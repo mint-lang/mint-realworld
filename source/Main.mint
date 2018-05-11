@@ -1,9 +1,62 @@
 component Main {
-  fun render : Array(Html) {
-    [
-      <Header/>,
-      <Home/>,
+  connect Application exposing { page }
+
+  style layout {
+    flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+  }
+
+  style content {
+    flex: 1;
+  }
+
+  get content : Html {
+    case (page) {
+      Page::Home => <Pages.Home/>
+      Page::Article => <Pages.Article/>
+    }
+  }
+
+  fun render : Html {
+    <div::layout>
+      <Header/>
+
+      <div::content>
+        <{ content }>
+      </div>
+
       <Footer/>
-    ]
+    </div>
+  }
+}
+
+store Application {
+  property page : Page = Page::Initial
+
+  fun setPage (page : Page) : Void {
+    next { state | page = page }
+  }
+}
+
+enum Page {
+  Initial,
+  Home,
+  Article
+}
+
+routes {
+  / {
+    do {
+      Application.setPage(Page::Home)
+      Stores.Articles.load()
+    }
+  }
+
+  /article/:slug (slug : String) {
+    do {
+      Application.setPage(Page::Article)
+      Stores.Article.load(slug)
+    }
   }
 }

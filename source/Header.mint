@@ -1,59 +1,46 @@
 component Header {
+  style base {
+
+  }
+
+  style wrapper {
+    align-items: center;
+    max-width: 960px;
+    margin: 0 auto;
+    display: flex;
+    height: 50px;
+  }
+
+  style links {
+    margin-left: auto;
+    display: flex;
+  }
+
   fun render : Html {
-    <nav class="navbar navbar-light">
-      <div class="container">
-        <a
-          class="navbar-brand"
-          href="index.html">
-
+    <div::base>
+      <div::wrapper>
+        <Link href="/">
           <{ "Conduit" }>
+        </Link>
 
-        </a>
+        <div::links>
+          <Link href="/">
+            <{ "Home" }>
+          </Link>
 
-        <ul class="nav navbar-nav pull-xs-right">
-          <li class="nav-item">
-            <a
-              class="nav-link active"
-              href="">
+          <Link href="">
+            <{ " New Post" }>
+          </Link>
 
-              <{ "Home" }>
+          <Link href="">
+            <{ " Settings" }>
+          </Link>
 
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="">
-
-              <i class="ion-compose"/>
-              <{ " New Post" }>
-
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="">
-
-              <i class="ion-gear-a"/>
-              <{ " Settings" }>
-
-            </a>
-          </li>
-
-          <li class="nav-item">
-            <a
-              class="nav-link"
-              href="">
-
-              <{ "Sign up" }>
-
-            </a>
-          </li>
-        </ul>
+          <Link href="">
+            <{ "Sign up" }>
+          </Link>
+        </div>
       </div>
-    </nav>
+    </div>
   }
 }
