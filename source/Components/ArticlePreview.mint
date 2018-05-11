@@ -25,6 +25,7 @@ component ArticlePreview {
   }
 
   style author {
+    text-decoration: none;
     grid-area: author;
     font-size: 14px;
     display: block;
@@ -58,7 +59,7 @@ component ArticlePreview {
 
     & > a {
       text-decoration: none;
-      transition: 300ms;
+      transition: 150ms;
       color: inherit;
     }
 

@@ -1,6 +1,4 @@
 component Link {
-  connect Theme exposing { link }
-
   property onClick : Maybe(Function(Html.Event, Void)) = Maybe.nothing()
   property children : Array(Html) = []
   property scrollToTop : Bool = true
@@ -10,7 +8,7 @@ component Link {
 
   style base {
     text-decoration: none;
-    color: {link};
+    color: inherit;
   }
 
   fun sameOrigin : Bool {

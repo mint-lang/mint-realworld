@@ -29,19 +29,13 @@ component Pages.Home {
     height: 170px;
   }
 
-  style previews {
-    margin-top: 50px;
-  }
-
   style layout {
-    grid-template-columns: 1fr 200px;
+    grid-template-columns: 1fr 300px;
     max-width: 960px;
-    margin: 0 auto;
     display: grid;
-  }
 
-  style tags {
-
+    margin: 0 auto;
+    margin-top: 30px;
   }
 
   fun render : Html {
@@ -57,13 +51,17 @@ component Pages.Home {
       </div>
 
       <div::layout>
-        <div::previews>
-          <Loader loading={loading}>
+        <div>
+          <Loader
+            loading={loading}
+            overlay={Bool.not(Array.isEmpty(articlePreviews))}>
+
             <{ articlePreviews }>
+
           </Loader>
         </div>
 
-        <div::tags/>
+        <PopularTags/>
       </div>
     </div>
   }

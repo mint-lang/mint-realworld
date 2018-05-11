@@ -49,7 +49,24 @@ routes {
   / {
     do {
       Application.setPage(Page::Home)
-      Stores.Articles.load()
+
+      Array.do(
+        [
+          Stores.Articles.load(Maybe.nothing()),
+          Stores.Tags.load()
+        ])
+    }
+  }
+
+  /articles?tag=:tag (tag : String) {
+    do {
+      Application.setPage(Page::Home)
+
+      Array.do(
+        [
+          Stores.Articles.load(Maybe.just(tag)),
+          Stores.Tags.load()
+        ])
     }
   }
 
