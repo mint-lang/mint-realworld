@@ -1,0 +1,16 @@
+{
+  "name": "mint-realworld",
+  "source-directories": [
+    "source"
+  ],
+  "application": {
+    "title": "Conduit",
+    "head": "assets/head.html"
+  },
+  "dependencies": {
+    "mint-core": {
+      "repository": "https://github.com/mint-lang/mint-core",
+      "constraint": "0.0.0 <= v < 1.0.0"
+    }
+  }
+}
