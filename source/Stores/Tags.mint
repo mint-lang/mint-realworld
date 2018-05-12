@@ -1,40 +1,36 @@
 store Stores.Tags {
+  property status : Api.Status = Api.Status::Initial
   property tags : Array(String) = []
-  property loading : Bool = false
+  property cached : Bool = false
 
   fun decodeTags (object : Object) : Result(Object.Error, Array(String)) {
     with Object.Decode {
-      array(string, object)
+      field("tags", \input : Object => array(string, input), object)
     }
   }
 
   fun load : Void {
-    with Http {
-      do {
-        next { state | loading = true }
+    if (cached) {
+      void
+    } else {
+      with Http {
+        do {
+          next { state | status = Api.nextStatus(status) }
 
-        response =
-          get(Api.endpoint() + "/tags")
-          |> send()
+          tags =
+            Api.endpoint() + "/tags"
+            |> Http.get()
+            |> Api.send(decodeTags)
 
-        object =
-          Json.parse(response.body)
-          |> Maybe.toResult("")
-
-        tags =
-          with Object.Decode {
-            field("tags", decodeTags, object)
-          }
-
-        next { state | tags = tags }
-      } catch Http.ErrorResponse => error {
-        void
-      } catch Object.Error => error {
-        void
-      } catch String => error {
-        void
-      } finally {
-        next { state | loading = false }
+          next
+            { state |
+              status = Api.Status::Ok,
+              cached = true,
+              tags = tags
+            }
+        } catch Api.Status => status {
+          next { state | status = status }
+        }
       }
     }
   }

@@ -1,56 +1,60 @@
-record Param {
-  param : String,
-  value : String
+module SearchParams {
+  fun empty : SearchParams {
+    `new URLSearchParams()`
+  }
+
+  fun append (key : String, value : String, params : SearchParams) : SearchParams {
+    `
+    (() => {
+      params.append(key, value)
+      return params
+    })()
+    `
+  }
+
+  fun toString (params : SearchParams) : String {
+    `params.toString()`
+  }
+}
+
+record Stores.Articles.Params {
+  tag : Maybe(String)
 }
 
 store Stores.Articles {
-  property tag : Maybe(String) = Maybe.nothing()
+  property status : Api.Status = Api.Status::Initial
   property articles : Array(Article) = []
-  property loading : Bool = false
-  property cached : Bool = true
 
-  fun load (tag : Maybe(String)) : Void {
-    do {
-      next
-        { state |
-          loading = true,
-          tag = tag
-        }
+  property params : Stores.Articles.Params = { tag = Maybe.nothing() }
 
-      tagParams =
-        [
-          {
-            param = "tag",
-            value = Maybe.withDefault("", tag)
+  fun load (newParams : Stores.Articles.Params) : Void {
+    if (newParams == params && status != Api.Status::Initial) {
+      void
+    } else {
+      do {
+        next { state | status = Api.nextStatus(status) }
+
+        params =
+          SearchParams.empty()
+          |> SearchParams.append(
+            "tag",
+            Maybe.withDefault("", newParams.tag))
+          |> SearchParams.toString()
+
+        articles =
+          Http.get(Api.endpoint() + "/articles?" + params)
+          |> Api.send(
+            \object : Object => Object.Decode.field("articles", Article.decodeMany, object))
+
+        next
+          { state |
+            status = Api.Status::Ok,
+            articles = articles,
+            params = newParams
           }
-        ]
-
-      params =
-        tagParams
-        |> Array.reject(\item : Param => String.isEmpty(item.value))
-        |> Array.map(\item : Param => item.param + "=" + item.value)
-        |> String.join("&")
-
-      response =
-        Http.get(Api.endpoint() + "/articles?" + params)
-        |> Http.send()
-
-      object =
-        Json.parse(response.body)
-        |> Maybe.toResult("")
-
-      articles =
-        Object.Decode.field("articles", Article.decodeMany, object)
-
-      next { state | articles = articles }
-    } catch Http.ErrorResponse => error {
-      void
-    } catch Object.Error => error {
-      void
-    } catch String => error {
-      void
-    } finally {
-      next { state | loading = false }
+      } catch Api.Status => status {
+        next { state | status = status }
+      }
     }
   }
 }

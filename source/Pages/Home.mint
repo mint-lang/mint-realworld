@@ -1,5 +1,5 @@
 component Pages.Home {
-  connect Stores.Articles exposing { articles, loading }
+  connect Stores.Articles exposing { articles, status }
   connect Theme exposing { primary, primaryText }
 
   get articlePreviews : Array(Html) {
@@ -52,13 +52,13 @@ component Pages.Home {
 
       <div::layout>
         <div>
-          <Loader
-            loading={loading}
-            overlay={Bool.not(Array.isEmpty(articlePreviews))}>
+          <Status
+            message="There was an error loading the articles."
+            status={status}>
 
             <{ articlePreviews }>
 
-          </Loader>
+          </Status>
         </div>
 
         <PopularTags/>

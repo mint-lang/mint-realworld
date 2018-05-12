@@ -1,5 +1,5 @@
 component Pages.Article {
-  connect Stores.Article exposing { article, loading }
+  connect Stores.Article exposing { article, status }
 
   style base {
 
@@ -12,7 +12,7 @@ component Pages.Article {
   }
 
   fun render : Html {
-    <Loader loading={loading}>
+    <Status status={status}>
       <div::base>
         <div::title>
           <h1>
@@ -24,6 +24,6 @@ component Pages.Article {
           <{ article.body }>
         </div>
       </div>
-    </Loader>
+    </Status>
   }
 }

@@ -1,5 +1,5 @@
 component PopularTags {
-  connect Stores.Tags exposing { tags, loading }
+  connect Stores.Tags exposing { tags, status }
 
   style tags {
     grid-template-columns: 1fr 1fr 1fr;
@@ -28,10 +28,7 @@ component PopularTags {
         <{ "Popular Tags" }>
       </div>
 
-      <Loader
-        loading={loading}
-        overlay={Bool.not(Array.isEmpty(tags))}>
-
+      <Status status={status}>
         <div::tags>
           <{
             Array.map(
@@ -42,8 +39,7 @@ component PopularTags {
               tags)
           }>
         </div>
-
-      </Loader>
+      </Status>
     </div>
   }
 }

@@ -1,42 +1,43 @@
 store Stores.Article {
+  property status : Api.Status = Api.Status::Initial
   property article : Article = Article.empty()
-  property loading : Bool = false
+  property slug : String = ""
 
-  fun load (slug : String) : Void {
-    if (article.slug == slug) {
-      next { state | article = article }
+  fun load (newSlug : String) : Void {
+    if (newSlug == slug) {
+      void
     } else {
-      with Http {
+      if (article.slug == newSlug) {
+        next
+          { state |
+            status = Api.Status::Ok,
+            article = article
+          }
+      } else {
         do {
-          next { state | loading = true }
-
-          response =
-            get(Api.endpoint() + "/articles/" + slug)
-            |> send()
-
-          object =
-            Json.parse(response.body)
-            |> Maybe.toResult("")
+          next { state | status = Api.nextStatus(status) }
 
           article =
-            Object.Decode.field("article", Article.decode, object)
+            Api.endpoint() + "/articles/" + newSlug
+            |> Http.get()
+            |> Api.send(
+              \object : Object => Object.Decode.field("article", Article.decode, object))
 
-          next { state | article = article }
-        } catch Http.ErrorResponse => error {
-          void
-        } catch Object.Error => error {
-          void
-        } catch String => error {
-          void
-        } finally {
-          next { state | loading = false }
+          next
+            { state |
+              status = Api.Status::Ok,
+              slug = newSlug,
+              article = article
+            }
+        } catch Api.Status => status {
+          next { state | status = status }
         }
       }
     }
   } where {
     article =
       Stores.Articles.articles
-      |> Array.find(\article : Article => article.slug == slug)
+      |> Array.find(\article : Article => article.slug == newSlug)
       |> Maybe.withDefault(Article.empty())
   }
 }

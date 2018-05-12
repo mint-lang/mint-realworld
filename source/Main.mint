@@ -52,7 +52,7 @@ routes {
 
       Array.do(
         [
-          Stores.Articles.load(Maybe.nothing()),
+          Stores.Articles.load({ tag = Maybe.nothing() }),
           Stores.Tags.load()
         ])
     }
@@ -64,7 +64,7 @@ routes {
 
       Array.do(
         [
-          Stores.Articles.load(Maybe.just(tag)),
+          Stores.Articles.load({ tag = Maybe.just(tag) }),
           Stores.Tags.load()
         ])
     }
