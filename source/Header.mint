@@ -1,4 +1,6 @@
 component Header {
+  connect Stores.User exposing { currentUser }
+
   style base {
 
   }
@@ -16,6 +18,28 @@ component Header {
     display: flex;
   }
 
+  get links : Array(Html) {
+    if (Maybe.isJust(currentUser)) {
+      [
+        <Link href="">
+          <{ " New Post" }>
+        </Link>,
+        <Link href="">
+          <{ " Settings" }>
+        </Link>,
+        <Link href="/logout">
+          <{ "Sign out" }>
+        </Link>
+      ]
+    } else {
+      [
+        <Link href="/login">
+          <{ "Sign in" }>
+        </Link>
+      ]
+    }
+  }
+
   fun render : Html {
     <div::base>
       <div::wrapper>
@@ -27,19 +51,9 @@ component Header {
           <Link href="/">
             <{ "Home" }>
           </Link>
-
-          <Link href="">
-            <{ " New Post" }>
-          </Link>
-
-          <Link href="">
-            <{ " Settings" }>
-          </Link>
-
-          <Link href="/login">
-            <{ "Sign in" }>
-          </Link>
         </div>
+
+        <{ links }>
       </div>
     </div>
   }

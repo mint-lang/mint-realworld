@@ -18,8 +18,7 @@ store Stores.Tags {
           next { state | status = Api.nextStatus(status) }
 
           tags =
-            Api.endpoint() + "/tags"
-            |> Http.get()
+            Http.get(Api.endpoint() + "/tags")
             |> Api.send(decodeTags)
 
           next

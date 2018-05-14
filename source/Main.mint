@@ -100,6 +100,13 @@ routes {
     }
   }
 
+  /logout {
+    case (Stores.User.status) {
+      Auth.Status::Authenticated => Stores.User.logout()
+      => Window.navigate("/")
+    }
+  }
+
   /article/:slug (slug : String) {
     do {
       Application.setPage(Page::Article)

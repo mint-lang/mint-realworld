@@ -34,7 +34,7 @@ module Api {
     }
   }
 
-  fun send (decoder : Function(Object, Result(Object.Error, a)), request : Http.Request) : Promise(Api.Status, a) {
+  fun send (decoder : Function(Object, Result(Object.Error, a)), rawRequest : Http.Request) : Promise(Api.Status, a) {
     request
     |> Http.send()
     |> then(
@@ -43,20 +43,40 @@ module Api {
           response =
             result
 
-          object =
-            Json.parse(response.body)
-            |> Maybe.toResult("")
+          if (response.status == 401) {
+            Result.error(Api.Status::Error)
+          } else {
+            try {
+              object =
+                Json.parse(response.body)
+                |> Maybe.toResult("")
 
-          data =
-            decoder(object)
+              data =
+                decoder(object)
 
-          Result.ok(data)
+              Result.ok(data)
+            } catch Object.Error => error {
+              Result.error(error)
+              |> Debug.log()
+              |> Result.withDefault(Api.Status::Error)
+              |> Result.error()
+            } catch String => error {
+              Result.error(Api.Status::Error)
+            }
+          }
         } catch Http.ErrorResponse => error {
           Result.error(Api.Status::Error)
-        } catch Object.Error => error {
-          Result.error(Api.Status::Error)
-        } catch String => error {
-          Result.error(Api.Status::Error)
         })
+  } where {
+    request =
+      try {
+        token =
+          Storage.Session.get("token")
+
+        rawRequest
+        |> Http.header("Authorization", "Token " + token)
+      } catch Storage.Error => error {
+        rawRequest
+      }
   }
 }
