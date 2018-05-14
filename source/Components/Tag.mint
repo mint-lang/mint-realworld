@@ -1,11 +1,16 @@
 component Tag {
+  connect Theme exposing { primary }
+
+  property inactive : Bool = false
+  property active : Bool = false
   property href : String = ""
   property name : String = ""
 
   style base {
+    pointer-events: {pointerEvents};
     text-transform: uppercase;
+    background: {background};
     display: inline-block;
-    background: #818a91;
     text-align: center;
     border-radius: 2px;
     font-weight: bold;
@@ -18,7 +23,31 @@ component Tag {
     }
 
     &:hover {
-      background: #6b747b;
+      background: {backgroundHover};
+    }
+  }
+
+  get pointerEvents : String {
+    if (inactive) {
+      "none"
+    } else {
+      ""
+    }
+  }
+
+  get backgroundHover : String {
+    if (active) {
+      "#46a046"
+    } else {
+      "#6b747b"
+    }
+  }
+
+  get background : String {
+    if (active) {
+      primary
+    } else {
+      "#818a91"
     }
   }
 

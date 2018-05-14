@@ -15,6 +15,7 @@ component Main {
     case (page) {
       Page::Home => <Pages.Home/>
       Page::Article => <Pages.Article/>
+      Page::Login => <Pages.Login/>
     }
   }
 
@@ -35,11 +36,27 @@ store Application {
   property page : Page = Page::Initial
 
   fun setPage (page : Page) : Void {
-    next { state | page = page }
+    case (Stores.User.status) {
+      Auth.Status::Initial =>
+        do {
+          Stores.User.getCurrentUser()
+
+          next { state | page = page }
+        }
+
+      => next { state | page = page }
+    }
   }
 }
 
+enum Auth.Status {
+  Unauthenticated,
+  Authenticated,
+  Initial
+}
+
 enum Page {
+  Login,
   Initial,
   Home,
   Article
@@ -50,9 +67,12 @@ routes {
     do {
       Application.setPage(Page::Home)
 
+      params =
+        Stores.Articles.params
+
       Array.do(
         [
-          Stores.Articles.load({ tag = Maybe.nothing() }),
+          Stores.Articles.load({ params | tag = Maybe.nothing() }),
           Stores.Tags.load()
         ])
     }
@@ -62,17 +82,28 @@ routes {
     do {
       Application.setPage(Page::Home)
 
+      params =
+        Stores.Articles.params
+
       Array.do(
         [
-          Stores.Articles.load({ tag = Maybe.just(tag) }),
+          Stores.Articles.load({ params | tag = Maybe.just(tag) }),
           Stores.Tags.load()
         ])
+    }
+  }
+
+  /login {
+    case (Stores.User.status) {
+      Auth.Status::Authenticated => Window.navigate("/")
+      => Application.setPage(Page::Login)
     }
   }
 
   /article/:slug (slug : String) {
     do {
       Application.setPage(Page::Article)
+
       Stores.Article.load(slug)
     }
   }

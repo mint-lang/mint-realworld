@@ -36,8 +36,8 @@ component Header {
             <{ " Settings" }>
           </Link>
 
-          <Link href="">
-            <{ "Sign up" }>
+          <Link href="/login">
+            <{ "Sign in" }>
           </Link>
         </div>
       </div>

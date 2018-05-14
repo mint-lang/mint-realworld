@@ -77,8 +77,25 @@ component ArticlePreview {
     opacity: 0.5;
   }
 
+  style tag {
+    & > * {
+      margin-right: 5px;
+      margin-top: 5px;
+      opacity: 0.5;
+    }
+  }
+
   get href : String {
     "/article/" + article.slug
+  }
+
+  get tags : Array(Html) {
+    article.tags
+    |> Array.map(
+      \tag : String =>
+        <Tag
+          inactive={true}
+          name={tag}/>)
   }
 
   fun render : Html {
@@ -114,6 +131,10 @@ component ArticlePreview {
 
           <div::link-text>
             <{ "Read more..." }>
+          </div>
+
+          <div::tag>
+            <{ tags }>
           </div>
         </Link>
       </div>

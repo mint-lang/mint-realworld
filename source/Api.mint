@@ -10,7 +10,15 @@ module Api {
   fun then (updater : Function(Result(a, b), Result(c, d)), promise : Promise(a, b)) : Promise(c, d) {
     `
     promise
-      .then((data) => updater(new Ok(data)))
+      .then((data) => {
+        let result = updater(new Ok(data))
+
+        if (result instanceof Err) {
+          throw result.value
+        } else {
+          return result
+        }
+      })
       .catch((error) => { throw updater(new Err(error)).value })
     `
   }

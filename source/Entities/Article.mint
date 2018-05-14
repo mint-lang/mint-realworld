@@ -7,7 +7,8 @@ record Article {
   favorited : Bool,
   createdAt : Time,
   updatedAt : Time,
-  author : Author
+  author : Author,
+  tags : Array(String)
 }
 
 module Article {
@@ -21,7 +22,8 @@ module Article {
       slug = "",
       title = "",
       updatedAt = Time.now(),
-      author = Author.empty()
+      author = Author.empty(),
+      tags = []
     }
   }
 
@@ -59,6 +61,12 @@ module Article {
         author =
           field("author", Author.decode, object)
 
+        tags =
+          field(
+            "tagList",
+            \input : Object => array(string, input),
+            object)
+
         Result.ok(
           {
             body = body,
@@ -69,7 +77,8 @@ module Article {
             favoritesCount = favoritesCount,
             slug = slug,
             title = title,
-            updatedAt = updatedAt
+            updatedAt = updatedAt,
+            tags = tags
           })
       } catch Object.Error => error {
         Result.error(error)

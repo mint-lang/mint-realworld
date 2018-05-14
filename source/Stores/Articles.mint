@@ -18,27 +18,36 @@ module SearchParams {
 }
 
 record Stores.Articles.Params {
-  tag : Maybe(String)
+  tag : Maybe(String),
+  limit : Number
 }
 
 store Stores.Articles {
   property status : Api.Status = Api.Status::Initial
   property articles : Array(Article) = []
 
-  property params : Stores.Articles.Params = { tag = Maybe.nothing() }
+  property params : Stores.Articles.Params = {
+    tag = Maybe.nothing(),
+    limit = 10
+  }
 
   fun load (newParams : Stores.Articles.Params) : Void {
     if (newParams == params && status != Api.Status::Initial) {
       void
     } else {
       do {
-        next { state | status = Api.nextStatus(status) }
+        next
+          { state |
+            status = Api.nextStatus(status),
+            params = newParams
+          }
 
         params =
           SearchParams.empty()
           |> SearchParams.append(
             "tag",
             Maybe.withDefault("", newParams.tag))
+          |> SearchParams.append("limit", Number.toString(newParams.limit))
           |> SearchParams.toString()
 
         articles =
@@ -49,8 +58,7 @@ store Stores.Articles {
         next
           { state |
             status = Api.Status::Ok,
-            articles = articles,
-            params = newParams
+            articles = articles
           }
       } catch Api.Status => status {
         next { state | status = status }

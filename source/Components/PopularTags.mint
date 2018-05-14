@@ -1,4 +1,5 @@
 component PopularTags {
+  connect Stores.Articles exposing { params }
   connect Stores.Tags exposing { tags, status }
 
   style tags {
@@ -17,9 +18,20 @@ component PopularTags {
 
   style title {
     text-transform: uppercase;
-    margin-bottom: 5px;
+    margin-bottom: 7px;
     font-weight: bold;
     font-size: 14px;
+  }
+
+  fun renderTag (tag : String) : Html {
+    <Tag
+      href={"/articles?tag=" + tag}
+      active={active}
+      name={tag}/>
+  } where {
+    active =
+      (params.tag
+      |> Maybe.withDefault("")) == tag
   }
 
   fun render : Html {
@@ -30,14 +42,7 @@ component PopularTags {
 
       <Status status={status}>
         <div::tags>
-          <{
-            Array.map(
-              \tag : String =>
-                <Tag
-                  name={tag}
-                  href={"/articles?tag=" + tag}/>,
-              tags)
-          }>
+          <{ Array.map(renderTag, tags) }>
         </div>
       </Status>
     </div>
