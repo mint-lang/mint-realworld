@@ -3,6 +3,10 @@ store Stores.Article {
   property article : Article = Article.empty()
   property slug : String = ""
 
+  fun reset : Void {
+    next { state | status = Api.Status::Initial }
+  }
+
   fun load (newSlug : String) : Void {
     if (newSlug == slug) {
       void

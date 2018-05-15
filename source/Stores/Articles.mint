@@ -31,6 +31,10 @@ store Stores.Articles {
     limit = 10
   }
 
+  fun reset : Void {
+    next { state | status = Api.Status::Initial }
+  }
+
   fun load (newParams : Stores.Articles.Params) : Void {
     if (newParams == params && status != Api.Status::Initial) {
       void

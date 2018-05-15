@@ -102,7 +102,16 @@ routes {
 
   /logout {
     case (Stores.User.status) {
-      Auth.Status::Authenticated => Stores.User.logout()
+      Auth.Status::Authenticated =>
+        do {
+          Stores.User.logout()
+
+          Stores.Articles.reset()
+          Stores.Article.reset()
+
+          Window.navigate("/")
+        }
+
       => Window.navigate("/")
     }
   }

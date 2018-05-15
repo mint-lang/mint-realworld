@@ -56,10 +56,7 @@ module Api {
 
               Result.ok(data)
             } catch Object.Error => error {
-              Result.error(error)
-              |> Debug.log()
-              |> Result.withDefault(Api.Status::Error)
-              |> Result.error()
+              Result.error(Api.Status::Error)
             } catch String => error {
               Result.error(Api.Status::Error)
             }
