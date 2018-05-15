@@ -1,5 +1,6 @@
 component Header {
-  connect Stores.User exposing { currentUser }
+  connect Stores.User exposing { status }
+  connect Theme exposing { primary }
 
   style base {
 
@@ -10,50 +11,66 @@ component Header {
     max-width: 960px;
     margin: 0 auto;
     display: flex;
-    height: 50px;
+    height: 56px;
+  }
+
+  style brand {
+    font-family: Titillium Web;
+    color: {primary};
+    font-size: 18px;
   }
 
   style links {
+    font-family: Source Sans Pro;
     margin-left: auto;
     display: flex;
+
+    & > a {
+      margin-left: 15px;
+    }
   }
 
   get links : Array(Html) {
-    if (Maybe.isJust(currentUser)) {
-      [
-        <Link href="">
-          <{ " New Post" }>
-        </Link>,
-        <Link href="">
-          <{ " Settings" }>
-        </Link>,
-        <Link href="/logout">
-          <{ "Sign out" }>
-        </Link>
-      ]
-    } else {
-      [
-        <Link href="/login">
-          <{ "Sign in" }>
-        </Link>
-      ]
+    case (status) {
+      Auth.Status::Unauthenticated =>
+        [
+          <Link href="/login">
+            <{ "Sign in" }>
+          </Link>,
+          <Link href="/register">
+            <{ "Sign up" }>
+          </Link>
+        ]
+
+      Auth.Status::Authenticated =>
+        [
+          <Link href="">
+            <{ " New Post" }>
+          </Link>,
+          <Link href="">
+            <{ " Settings" }>
+          </Link>,
+          <Link href="/logout">
+            <{ "Sign out" }>
+          </Link>
+        ]
+
+      => []
     }
   }
 
   fun render : Html {
     <div::base>
       <div::wrapper>
-        <Link href="/">
-          <{ "Conduit" }>
-        </Link>
-
-        <div::links>
+        <div::brand>
           <Link href="/">
-            <{ "Home" }>
+            <{ "Conduit" }>
           </Link>
         </div>
 
-        <{ links }>
+        <div::links>
+          <{ links }>
+        </div>
       </div>
     </div>
   }
