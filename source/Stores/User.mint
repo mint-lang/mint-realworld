@@ -45,6 +45,7 @@ store Stores.User {
     do {
       Stores.Articles.reset()
       Stores.Article.reset()
+      Stores.Comments.reset()
     }
   }
 

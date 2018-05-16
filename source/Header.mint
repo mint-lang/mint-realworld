@@ -8,8 +8,6 @@ component Header {
 
   style wrapper {
     align-items: center;
-    max-width: 960px;
-    margin: 0 auto;
     display: flex;
     height: 56px;
   }
@@ -61,17 +59,19 @@ component Header {
 
   fun render : Html {
     <div::base>
-      <div::wrapper>
-        <div::brand>
-          <Link href="/">
-            <{ "Conduit" }>
-          </Link>
-        </div>
+      <Container>
+        <div::wrapper>
+          <div::brand>
+            <Link href="/">
+              <{ "Conduit" }>
+            </Link>
+          </div>
 
-        <div::links>
-          <{ links }>
+          <div::links>
+            <{ links }>
+          </div>
         </div>
-      </div>
+      </Container>
     </div>
   }
 }

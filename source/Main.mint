@@ -122,7 +122,15 @@ routes {
   /article/:slug (slug : String) {
     do {
       Application.initializeWithPage(Page::Article)
-      Stores.Article.load(slug)
+
+      Array.do(
+        [
+          Stores.Article.load(slug),
+          do {
+            Stores.Comments.reset()
+            Stores.Comments.load(slug)
+          }
+        ])
     }
   }
 }

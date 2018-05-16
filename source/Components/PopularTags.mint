@@ -25,7 +25,6 @@ component PopularTags {
 
   fun renderTag (tag : String) : Html {
     <Tag
-      href={"/articles?tag=" + tag}
       active={active}
       name={tag}/>
   } where {

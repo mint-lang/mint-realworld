@@ -6,22 +6,53 @@ component Pages.Article {
   }
 
   style title {
+    margin-bottom: 20px;
+    font-size: 44px;
+  }
+
+  style header {
     background: #333;
-    height: 150px;
+    padding: 40px 0;
     color: white;
+  }
+
+  style content {
+    margin-top: 50px;
+  }
+
+  style hr {
+    border: 0;
+    margin: 40px 0;
+    border-top: 1px solid #DDD;
+  }
+
+  style spacer {
+    height: 20px;
   }
 
   fun render : Html {
     <Status status={status}>
       <div::base>
-        <div::title>
-          <h1>
-            <{ article.title }>
-          </h1>
+        <div::header>
+          <Container>
+            <div::title>
+              <{ article.title }>
+            </div>
+
+            <Article.Profile article={article}/>
+            <div::spacer/>
+            <TagList tags={article.tags}/>
+          </Container>
         </div>
 
-        <div>
-          <{ article.body }>
+        <div::content>
+          <Container>
+            <Markdown content={article.body}/>
+
+            <hr::hr/>
+
+            <Article.Comments/>
+          </Container>
         </div>
       </div>
     </Status>

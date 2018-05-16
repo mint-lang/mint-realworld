@@ -19,7 +19,8 @@ store Stores.Article {
         next
           { state |
             status = Api.Status::Ok,
-            article = article
+            article = article,
+            slug = newSlug
           }
       } else {
         do {

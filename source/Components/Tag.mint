@@ -3,7 +3,6 @@ component Tag {
 
   property inactive : Bool = false
   property active : Bool = false
-  property href : String = ""
   property name : String = ""
 
   style base {
@@ -53,7 +52,7 @@ component Tag {
 
   fun render : Html {
     <div::base>
-      <Link href={href}>
+      <Link href={"/articles?tag=" + name}>
         <{ name }>
       </Link>
     </div>

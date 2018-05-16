@@ -5,7 +5,7 @@ component Pages.Home {
   get articlePreviews : Array(Html) {
     articles
     |> Array.map(
-      \article : Article => <ArticlePreview article={article}/>)
+      \article : Article => <Article.Preview article={article}/>)
     |> Array.intersperse(<div::divider/>)
   }
 
