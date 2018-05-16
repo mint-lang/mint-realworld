@@ -27,6 +27,14 @@ module Article {
     }
   }
 
+  fun decodeArticles (object : Object) : Result(Object.Error, Array(Article)) {
+    Object.Decode.field("articles", decodeMany, object)
+  }
+
+  fun decodeArticle (object : Object) : Result(Object.Error, Article) {
+    Object.Decode.field("article", decode, object)
+  }
+
   fun decodeMany (object : Object) : Result(Object.Error, Array(Article)) {
     Object.Decode.array(decode, object)
   }

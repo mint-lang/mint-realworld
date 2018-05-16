@@ -4,7 +4,7 @@ record Pages.Login.State {
 }
 
 component Pages.Login {
-  connect Stores.User exposing { login }
+  connect Stores.User exposing { login, loginStatus }
 
   state : Pages.Login.State {
     password = "",
@@ -49,6 +49,14 @@ component Pages.Login {
     }
   }
 
+  get disabled : Bool {
+    case (loginStatus) {
+      Api.Status::Reloading => true
+      Api.Status::Loading => true
+      => false
+    }
+  }
+
   fun render : Html {
     <div::base>
       <h1>
@@ -62,6 +70,7 @@ component Pages.Login {
 
         <input::input
           onInput={handleEmail}
+          disabled={disabled}
           value={state.email}/>
 
         <label::label>
@@ -71,9 +80,10 @@ component Pages.Login {
         <input::input
           onInput={handlePassword}
           value={state.password}
+          disabled={disabled}
           type="password"/>
 
-        <button>
+        <button disabled={disabled}>
           <{ "Sign in" }>
         </button>
       </form>

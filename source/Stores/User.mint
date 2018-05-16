@@ -1,6 +1,13 @@
+enum Auth.Status {
+  Unauthenticated,
+  Authenticated,
+  Initial
+}
+
 store Stores.User {
   property loginStatus : Api.Status = Api.Status::Initial
   property status : Auth.Status = Auth.Status::Initial
+
   property currentUser : Maybe(User) = Maybe.nothing()
 
   fun getCurrentUser : Void {
@@ -11,8 +18,8 @@ store Stores.User {
 
       next
         { state |
-          currentUser = Maybe.just(user),
-          status = Auth.Status::Authenticated
+          status = Auth.Status::Authenticated,
+          currentUser = Maybe.just(user)
         }
     } catch Api.Status => status {
       next { state | status = Auth.Status::Unauthenticated }
@@ -22,6 +29,7 @@ store Stores.User {
   fun logout : Void {
     do {
       Storage.Session.remove("token")
+      resetStores()
 
       next
         { state |
@@ -30,6 +38,13 @@ store Stores.User {
         }
     } catch Storage.Error => error {
       void
+    }
+  }
+
+  fun resetStores : Void {
+    do {
+      Stores.Articles.reset()
+      Stores.Article.reset()
     }
   }
 
@@ -54,16 +69,18 @@ store Stores.User {
 
       user =
         Http.post(Api.endpoint() + "/users/login")
-        |> Http.stringBody(body)
         |> Http.header("Content-Type", "application/json")
+        |> Http.stringBody(body)
         |> Api.send(User.decode)
 
       Storage.Session.set("token", user.token)
+      resetStores()
 
       next
         { state |
+          status = Auth.Status::Authenticated,
           currentUser = Maybe.just(user),
-          status = Auth.Status::Authenticated
+          loginStatus = Api.Status::Ok
         }
 
       Window.navigate("/")

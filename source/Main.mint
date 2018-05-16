@@ -35,24 +35,23 @@ component Main {
 store Application {
   property page : Page = Page::Initial
 
-  fun setPage (page : Page) : Void {
-    case (Stores.User.status) {
-      Auth.Status::Initial =>
-        do {
-          Stores.User.getCurrentUser()
-
-          next { state | page = page }
-        }
-
-      => next { state | page = page }
+  fun initializeWithPage (page : Page) : Void {
+    do {
+      initialize()
+      setPage(page)
     }
   }
-}
 
-enum Auth.Status {
-  Unauthenticated,
-  Authenticated,
-  Initial
+  fun initialize : Void {
+    case (Stores.User.status) {
+      Auth.Status::Initial => Stores.User.getCurrentUser()
+      => void
+    }
+  }
+
+  fun setPage (page : Page) : Void {
+    next { state | page = page }
+  }
 }
 
 enum Page {
@@ -65,14 +64,14 @@ enum Page {
 routes {
   / {
     do {
-      Application.setPage(Page::Home)
+      Application.initializeWithPage(Page::Home)
 
       params =
         Stores.Articles.params
 
       Array.do(
         [
-          Stores.Articles.load({ params | tag = Maybe.nothing() }),
+          Stores.Articles.load({ params | tag = "" }),
           Stores.Tags.load()
         ])
     }
@@ -80,46 +79,49 @@ routes {
 
   /articles?tag=:tag (tag : String) {
     do {
-      Application.setPage(Page::Home)
+      Application.initializeWithPage(Page::Home)
 
       params =
         Stores.Articles.params
 
       Array.do(
         [
-          Stores.Articles.load({ params | tag = Maybe.just(tag) }),
+          Stores.Articles.load({ params | tag = tag }),
           Stores.Tags.load()
         ])
     }
   }
 
   /login {
-    case (Stores.User.status) {
-      Auth.Status::Authenticated => Window.navigate("/")
-      => Application.setPage(Page::Login)
+    do {
+      Application.initialize()
+
+      case (Stores.User.status) {
+        Auth.Status::Authenticated => Window.navigate("/")
+        => Application.setPage(Page::Login)
+      }
     }
   }
 
   /logout {
-    case (Stores.User.status) {
-      Auth.Status::Authenticated =>
-        do {
-          Stores.User.logout()
+    do {
+      Application.initialize()
 
-          Stores.Articles.reset()
-          Stores.Article.reset()
+      case (Stores.User.status) {
+        Auth.Status::Authenticated =>
+          do {
+            Stores.User.logout()
+            Window.navigate("/")
+          }
 
-          Window.navigate("/")
-        }
-
-      => Window.navigate("/")
+        => Window.navigate("/")
+      }
     }
   }
 
   /article/:slug (slug : String) {
     do {
-      Application.setPage(Page::Article)
-
+      Application.initializeWithPage(Page::Article)
       Stores.Article.load(slug)
     }
   }

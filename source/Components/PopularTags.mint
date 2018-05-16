@@ -30,8 +30,7 @@ component PopularTags {
       name={tag}/>
   } where {
     active =
-      (params.tag
-      |> Maybe.withDefault("")) == tag
+      params.tag == tag
   }
 
   fun render : Html {
@@ -40,10 +39,14 @@ component PopularTags {
         <{ "Popular Tags" }>
       </div>
 
-      <Status status={status}>
+      <Status
+        message="There was an error loading the popular tags."
+        status={status}>
+
         <div::tags>
           <{ Array.map(renderTag, tags) }>
         </div>
+
       </Status>
     </div>
   }

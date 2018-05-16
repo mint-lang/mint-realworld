@@ -4,11 +4,15 @@ store Stores.Article {
   property slug : String = ""
 
   fun reset : Void {
-    next { state | status = Api.Status::Initial }
+    next
+      { state |
+        status = Api.Status::Initial,
+        article = Article.empty()
+      }
   }
 
   fun load (newSlug : String) : Void {
-    if (newSlug == slug) {
+    if (slug == newSlug) {
       void
     } else {
       if (article.slug == newSlug) {
@@ -24,14 +28,13 @@ store Stores.Article {
           article =
             Api.endpoint() + "/articles/" + newSlug
             |> Http.get()
-            |> Api.send(
-              \object : Object => Object.Decode.field("article", Article.decode, object))
+            |> Api.send(Article.decodeArticle)
 
           next
             { state |
               status = Api.Status::Ok,
-              slug = newSlug,
-              article = article
+              article = article,
+              slug = newSlug
             }
         } catch Api.Status => status {
           next { state | status = status }
