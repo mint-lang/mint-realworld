@@ -39,6 +39,7 @@ component Image {
   style image {
     border-radius: {borderRadius};
     height: {height};
+    display: block;
     width: {width};
   }
 

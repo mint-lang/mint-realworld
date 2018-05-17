@@ -14,7 +14,7 @@ component Pages.Home {
   }
 
   style divider {
-    border-top: 1px solid #DDD;
+    border-top: 1px solid #EEE;
     margin: 30px 0;
   }
 
@@ -31,10 +31,7 @@ component Pages.Home {
 
   style layout {
     grid-template-columns: 1fr 300px;
-    max-width: 960px;
     display: grid;
-
-    margin: 0 auto;
     margin-top: 30px;
   }
 
@@ -50,19 +47,21 @@ component Pages.Home {
         </p>
       </div>
 
-      <div::layout>
-        <div>
-          <Status
-            message="There was an error loading the articles."
-            status={status}>
+      <Container>
+        <div::layout>
+          <div>
+            <Status
+              message="There was an error loading the articles."
+              status={status}>
 
-            <{ articlePreviews }>
+              <{ articlePreviews }>
 
-          </Status>
+            </Status>
+          </div>
+
+          <PopularTags/>
         </div>
-
-        <PopularTags/>
-      </div>
+      </Container>
     </div>
   }
 }

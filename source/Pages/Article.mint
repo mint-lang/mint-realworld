@@ -23,7 +23,7 @@ component Pages.Article {
   style hr {
     border: 0;
     margin: 40px 0;
-    border-top: 1px solid #DDD;
+    border-top: 1px solid #EEE;
   }
 
   style spacer {
@@ -51,6 +51,7 @@ component Pages.Article {
 
             <hr::hr/>
 
+            <Forms.Comment/>
             <Article.Comments/>
           </Container>
         </div>
