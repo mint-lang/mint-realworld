@@ -7,7 +7,8 @@ store Stores.Article {
     next
       { state |
         status = Api.Status::Initial,
-        article = Article.empty()
+        article = Article.empty(),
+        slug = ""
       }
   }
 
@@ -38,7 +39,7 @@ store Stores.Article {
               slug = newSlug
             }
         } catch Api.Status => status {
-          next { state | status = status }
+          reset()
         }
       }
     }

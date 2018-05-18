@@ -16,14 +16,16 @@ component Tag {
     font-size: 12px;
     color: #FFF;
 
-    & a {
-      display: block;
-      padding: 5px;
-    }
-
     &:hover {
       background: {backgroundHover};
     }
+  }
+
+  style link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    padding: 5px;
   }
 
   get pointerEvents : String {
@@ -52,9 +54,9 @@ component Tag {
 
   fun render : Html {
     <div::base>
-      <Link href={"/articles?tag=" + name}>
+      <a::link href={"/articles?tag=" + name}>
         <{ name }>
-      </Link>
+      </a>
     </div>
   }
 }

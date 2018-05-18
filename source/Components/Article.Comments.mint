@@ -36,9 +36,9 @@ component Article.Comment {
           height="20px"
           width="20px"/>
 
-        <Link>
+        <a>
           <{ comment.author.username }>
-        </Link>
+        </a>
       </div>
     </div>
   }

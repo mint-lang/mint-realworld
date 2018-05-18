@@ -65,7 +65,7 @@ component Article.Preview {
       </div>
 
       <div::content>
-        <Link href={href}>
+        <a href={href}>
           <div::title>
             <{ article.title }>
           </div>
@@ -81,7 +81,7 @@ component Article.Preview {
           <TagList
             tags={article.tags}
             inactive={true}/>
-        </Link>
+        </a>
       </div>
     </div>
   }

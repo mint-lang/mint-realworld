@@ -14,6 +14,7 @@ component Header {
 
   style brand {
     font-family: Titillium Web;
+    text-decoration: none;
     color: {primary};
     font-size: 18px;
   }
@@ -22,35 +23,37 @@ component Header {
     font-family: Source Sans Pro;
     margin-left: auto;
     display: flex;
+  }
 
-    & > a {
-      margin-left: 15px;
-    }
+  style link {
+    text-decoration: none;
+    margin-left: 15px;
+    color: {primary};
   }
 
   get links : Array(Html) {
     case (status) {
       Auth.Status::Unauthenticated =>
         [
-          <Link href="/login">
+          <a::link href="/login">
             <{ "Sign in" }>
-          </Link>,
-          <Link href="/register">
+          </a>,
+          <a::link href="/register">
             <{ "Sign up" }>
-          </Link>
+          </a>
         ]
 
       Auth.Status::Authenticated =>
         [
-          <Link href="">
+          <a::link href="">
             <{ " New Post" }>
-          </Link>,
-          <Link href="">
+          </a>,
+          <a::link href="">
             <{ " Settings" }>
-          </Link>,
-          <Link href="/logout">
+          </a>,
+          <a::link href="/logout">
             <{ "Sign out" }>
-          </Link>
+          </a>
         ]
 
       => []
@@ -61,11 +64,9 @@ component Header {
     <div::base>
       <Container>
         <div::wrapper>
-          <div::brand>
-            <Link href="/">
-              <{ "Conduit" }>
-            </Link>
-          </div>
+          <a::brand href="/">
+            <{ "Conduit" }>
+          </a>
 
           <div::links>
             <{ links }>
