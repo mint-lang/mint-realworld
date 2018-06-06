@@ -11,7 +11,7 @@ component Tag {
     background: {background};
     display: inline-block;
     text-align: center;
-    border-radius: 2px;
+    border-radius: 12px;
     font-weight: bold;
     font-size: 12px;
     color: #FFF;

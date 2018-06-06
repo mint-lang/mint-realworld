@@ -15,7 +15,19 @@ component Article.Preview {
   }
 
   style button {
+    border-radius: 5px;
+    border-color: {link};
+    color: {link};
 
+    &:hover {
+      background-color: {link};
+      color: white;
+      cursor: pointer;
+    }
+
+    &:hover > svg {
+      fill: white;
+    }
   }
 
   style title {
@@ -59,7 +71,7 @@ component Article.Preview {
         <Article.Profile article={article}/>
 
         <button::button>
-          <i class="ion-heart"/>
+          <HeartIcon/>
           <{ Number.toString(article.favoritesCount) }>
         </button>
       </div>
