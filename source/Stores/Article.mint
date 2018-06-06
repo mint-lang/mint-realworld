@@ -30,7 +30,12 @@ store Stores.Article {
           article =
             Api.endpoint() + "/articles/" + newSlug
             |> Http.get()
-            |> Api.send(Article.decodeArticle)
+            |> Api.send(
+              \object : Object =>
+                Object.Decode.field(
+                  "article",
+                  \input : Object => decode input as Article,
+                  object))
 
           next
             { state |

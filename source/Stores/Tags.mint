@@ -5,7 +5,7 @@ store Stores.Tags {
 
   fun decodeTags (object : Object) : Result(Object.Error, Array(String)) {
     with Object.Decode {
-      field("tags", \input : Object => array(string, input), object)
+      field("tags", \input : Object => decode input as Array(String), object)
     }
   }
 

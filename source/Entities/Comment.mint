@@ -16,44 +16,4 @@ module Comment {
       id = 0
     }
   }
-
-  fun decodeComments (object : Object) : Result(Object.Error, Array(Comment)) {
-    Object.Decode.field("comments", decodeMany, object)
-  }
-
-  fun decodeMany (object : Object) : Result(Object.Error, Array(Comment)) {
-    Object.Decode.array(decode, object)
-  }
-
-  fun decode (object : Object) : Result(Object.Error, Comment) {
-    with Object.Decode {
-      try {
-        author =
-          field("author", Author.decode, object)
-
-        body =
-          field("body", string, object)
-
-        id =
-          field("id", number, object)
-
-        createdAt =
-          field("createdAt", time, object)
-
-        updatedAt =
-          field("updatedAt", time, object)
-
-        Result.ok(
-          {
-            updatedAt = updatedAt,
-            createdAt = createdAt,
-            author = author,
-            body = body,
-            id = id
-          })
-      } catch Object.Error => error {
-        Result.error(error)
-      }
-    }
-  }
 }

@@ -21,7 +21,12 @@ store Stores.Comments {
         comments =
           Api.endpoint() + "/articles/" + newSlug + "/comments"
           |> Http.get()
-          |> Api.send(Comment.decodeComments)
+          |> Api.send(
+              \object : Object =>
+                Object.Decode.field(
+                  "comments",
+                  \input : Object => decode input as Array(Comment),
+                  object))
 
         next
           { state |

@@ -14,7 +14,12 @@ store Stores.User {
     do {
       user =
         Http.get(Api.endpoint() + "/user")
-        |> Api.send(User.decode)
+        |> Api.send(
+          \object : Object =>
+            Object.Decode.field(
+              "user",
+              \input : Object => decode input as User,
+              object))
 
       next
         { state |
@@ -72,7 +77,12 @@ store Stores.User {
         Http.post(Api.endpoint() + "/users/login")
         |> Http.header("Content-Type", "application/json")
         |> Http.stringBody(body)
-        |> Api.send(User.decode)
+        |> Api.send(
+          \object : Object =>
+            Object.Decode.field(
+              "user",
+              \input : Object => decode input as User,
+              object))
 
       Storage.Session.set("token", user.token)
       resetStores()
