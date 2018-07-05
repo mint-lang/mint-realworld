@@ -3,6 +3,9 @@
   "source-directories": [
     "source"
   ],
+  "external-javascripts": [
+    "assets/commonmark.js"
+  ],
   "application": {
     "title": "Conduit",
     "head": "assets/head.html"

@@ -55,9 +55,9 @@ store Application {
 }
 
 enum Page {
-  Login,
-  Initial,
-  Home,
+  Login
+  Initial
+  Home
   Article
 }
 

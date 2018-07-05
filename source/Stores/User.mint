@@ -1,6 +1,6 @@
 enum Auth.Status {
-  Unauthenticated,
-  Authenticated,
+  Unauthenticated
+  Authenticated
   Initial
 }
 

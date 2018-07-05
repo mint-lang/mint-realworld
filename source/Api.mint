@@ -1,8 +1,8 @@
 enum Api.Status {
-  Error,
-  Loading,
-  Reloading,
-  Initial,
+  Error
+  Loading
+  Reloading
+  Initial
   Ok
 }
 

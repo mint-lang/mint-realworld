@@ -3,8 +3,8 @@ record Image.State {
 }
 
 enum Image.Status {
-  Initial,
-  Invalid,
+  Initial
+  Invalid
   Ok
 }
 
