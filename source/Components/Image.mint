@@ -1,7 +1,3 @@
-record Image.State {
-  status : Image.Status
-}
-
 enum Image.Status {
   Initial
   Invalid
@@ -14,14 +10,14 @@ component Image {
   property width : String = "auto"
   property src : String = ""
 
-  state : Image.State { status = Image.Status::Initial }
+  state status : Image.Status = Image.Status::Initial
 
   fun componentDidMount : Void {
     do {
       status =
         load()
 
-      next { state | status = status }
+      next { status = status }
     }
   }
 
@@ -51,7 +47,7 @@ component Image {
   }
 
   fun render : Html {
-    case (state.status) {
+    case (status) {
       Image.Status::Ok => <img::image src={src}/>
       => <div::placeholder/>
     }

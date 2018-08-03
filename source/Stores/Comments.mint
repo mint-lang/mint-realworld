@@ -1,11 +1,11 @@
 store Stores.Comments {
-  property status : Api.Status = Api.Status::Initial
-  property comments : Array(Comment) = []
-  property slug : String = ""
+  state status : Api.Status = Api.Status::Initial
+  state comments : Array(Comment) = []
+  state slug : String = ""
 
   fun reset : Void {
     next
-      { state |
+      {
         status = Api.Status::Initial,
         comments = []
       }
@@ -16,26 +16,27 @@ store Stores.Comments {
       void
     } else {
       do {
-        next { state | status = Api.nextStatus(status) }
+        next { status = Api.nextStatus(status) }
 
         comments =
           Api.endpoint() + "/articles/" + newSlug + "/comments"
           |> Http.get()
           |> Api.send(
-              \object : Object =>
-                Object.Decode.field(
-                  "comments",
-                  \input : Object => decode input as Array(Comment),
-                  object))
+            (object : Object) : Result(Object.Error, Array(Comment)) => {
+              Object.Decode.field(
+                "comments",
+                (input : Object) : Result(Object.Error, Array(Comment)) => { decode input as Array(Comment) },
+                object)
+            })
 
         next
-          { state |
+          {
             status = Api.Status::Ok,
             comments = comments,
             slug = newSlug
           }
       } catch Api.Status => status {
-        next { state | status = status }
+        next { status = status }
       }
     }
   }

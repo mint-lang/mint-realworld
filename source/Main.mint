@@ -1,7 +1,7 @@
-component Main {
-  connect Application exposing { page }
+component Layout {
+  property children : Array(Html) = []
 
-  style layout {
+  style base {
     flex-direction: column;
     min-height: 100vh;
     display: flex;
@@ -10,6 +10,45 @@ component Main {
   style content {
     flex: 1;
   }
+
+  fun render : Html {
+    <div::base>
+      <Header/>
+
+      <div::content>
+        <{ children }>
+      </div>
+
+      <Footer/>
+    </div>
+  }
+}
+
+component Logo {
+  style base {
+    fill: currentColor;
+  }
+
+  fun render : Html {
+    <svg::base
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      height="24"
+      width="24">
+
+      <path
+        d={
+          "M4 4v20h20v-20h-20zm18 18h-16v-13h16v13zm-3-3h-10v-1h10v" \
+          "1zm0-3h-10v-1h10v1zm0-3h-10v-1h10v1zm2-11h-19v19h-2v-21h" \
+          "21v2z"
+        }/>
+
+    </svg>
+  }
+}
+
+component Main {
+  connect Application exposing { page }
 
   get content : Html {
     case (page) {
@@ -20,26 +59,20 @@ component Main {
   }
 
   fun render : Html {
-    <div::layout>
-      <Header/>
-
-      <div::content>
-        <{ content }>
-      </div>
-
-      <Footer/>
-    </div>
+    <Layout>
+      <{ content }>
+    </Layout>
   }
 }
 
 store Application {
-  property page : Page = Page::Initial
+  state page : Page = Page::Initial
 
   fun initializeWithPage (page : Page) : Void {
-    do {
+    Array.do([
+      setPage(page),
       initialize()
-      setPage(page)
-    }
+    ])
   }
 
   fun initialize : Void {
@@ -50,7 +83,7 @@ store Application {
   }
 
   fun setPage (page : Page) : Void {
-    next { state | page = page }
+    next { page = page }
   }
 }
 
@@ -63,33 +96,31 @@ enum Page {
 
 routes {
   / {
-    do {
-      Application.initializeWithPage(Page::Home)
+    Array.do(
+      [
+        Application.initializeWithPage(Page::Home),
+        Stores.Tags.load(),
+        do {
+          params =
+            Stores.Articles.params
 
-      params =
-        Stores.Articles.params
-
-      Array.do(
-        [
-          Stores.Articles.load({ params | tag = "" }),
-          Stores.Tags.load()
-        ])
-    }
+          Stores.Articles.load({ params | tag = "" })
+        }
+      ])
   }
 
   /articles?tag=:tag (tag : String) {
-    do {
-      Application.initializeWithPage(Page::Home)
+    Array.do(
+      [
+        Application.initializeWithPage(Page::Home),
+        Stores.Tags.load(),
+        do {
+          params =
+            Stores.Articles.params
 
-      params =
-        Stores.Articles.params
-
-      Array.do(
-        [
-          Stores.Articles.load({ params | tag = tag }),
-          Stores.Tags.load()
-        ])
-    }
+          Stores.Articles.load({ params | tag = tag })
+        }
+      ])
   }
 
   /login {
@@ -120,17 +151,18 @@ routes {
   }
 
   /article/:slug (slug : String) {
-    do {
-      Application.initializeWithPage(Page::Article)
+    Array.do(
+      [
+        Application.initializeWithPage(Page::Article),
+        Stores.Article.load(slug),
+        do {
+          Stores.Comments.reset()
+          Stores.Comments.load(slug)
+        }
+      ])
+  }
 
-      Array.do(
-        [
-          Stores.Article.load(slug),
-          do {
-            Stores.Comments.reset()
-            Stores.Comments.load(slug)
-          }
-        ])
-    }
+  * {
+    Application.initialize()
   }
 }

@@ -1,14 +1,15 @@
 component HeartIcon {
-  connect Theme exposing { link }
+  property size : String = "18px"
 
-  property size : String = "15px"
+  style base {
+    fill: currentColor;
+  }
 
   fun render : Html {
-    <svg
-      width={size}
+    <svg::base
+      viewBox="0 0 512 512"
       height={size}
-      fill={link}
-      viewBox="0 0 512 512">
+      width={size}>
 
       <g>
         <path

@@ -1,12 +1,12 @@
 store Stores.Forms.Comment {
-  property value : String = ""
+  state value : String = ""
 
   fun setValue (value : String) : Void {
-    next { state | value = value }
+    next { value = value }
   }
 
   fun clearValue : Void {
-    next { state | value = "" }
+    next { value = "" }
   }
 }
 

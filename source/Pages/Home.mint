@@ -5,7 +5,7 @@ component Pages.Home {
   get articlePreviews : Array(Html) {
     articles
     |> Array.map(
-      \article : Article => <Article.Preview article={article}/>)
+      (article : Article) : Html => { <Article.Preview article={article}/> })
     |> Array.intersperse(<div::divider/>)
   }
 
@@ -14,8 +14,7 @@ component Pages.Home {
   }
 
   style divider {
-    border-top: 1px solid #EEE;
-    margin: 30px 0;
+    margin: 20px 0;
   }
 
   style banner {
@@ -26,7 +25,7 @@ component Pages.Home {
     align-items: center;
     text-align: center;
     display: flex;
-    height: 170px;
+    height: 300px;
   }
 
   style layout {

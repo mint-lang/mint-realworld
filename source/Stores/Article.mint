@@ -1,11 +1,11 @@
 store Stores.Article {
-  property status : Api.Status = Api.Status::Initial
-  property article : Article = Article.empty()
-  property slug : String = ""
+  state status : Api.Status = Api.Status::Initial
+  state article : Article = Article.empty()
+  state slug : String = ""
 
   fun reset : Void {
     next
-      { state |
+      {
         status = Api.Status::Initial,
         article = Article.empty(),
         slug = ""
@@ -18,27 +18,28 @@ store Stores.Article {
     } else {
       if (article.slug == newSlug) {
         next
-          { state |
+          {
             status = Api.Status::Ok,
             article = article,
             slug = newSlug
           }
       } else {
         do {
-          next { state | status = Api.nextStatus(status) }
+          next { status = Api.nextStatus(status) }
 
           article =
             Api.endpoint() + "/articles/" + newSlug
             |> Http.get()
             |> Api.send(
-              \object : Object =>
+              (object : Object) : Result(Object.Error, Article) => {
                 Object.Decode.field(
                   "article",
-                  \input : Object => decode input as Article,
-                  object))
+                  (input : Object) : Result(Object.Error, Article) => { decode input as Article },
+                  object)
+              })
 
           next
-            { state |
+            {
               status = Api.Status::Ok,
               article = article,
               slug = newSlug
@@ -51,7 +52,8 @@ store Stores.Article {
   } where {
     article =
       Stores.Articles.articles
-      |> Array.find(\article : Article => article.slug == newSlug)
+      |> Array.find(
+        (article : Article) : Bool => { article.slug == newSlug })
       |> Maybe.withDefault(Article.empty())
   }
 }

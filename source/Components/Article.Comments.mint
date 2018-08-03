@@ -56,7 +56,7 @@ component Article.Comments {
       <div>
         <{
           Array.map(
-            \comment : Comment => <Article.Comment comment={comment}/>,
+            (comment : Comment) : Html => { <Article.Comment comment={comment}/> },
             comments)
         }>
       </div>

@@ -1,14 +1,38 @@
-record Pages.Login.State {
-  password : String,
-  email : String
+component Input {
+  property onChange : Function(String, Void) = (value : String) : Void => { void }
+  property disabled : Bool = false
+  property value : String = ""
+  property type : String = "text"
+
+  style base {
+    border: 1px solid #CCC;
+    margin-bottom: 15px;
+    border-radius: 2px;
+    padding: 5px 10px;
+    font-size: 20px;
+  }
+
+  fun handleInput (event : Html.Event) : Void {
+    onChange(Dom.getValue(event.target))
+  }
+
+  fun render : Html {
+    <input::base
+      onInput={handleInput}
+      disabled={disabled}
+      value={value}
+      type={type}/>
+  }
 }
 
 component Pages.Login {
   connect Stores.User exposing { login, loginStatus }
 
-  state : Pages.Login.State {
-    password = "",
-    email = ""
+  state password : String = ""
+  state email : String = ""
+
+  style hidden {
+    display: none;
   }
 
   style form {
@@ -21,31 +45,23 @@ component Pages.Login {
     margin: 0 auto;
   }
 
-  style input {
-    border: 1px solid #CCC;
-    margin-bottom: 15px;
-    border-radius: 2px;
-    padding: 5px 10px;
-    font-size: 20px;
-  }
-
   style label {
     font-weight: bold;
     font-size: 14px;
   }
 
-  fun handleEmail (event : Html.Event) : Void {
-    next { state | email = Dom.getValue(event.target) }
+  fun handleEmail (value : String) : Void {
+    next { email = value }
   }
 
-  fun handlePassword (event : Html.Event) : Void {
-    next { state | password = Dom.getValue(event.target) }
+  fun handlePassword (value : String) : Void {
+    next { password = value }
   }
 
   fun handleSubmit (event : Html.Event) : Void {
     do {
       Html.Event.preventDefault(event)
-      login(state.email, state.password)
+      login(email, password)
     }
   }
 
@@ -63,29 +79,39 @@ component Pages.Login {
         <{ "Sign in" }>
       </h1>
 
-      <form::form onSubmit={handleSubmit}>
+      <form::form
+        onSubmit={handleSubmit}
+        autocomplete="false">
+
+        <input::hidden
+          name="prevent_autofill"
+          id="prevent_autofill"
+          type="text"
+          value=""/>
+
         <label::label>
           <{ "Email" }>
         </label>
 
-        <input::input
-          onInput={handleEmail}
+        <Input
+          onChange={handleEmail}
           disabled={disabled}
-          value={state.email}/>
+          value={email}/>
 
         <label::label>
           <{ "Password" }>
         </label>
 
-        <input::input
-          onInput={handlePassword}
-          value={state.password}
+        <Input
+          onChange={handlePassword}
           disabled={disabled}
+          value={password}
           type="password"/>
 
         <button disabled={disabled}>
           <{ "Sign in" }>
         </button>
+
       </form>
     </div>
   }

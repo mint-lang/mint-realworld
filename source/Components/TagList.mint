@@ -25,10 +25,11 @@ component TagList {
   } where {
     renderdTags =
       Array.map(
-        \tag : String =>
+        (tag : String) : Html => {
           <Tag
             inactive={inactive}
-            name={tag}/>,
+            name={tag}/>
+        },
         tags)
   }
 }

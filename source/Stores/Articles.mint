@@ -4,17 +4,17 @@ record Stores.Articles.Params {
 }
 
 store Stores.Articles {
-  property status : Api.Status = Api.Status::Initial
-  property articles : Array(Article) = []
+  state status : Api.Status = Api.Status::Initial
+  state articles : Array(Article) = []
 
-  property params : Stores.Articles.Params = {
+  state params : Stores.Articles.Params = {
     tag = "",
     limit = 10
   }
 
   fun reset : Void {
     next
-      { state |
+      {
         status = Api.Status::Initial,
         articles = []
       }
@@ -26,7 +26,7 @@ store Stores.Articles {
     } else {
       do {
         next
-          { state |
+          {
             status = Api.nextStatus(status),
             params = newParams
           }
@@ -40,19 +40,20 @@ store Stores.Articles {
         articles =
           Http.get(Api.endpoint() + "/articles?" + params)
           |> Api.send(
-              \object : Object =>
-                Object.Decode.field(
-                  "articles",
-                  \input : Object => decode input as Array(Article),
-                  object))
+            (object : Object) : Result(Object.Error, Array(Article)) => {
+              Object.Decode.field(
+                "articles",
+                (input : Object) : Result(Object.Error, Array(Article)) => { decode input as Array(Article) },
+                object)
+            })
 
         next
-          { state |
+          {
             status = Api.Status::Ok,
             articles = articles
           }
       } catch Api.Status => status {
-        next { state | status = status }
+        next { status = status }
       }
     }
   }

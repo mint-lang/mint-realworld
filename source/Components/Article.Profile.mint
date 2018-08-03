@@ -8,7 +8,7 @@ component Article.Profile {
                          "image date";
 
     grid-template-columns: 32px 1fr;
-    grid-template-rows: 16px 16px;
+    grid-template-rows: 22px 10px;
     grid-gap: 0 10px;
     display: grid;
   }
@@ -18,16 +18,19 @@ component Article.Profile {
   }
 
   style author {
+    text-transform: uppercase;
     text-decoration: none;
     grid-area: author;
+    font-weight: 600;
     font-size: 14px;
     display: block;
     color: {link};
   }
 
   style date {
+    line-height: 10px;
     grid-area: date;
-    font-size: 12px;
+    font-size: 10px;
     opacity: 0.5;
   }
 
@@ -36,8 +39,8 @@ component Article.Profile {
       <a::profile href="">
         <Image
           src={article.author.image}
-          borderRadius="16px"
           key={article.slug}
+          borderRadius="3px"
           height="32px"
           width="32px"/>
       </a>

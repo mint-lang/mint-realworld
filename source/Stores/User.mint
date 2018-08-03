@@ -5,29 +5,30 @@ enum Auth.Status {
 }
 
 store Stores.User {
-  property loginStatus : Api.Status = Api.Status::Initial
-  property status : Auth.Status = Auth.Status::Initial
+  state loginStatus : Api.Status = Api.Status::Initial
+  state status : Auth.Status = Auth.Status::Initial
 
-  property currentUser : Maybe(User) = Maybe.nothing()
+  state currentUser : Maybe(User) = Maybe.nothing()
 
   fun getCurrentUser : Void {
     do {
       user =
         Http.get(Api.endpoint() + "/user")
         |> Api.send(
-          \object : Object =>
+          (object : Object) : Result(Object.Error, User) => {
             Object.Decode.field(
               "user",
-              \input : Object => decode input as User,
-              object))
+              (input : Object) : Result(Object.Error, User) => { decode input as User },
+              object)
+          })
 
       next
-        { state |
+        {
           status = Auth.Status::Authenticated,
           currentUser = Maybe.just(user)
         }
     } catch Api.Status => status {
-      next { state | status = Auth.Status::Unauthenticated }
+      next { status = Auth.Status::Unauthenticated }
     }
   }
 
@@ -37,7 +38,7 @@ store Stores.User {
       resetStores()
 
       next
-        { state |
+        {
           status = Auth.Status::Unauthenticated,
           currentUser = Maybe.nothing()
         }
@@ -56,7 +57,7 @@ store Stores.User {
 
   fun login (email : String, password : String) : Void {
     do {
-      next { state | loginStatus = Api.nextStatus(loginStatus) }
+      next { loginStatus = Api.nextStatus(loginStatus) }
 
       userObject =
         with Object.Encode {
@@ -78,17 +79,18 @@ store Stores.User {
         |> Http.header("Content-Type", "application/json")
         |> Http.stringBody(body)
         |> Api.send(
-          \object : Object =>
+          (object : Object) : Result(Object.Error, User) => {
             Object.Decode.field(
               "user",
-              \input : Object => decode input as User,
-              object))
+              (input : Object) : Result(Object.Error, User) => { decode input as User },
+              object)
+          })
 
       Storage.Session.set("token", user.token)
       resetStores()
 
       next
-        { state |
+        {
           status = Auth.Status::Authenticated,
           currentUser = Maybe.just(user),
           loginStatus = Api.Status::Ok
@@ -96,7 +98,7 @@ store Stores.User {
 
       Window.navigate("/")
     } catch Api.Status => status {
-      next { state | loginStatus = status }
+      next { loginStatus = status }
     } catch Storage.Error => error {
       void
     }

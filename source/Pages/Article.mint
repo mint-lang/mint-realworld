@@ -1,5 +1,6 @@
 component Pages.Article {
   connect Stores.Article exposing { article, status }
+  connect Theme exposing { primary, primaryText }
 
   style base {
 
@@ -11,9 +12,9 @@ component Pages.Article {
   }
 
   style header {
-    background: #333;
+    background: {primary};
+    color: {primaryText};
     padding: 40px 0;
-    color: white;
   }
 
   style content {

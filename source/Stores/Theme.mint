@@ -1,6 +1,10 @@
 store Theme {
-  property primaryText : String = "#FFF"
-  property primary : String = "#5CB85C"
+  state primaryDark : String = "#0284c0"
+  state primaryText : String = "#FFF"
+  state primary : String = "#03a9f4"
 
-  property link : String = "#5CB85C"
+  state link : String = "#338cc7"
+
+  state secondaryText : String = "#FFF"
+  state secondary : String = "#ff7422"
 }

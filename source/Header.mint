@@ -1,9 +1,9 @@
 component Header {
   connect Stores.User exposing { status }
-  connect Theme exposing { primary }
 
   style base {
-
+    background: #222;
+    color: #EEE;
   }
 
   style wrapper {
@@ -13,22 +13,32 @@ component Header {
   }
 
   style brand {
-    font-family: Titillium Web;
+    text-transform: uppercase;
+    font-family: Righteous;
     text-decoration: none;
-    color: {primary};
-    font-size: 18px;
+    letter-spacing: 1px;
+    line-height: 24px;
+    font-size: 24px;
+    color: inherit;
+    display: flex;
+  }
+
+  style brand-name {
+    margin-left: 10px;
   }
 
   style links {
-    font-family: Source Sans Pro;
+    text-transform: uppercase;
     margin-left: auto;
+    font-weight: 600;
+    font-size: 14px;
     display: flex;
   }
 
   style link {
     text-decoration: none;
     margin-left: 15px;
-    color: {primary};
+    color: inherit;
   }
 
   get links : Array(Html) {
@@ -56,7 +66,12 @@ component Header {
           </a>
         ]
 
-      => []
+      =>
+        [
+          <a::link>
+            <{ "Loading..." }>
+          </a>
+        ]
     }
   }
 
@@ -65,7 +80,11 @@ component Header {
       <Container>
         <div::wrapper>
           <a::brand href="/">
-            <{ "Conduit" }>
+            <Logo/>
+
+            <span::brand-name>
+              <{ "Conduit" }>
+            </span>
           </a>
 
           <div::links>

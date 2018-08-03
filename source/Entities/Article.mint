@@ -8,7 +8,7 @@ record Article {
   createdAt : Time,
   updatedAt : Time,
   author : Author,
-  tags : Array(String) from "tagList"
+  tags : Array(String) using "tagList"
 }
 
 module Article {

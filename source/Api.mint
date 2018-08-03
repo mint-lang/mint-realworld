@@ -38,7 +38,7 @@ module Api {
     request
     |> Http.send()
     |> then(
-      \result : Result(Http.ErrorResponse, Http.Response) =>
+      (result : Result(Http.ErrorResponse, Http.Response)) : Result(Api.Status, b) => {
         try {
           response =
             result
@@ -63,7 +63,8 @@ module Api {
           }
         } catch Http.ErrorResponse => error {
           Result.error(Api.Status::Error)
-        })
+        }
+      })
   } where {
     request =
       try {

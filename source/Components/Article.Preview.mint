@@ -1,33 +1,39 @@
 component Article.Preview {
-  connect Theme exposing { link }
+  connect Theme exposing { secondary, secondaryText }
 
   property article : Article = Article.empty()
 
   style base {
-
+    border: 1px solid #EEE;
+    border-radius: 2px;
   }
 
-  style header {
+  style footer {
     justify-content: space-between;
+    border-top: 1px solid #EEE;
     margin-bottom: 10px;
+    background: #F6F6F6;
     margin-bottom: 0;
     display: flex;
+    padding: 10px;
   }
 
   style button {
-    border-radius: 5px;
-    border-color: {link};
-    color: {link};
+    background: #a7a7a7;
+    color: {secondaryText};
+    align-items: center;
+    border-radius: 2px;
+    display: flex;
+    border: 0;
 
     &:hover {
-      background-color: {link};
-      color: white;
       cursor: pointer;
     }
+  }
 
-    &:hover > svg {
-      fill: white;
-    }
+  style button-text {
+    margin-left: 5px;
+    font-weight: 600;
   }
 
   style title {
@@ -38,27 +44,21 @@ component Article.Preview {
 
   style description {
     margin-bottom: 10px;
+    max-height: 200px;
     font-size: 14px;
     opacity: 0.6;
   }
 
   style content {
     grid-area: content;
-
-    & > a {
-      text-decoration: none;
-      transition: 150ms;
-      color: inherit;
-    }
-
-    &:hover > a {
-      color: {link};
-    }
   }
 
-  style link-text {
-    font-size: 12px;
-    opacity: 0.5;
+  style link {
+    text-decoration: none;
+    transition: 150ms;
+    color: inherit;
+    display: block;
+    padding: 10px;
   }
 
   get href : String {
@@ -67,33 +67,32 @@ component Article.Preview {
 
   fun render : Html {
     <div::base>
-      <div::header>
-        <Article.Profile article={article}/>
-
-        <button::button>
-          <HeartIcon/>
-          <{ Number.toString(article.favoritesCount) }>
-        </button>
-      </div>
-
       <div::content>
-        <a href={href}>
+        <a::link href={href}>
           <div::title>
             <{ article.title }>
           </div>
 
           <div::description>
-            <{ article.description }>
-          </div>
-
-          <div::link-text>
-            <{ "Read more..." }>
+            <Markdown content={article.body}/>
           </div>
 
           <TagList
             tags={article.tags}
             inactive={true}/>
         </a>
+      </div>
+
+      <div::footer>
+        <Article.Profile article={article}/>
+
+        <button::button>
+          <HeartIcon/>
+
+          <span::button-text>
+            <{ Number.toString(article.favoritesCount) }>
+          </span>
+        </button>
       </div>
     </div>
   }

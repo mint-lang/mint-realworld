@@ -1,5 +1,5 @@
 component Tag {
-  connect Theme exposing { primary }
+  connect Theme exposing { primary, primaryText, primaryDark }
 
   property inactive : Bool = false
   property active : Bool = false
@@ -7,14 +7,15 @@ component Tag {
 
   style base {
     pointer-events: {pointerEvents};
-    text-transform: uppercase;
     background: {background};
+    color: {primaryText};
+
+    text-transform: uppercase;
     display: inline-block;
     text-align: center;
-    border-radius: 12px;
+    border-radius: 2px;
     font-weight: bold;
     font-size: 12px;
-    color: #FFF;
 
     &:hover {
       background: {backgroundHover};
@@ -38,7 +39,7 @@ component Tag {
 
   get backgroundHover : String {
     if (active) {
-      "#46a046"
+      primaryDark
     } else {
       "#6b747b"
     }
