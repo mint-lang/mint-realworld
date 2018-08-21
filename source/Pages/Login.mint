@@ -1,5 +1,5 @@
 component Input {
-  property onChange : Function(String, Void) = (value : String) : Void => { void }
+  property onChange : Function(String, a) = (value : String) : a => { void }
   property disabled : Bool = false
   property value : String = ""
   property type : String = "text"
@@ -12,7 +12,7 @@ component Input {
     font-size: 20px;
   }
 
-  fun handleInput (event : Html.Event) : Void {
+  fun handleInput (event : Html.Event) : a {
     onChange(Dom.getValue(event.target))
   }
 
@@ -50,16 +50,16 @@ component Pages.Login {
     font-size: 14px;
   }
 
-  fun handleEmail (value : String) : Void {
+  fun handleEmail (value : String) : Promise(Never, Void) {
     next { email = value }
   }
 
-  fun handlePassword (value : String) : Void {
+  fun handlePassword (value : String) : Promise(Never, Void) {
     next { password = value }
   }
 
-  fun handleSubmit (event : Html.Event) : Void {
-    do {
+  fun handleSubmit (event : Html.Event) : Promise(Never, Void) {
+    sequence {
       Html.Event.preventDefault(event)
       login(email, password)
     }
@@ -67,9 +67,20 @@ component Pages.Login {
 
   get disabled : Bool {
     case (loginStatus) {
-      Api.Status::Reloading => true
-      Api.Status::Loading => true
+      Api.Status::Reloading  => true
+      Api.Status::Loading  => true
       => false
+    }
+  }
+
+  get error : Html {
+    case (loginStatus) {
+      Api.Status::Error  =>
+        <div>
+          <{ "Invalid email or password!" }>
+        </div>
+
+      => Html.empty()
     }
   }
 
@@ -88,6 +99,8 @@ component Pages.Login {
           id="prevent_autofill"
           type="text"
           value=""/>
+
+        <{ error }>
 
         <label::label>
           <{ "Email" }>

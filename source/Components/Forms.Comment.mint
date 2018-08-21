@@ -1,11 +1,11 @@
 store Stores.Forms.Comment {
   state value : String = ""
 
-  fun setValue (value : String) : Void {
+  fun setValue (value : String) : Promise(Never, Void) {
     next { value = value }
   }
 
-  fun clearValue : Void {
+  fun clearValue : Promise(Never, Void) {
     next { value = "" }
   }
 }
@@ -32,13 +32,13 @@ component Forms.Comment {
     }
   }
 
-  fun handleChange (event : Html.Event) : Void {
+  fun handleChange (event : Html.Event) : Promise(Never, Void) {
     event.target
     |> Dom.getValue()
     |> setValue()
   }
 
-  fun handleClick (event : Html.Event) : Void {
+  fun handleClick (event : Html.Event) : Promise(Never, Void) {
     clearValue()
   }
 

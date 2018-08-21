@@ -1,6 +1,5 @@
 store Stores.Tags {
-  state status : Api.Status = Api.Status::Initial
-  state tags : Array(String) = []
+  state status : Api.Status(Array(String)) = Api.Status::Initial
   state cached : Bool = false
 
   fun decodeTags (object : Object) : Result(Object.Error, Array(String)) {
@@ -12,26 +11,23 @@ store Stores.Tags {
     }
   }
 
-  fun load : Void {
+  fun load : Promise(Never, Void) {
     if (cached) {
-      void
+      Promise.never()
     } else {
       with Http {
-        do {
+        sequence {
           next { status = Api.nextStatus(status) }
 
-          tags =
+          status =
             Http.get(Api.endpoint() + "/tags")
             |> Api.send(decodeTags)
 
           next
             {
-              status = Api.Status::Ok,
-              cached = true,
-              tags = tags
+              status = status,
+              cached = true
             }
-        } catch Api.Status => status {
-          next { status = status }
         }
       }
     }

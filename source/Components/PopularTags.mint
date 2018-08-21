@@ -1,6 +1,6 @@
 component PopularTags {
   connect Stores.Articles exposing { params }
-  connect Stores.Tags exposing { tags, status }
+  connect Stores.Tags exposing { status }
 
   style tags {
     grid-template-columns: 1fr 1fr 1fr;
@@ -48,5 +48,11 @@ component PopularTags {
 
       </Status>
     </div>
+  } where {
+    tags =
+      case (status) {
+        Api.Status::Ok tags => tags
+        => []
+      }
   }
 }

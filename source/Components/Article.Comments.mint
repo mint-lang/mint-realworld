@@ -45,7 +45,7 @@ component Article.Comment {
 }
 
 component Article.Comments {
-  connect Stores.Comments exposing { comments, status }
+  connect Stores.Comments exposing { status }
 
   get content : Html {
     if (Array.isEmpty(comments)) {
@@ -61,6 +61,12 @@ component Article.Comments {
         }>
       </div>
     }
+  } where {
+    comments =
+      case (status) {
+        Api.Status::Ok comments => comments
+        => []
+      }
   }
 
   fun render : Html {

@@ -1,5 +1,5 @@
 component Header {
-  connect Stores.User exposing { status }
+  connect Stores.User exposing { userStatus }
 
   style base {
     background: #222;
@@ -42,8 +42,8 @@ component Header {
   }
 
   get links : Array(Html) {
-    case (status) {
-      Auth.Status::Unauthenticated =>
+    case (userStatus) {
+      Api.Status::Error  =>
         [
           <a::link href="/login">
             <{ "Sign in" }>
@@ -53,7 +53,7 @@ component Header {
           </a>
         ]
 
-      Auth.Status::Authenticated =>
+      Api.Status::Ok  =>
         [
           <a::link href="">
             <{ " New Post" }>

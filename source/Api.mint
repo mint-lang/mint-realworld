@@ -1,70 +1,67 @@
-enum Api.Status {
+enum Api.Status(a) {
   Error
   Loading
   Reloading
   Initial
-  Ok
+  Ok(a)
 }
 
 module Api {
-  fun then (updater : Function(Result(a, b), Result(c, d)), promise : Promise(a, b)) : Promise(c, d) {
-    `
-    promise
-      .then((data) => {
-        let result = updater(new Ok(data))
+  fun then (
+    updater : Function(Result(a, b), c),
+    promise : Promise(a, b)
+  ) : Promise(Never, c) {
+    `promise.then((data) => { return updater(new Ok(data)) })`
+  }
 
-        if (result instanceof Err) {
-          throw result.value
-        } else {
-          return result
-        }
-      })
-      .catch((error) => { throw updater(new Err(error)).value })
-    `
+  fun withDefault (a : a, status : Api.Status(a)) : a {
+    case (status) {
+      Api.Status::Ok value => value
+      => a
+    }
   }
 
   fun endpoint : String {
     "https://conduit.productionready.io/api"
   }
 
-  fun nextStatus (status : Api.Status) : Api.Status {
+  fun nextStatus (status : Api.Status(a)) : Api.Status(a) {
     case (status) {
-      Api.Status::Initial => Api.Status::Loading
+      Api.Status::Initial  => Api.Status::Loading
       => Api.Status::Reloading
     }
   }
 
-  fun send (decoder : Function(Object, Result(Object.Error, a)), rawRequest : Http.Request) : Promise(Api.Status, a) {
-    request
-    |> Http.send()
-    |> then(
-      (result : Result(Http.ErrorResponse, Http.Response)) : Result(Api.Status, b) => {
+  fun send (
+    decoder : Function(Object, Result(Object.Error, a)),
+    rawRequest : Http.Request
+  ) : Promise(Never, Api.Status(a)) {
+    sequence {
+      response =
+        request
+        |> Http.send()
+
+      if (response.status == 401) {
+        Api.Status::Error
+      } else {
         try {
-          response =
-            result
+          object =
+            Json.parse(response.body)
+            |> Maybe.toResult("")
 
-          if (response.status == 401) {
-            Result.error(Api.Status::Error)
-          } else {
-            try {
-              object =
-                Json.parse(response.body)
-                |> Maybe.toResult("")
+          data =
+            decoder(object)
 
-              data =
-                decoder(object)
-
-              Result.ok(data)
-            } catch Object.Error => error {
-              Result.error(Api.Status::Error)
-            } catch String => error {
-              Result.error(Api.Status::Error)
-            }
-          }
-        } catch Http.ErrorResponse => error {
-          Result.error(Api.Status::Error)
+          Api.Status::Ok(data)
+        } catch Object.Error => error {
+          Api.Status::Error
+        } catch String => error {
+          Api.Status::Error
         }
-      })
+      }
+    } catch Http.ErrorResponse => error {
+      Api.Status::Error
+    }
   } where {
     request =
       try {

@@ -1,24 +1,19 @@
 store Stores.Comments {
-  state status : Api.Status = Api.Status::Initial
-  state comments : Array(Comment) = []
+  state status : Api.Status(Array(Comment)) = Api.Status::Initial
   state slug : String = ""
 
-  fun reset : Void {
-    next
-      {
-        status = Api.Status::Initial,
-        comments = []
-      }
+  fun reset : Promise(Never, Void) {
+    next { status = Api.Status::Initial }
   }
 
-  fun load (newSlug : String) : Void {
+  fun load (newSlug : String) : Promise(Never, Void) {
     if (slug == newSlug && status != Api.Status::Initial) {
-      void
+      Promise.never()
     } else {
-      do {
+      sequence {
         next { status = Api.nextStatus(status) }
 
-        comments =
+        status =
           Api.endpoint() + "/articles/" + newSlug + "/comments"
           |> Http.get()
           |> Api.send(
@@ -31,12 +26,9 @@ store Stores.Comments {
 
         next
           {
-            status = Api.Status::Ok,
-            comments = comments,
+            status = status,
             slug = newSlug
           }
-      } catch Api.Status => status {
-        next { status = status }
       }
     }
   }

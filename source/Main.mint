@@ -52,9 +52,14 @@ component Main {
 
   get content : Html {
     case (page) {
-      Page::Home => <Pages.Home/>
-      Page::Article => <Pages.Article/>
-      Page::Login => <Pages.Login/>
+      Page::Home  => <Pages.Home/>
+      Page::Article  => <Pages.Article/>
+      Page::Login  => <Pages.Login/>
+
+      =>
+        <div>
+          <{ "WTF" }>
+        </div>
     }
   }
 
@@ -68,21 +73,21 @@ component Main {
 store Application {
   state page : Page = Page::Initial
 
-  fun initializeWithPage (page : Page) : Void {
+  fun initializeWithPage (page : Page) : Promise(Never, Void) {
     Array.do([
       setPage(page),
       initialize()
     ])
   }
 
-  fun initialize : Void {
-    case (Stores.User.status) {
-      Auth.Status::Initial => Stores.User.getCurrentUser()
-      => void
+  fun initialize : Promise(Never, Void) {
+    case (Stores.User.userStatus) {
+      Api.Status::Initial  => Stores.User.getCurrentUser()
+      => Promise.never()
     }
   }
 
-  fun setPage (page : Page) : Void {
+  fun setPage (page : Page) : Promise(Never, Void) {
     next { page = page }
   }
 }
@@ -96,70 +101,77 @@ enum Page {
 
 routes {
   / {
-    Array.do(
-      [
-        Application.initializeWithPage(Page::Home),
-        Stores.Tags.load(),
-        do {
-          params =
-            Stores.Articles.params
+    parallel {
+      Application.initializeWithPage(Page::Home)
+      Stores.Tags.load()
 
-          Stores.Articles.load({ params | tag = "" })
-        }
-      ])
+      sequence {
+        params =
+          Stores.Articles.params
+
+        Stores.Articles.load({ params | tag = "" })
+      }
+    }
   }
 
   /articles?tag=:tag (tag : String) {
-    Array.do(
-      [
-        Application.initializeWithPage(Page::Home),
-        Stores.Tags.load(),
-        do {
-          params =
-            Stores.Articles.params
+    parallel {
+      Application.initializeWithPage(Page::Home)
+      Stores.Tags.load()
 
-          Stores.Articles.load({ params | tag = tag })
-        }
-      ])
+      sequence {
+        params =
+          Stores.Articles.params
+
+        Stores.Articles.load({ params | tag = tag })
+      }
+    }
   }
 
   /login {
-    do {
+    sequence {
       Application.initialize()
 
-      case (Stores.User.status) {
-        Auth.Status::Authenticated => Window.navigate("/")
+      case (Stores.User.userStatus) {
+        Api.Status::Ok user =>
+          sequence {
+            Window.navigate("/")
+          }
+
         => Application.setPage(Page::Login)
       }
     }
   }
 
   /logout {
-    do {
+    sequence {
       Application.initialize()
 
-      case (Stores.User.status) {
-        Auth.Status::Authenticated =>
-          do {
+      case (Stores.User.userStatus) {
+        Api.Status::Ok user =>
+          sequence {
             Stores.User.logout()
             Window.navigate("/")
           }
 
-        => Window.navigate("/")
+        =>
+          sequence {
+            Window.navigate("/")
+          }
       }
     }
   }
 
   /article/:slug (slug : String) {
-    Array.do(
-      [
-        Application.initializeWithPage(Page::Article),
-        Stores.Article.load(slug),
-        do {
-          Stores.Comments.reset()
-          Stores.Comments.load(slug)
-        }
-      ])
+    parallel {
+      Application.initializeWithPage(Page::Article)
+      Stores.Article.load(slug)
+
+      sequence {
+        Stores.Comments.reset()
+        Stores.Comments.load(slug)
+      }
+    }
   }
 
   * {

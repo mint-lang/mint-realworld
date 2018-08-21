@@ -1,34 +1,33 @@
+/* This store contains the data of the currenty viewed article. */
 store Stores.Article {
-  state status : Api.Status = Api.Status::Initial
-  state article : Article = Article.empty()
-  state slug : String = ""
+  /* Represents the status of the article. */
+  state status : Api.Status(Article) = Api.Status::Initial
 
-  fun reset : Void {
-    next
-      {
-        status = Api.Status::Initial,
-        article = Article.empty(),
-        slug = ""
-      }
+  /* Returns the current article. */
+  get article : Article {
+    Api.withDefault(Article.empty(), status)
   }
 
-  fun load (newSlug : String) : Void {
-    if (slug == newSlug) {
-      void
+  /* Resets the store to the initial values. */
+  fun reset : Promise(Never, Void) {
+    next { status = Api.Status::Initial }
+  }
+
+  /* Loads the article from the given slug. */
+  fun load (slug : String) : Promise(Never, Void) {
+    /* If the slug is the same then we don't need to do anything. */
+    if (article.slug == slug) {
+      Promise.never()
     } else {
-      if (article.slug == newSlug) {
-        next
-          {
-            status = Api.Status::Ok,
-            article = article,
-            slug = newSlug
-          }
+      /* If the next article is in the store we just use that. */
+      if (nextArticle.slug == slug) {
+        next { status = Api.Status::Ok(nextArticle) }
       } else {
-        do {
+        sequence {
           next { status = Api.nextStatus(status) }
 
-          article =
-            Api.endpoint() + "/articles/" + newSlug
+          status =
+            Api.endpoint() + "/articles/" + slug
             |> Http.get()
             |> Api.send(
               (object : Object) : Result(Object.Error, Article) => {
@@ -38,22 +37,15 @@ store Stores.Article {
                   object)
               })
 
-          next
-            {
-              status = Api.Status::Ok,
-              article = article,
-              slug = newSlug
-            }
-        } catch Api.Status => status {
-          reset()
+          next { status = status }
         }
       }
     }
   } where {
-    article =
+    nextArticle =
       Stores.Articles.articles
       |> Array.find(
-        (article : Article) : Bool => { article.slug == newSlug })
+        (article : Article) : Bool => { article.slug == slug })
       |> Maybe.withDefault(Article.empty())
   }
 }

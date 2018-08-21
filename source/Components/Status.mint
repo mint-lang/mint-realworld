@@ -1,5 +1,5 @@
 component Status {
-  property status : Api.Status = Api.Status::Ok
+  property status : Api.Status(a) = Api.Status::Initial
   property children : Array(Html) = []
   property message : String = ""
 
@@ -45,30 +45,30 @@ component Status {
 
   get isLoading : Bool {
     case (status) {
-      Api.Status::Reloading => true
-      Api.Status::Loading => true
+      Api.Status::Reloading  => true
+      Api.Status::Loading  => true
       => false
     }
   }
 
   fun render : Html {
     case (status) {
-      Api.Status::Error =>
+      Api.Status::Error  =>
         <div>
           <{ message }>
         </div>
 
-      Api.Status::Ok =>
+      Api.Status::Ok  =>
         <div>
           <{ children }>
         </div>
 
-      Api.Status::Loading =>
+      Api.Status::Loading  =>
         <div>
           <{ "Loading..." }>
         </div>
 
-      Api.Status::Reloading =>
+      Api.Status::Reloading  =>
         <div::base>
           <div::loader>
             <{ "Loading..." }>
@@ -77,7 +77,7 @@ component Status {
           <{ children }>
         </div>
 
-      Api.Status::Initial => <div/>
+      Api.Status::Initial  => <div/>
     }
   }
 }

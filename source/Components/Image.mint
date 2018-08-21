@@ -12,8 +12,8 @@ component Image {
 
   state status : Image.Status = Image.Status::Initial
 
-  fun componentDidMount : Void {
-    do {
+  fun componentDidMount : Promise(Never, Void) {
+    sequence {
       status =
         load()
 
@@ -25,8 +25,8 @@ component Image {
     `
     new Promise((resolve, reject) => {
       let image = new Image()
-      image.onerror = () => {resolve($Image_Status_Invalid)}
-      image.onload = () => {resolve($Image_Status_Ok)}
+      image.onerror = () => {resolve(new $$Image_Status_Invalid)}
+      image.onload = () => {resolve(new $$Image_Status_Ok)}
       image.src = this.src
     })
     `
@@ -48,7 +48,7 @@ component Image {
 
   fun render : Html {
     case (status) {
-      Image.Status::Ok => <img::image src={src}/>
+      Image.Status::Ok  => <img::image src={src}/>
       => <div::placeholder/>
     }
   }

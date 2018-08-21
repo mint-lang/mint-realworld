@@ -1,62 +1,48 @@
-enum Auth.Status {
-  Unauthenticated
-  Authenticated
-  Initial
-}
-
 store Stores.User {
-  state loginStatus : Api.Status = Api.Status::Initial
-  state status : Auth.Status = Auth.Status::Initial
+  state loginStatus : Api.Status(User) = Api.Status::Initial
+  state userStatus : Api.Status(User) = Api.Status::Initial
 
-  state currentUser : Maybe(User) = Maybe.nothing()
+  fun decodeUser (object : Object) : Result(Object.Error, User) {
+    object
+    |> Object.Decode.field(
+      "user",
+      (input : Object) : Result(Object.Error, User) => { decode input as User })
+  }
 
-  fun getCurrentUser : Void {
-    do {
-      user =
-        Http.get(Api.endpoint() + "/user")
-        |> Api.send(
-          (object : Object) : Result(Object.Error, User) => {
-            Object.Decode.field(
-              "user",
-              (input : Object) : Result(Object.Error, User) => { decode input as User },
-              object)
-          })
+  fun getCurrentUser : Promise(Never, Void) {
+    sequence {
+      next { userStatus = Api.nextStatus(userStatus) }
 
-      next
-        {
-          status = Auth.Status::Authenticated,
-          currentUser = Maybe.just(user)
-        }
-    } catch Api.Status => status {
-      next { status = Auth.Status::Unauthenticated }
+      userStatus =
+        Api.endpoint() + "/user"
+        |> Http.get()
+        |> Api.send(decodeUser)
+
+      next { userStatus = userStatus }
     }
   }
 
-  fun logout : Void {
-    do {
+  fun logout : Promise(Never, Void) {
+    sequence {
       Storage.Session.remove("token")
       resetStores()
 
-      next
-        {
-          status = Auth.Status::Unauthenticated,
-          currentUser = Maybe.nothing()
-        }
+      next { userStatus = Api.Status::Initial }
     } catch Storage.Error => error {
       void
     }
   }
 
-  fun resetStores : Void {
-    do {
+  fun resetStores : Promise(Never, Void) {
+    sequence {
       Stores.Articles.reset()
-      Stores.Article.reset()
       Stores.Comments.reset()
+      Stores.Article.reset()
     }
   }
 
-  fun login (email : String, password : String) : Void {
-    do {
+  fun login (email : String, password : String) : Promise(Never, Void) {
+    sequence {
       next { loginStatus = Api.nextStatus(loginStatus) }
 
       userObject =
@@ -74,33 +60,31 @@ store Stores.User {
           |> Json.stringify()
         }
 
-      user =
+      loginStatus =
         Http.post(Api.endpoint() + "/users/login")
         |> Http.header("Content-Type", "application/json")
         |> Http.stringBody(body)
-        |> Api.send(
-          (object : Object) : Result(Object.Error, User) => {
-            Object.Decode.field(
-              "user",
-              (input : Object) : Result(Object.Error, User) => { decode input as User },
-              object)
-          })
+        |> Api.send(decodeUser)
 
-      Storage.Session.set("token", user.token)
-      resetStores()
+      case (loginStatus) {
+        Api.Status::Ok user =>
+          sequence {
+            Storage.Session.set("token", user.token)
+            resetStores()
 
-      next
-        {
-          status = Auth.Status::Authenticated,
-          currentUser = Maybe.just(user),
-          loginStatus = Api.Status::Ok
-        }
+            next
+              {
+                loginStatus = loginStatus,
+                userStatus = loginStatus
+              }
 
-      Window.navigate("/")
-    } catch Api.Status => status {
-      next { loginStatus = status }
-    } catch Storage.Error => error {
-      void
+            Window.navigate("/")
+          } catch Storage.Error => error {
+            void
+          }
+
+        => next { loginStatus = loginStatus }
+      }
     }
   }
 }

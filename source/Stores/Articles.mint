@@ -4,27 +4,26 @@ record Stores.Articles.Params {
 }
 
 store Stores.Articles {
-  state status : Api.Status = Api.Status::Initial
-  state articles : Array(Article) = []
+  state status : Api.Status(Array(Article)) = Api.Status::Initial
 
   state params : Stores.Articles.Params = {
-    tag = "",
-    limit = 10
+    limit = 10,
+    tag = ""
   }
 
-  fun reset : Void {
-    next
-      {
-        status = Api.Status::Initial,
-        articles = []
-      }
+  get articles : Array(Article) {
+    Api.withDefault([], status)
   }
 
-  fun load (newParams : Stores.Articles.Params) : Void {
+  fun reset : Promise(Never, Void) {
+    next { status = Api.Status::Initial }
+  }
+
+  fun load (newParams : Stores.Articles.Params) : Promise(Never, Void) {
     if (newParams == params && status != Api.Status::Initial) {
-      void
+      Promise.never()
     } else {
-      do {
+      sequence {
         next
           {
             status = Api.nextStatus(status),
@@ -37,7 +36,7 @@ store Stores.Articles {
           |> SearchParams.append("limit", Number.toString(newParams.limit))
           |> SearchParams.toString()
 
-        articles =
+        status =
           Http.get(Api.endpoint() + "/articles?" + params)
           |> Api.send(
             (object : Object) : Result(Object.Error, Array(Article)) => {
@@ -47,12 +46,6 @@ store Stores.Articles {
                 object)
             })
 
-        next
-          {
-            status = Api.Status::Ok,
-            articles = articles
-          }
-      } catch Api.Status => status {
         next { status = status }
       }
     }
