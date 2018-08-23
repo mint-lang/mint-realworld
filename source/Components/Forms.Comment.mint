@@ -12,6 +12,9 @@ store Stores.Forms.Comment {
 
 component Forms.Comment {
   connect Stores.Forms.Comment exposing { value, setValue, clearValue }
+  connect Stores.Comments exposing { post, reload, slug }
+  connect Stores.User exposing { userStatus }
+
   connect Theme exposing { link }
 
   style textarea {
@@ -39,19 +42,45 @@ component Forms.Comment {
   }
 
   fun handleClick (event : Html.Event) : Promise(Never, Void) {
-    clearValue()
+    sequence {
+      post(value)
+      clearValue()
+      reload()
+    }
   }
 
   fun render : Html {
-    <div>
-      <textarea::textarea
-        placeholder="Write a comment..."
-        onInput={handleChange}
-        value={value}/>
+    case (userStatus) {
+      Api.Status::Ok user =>
+        <div>
+          <textarea::textarea
+            placeholder="Write a comment..."
+            onInput={handleChange}
+            value={value}/>
 
-      <button::button onClick={handleClick}>
-        <{ "Push me" }>
-      </button>
-    </div>
+          <button::button onClick={handleClick}>
+            <{ "Push me" }>
+          </button>
+        </div>
+
+      =>
+        <div>
+          <a href="/sign-in">
+            <{ "Sign in" }>
+          </a>
+
+          <span>
+            <{ "or" }>
+          </span>
+
+          <a href="/sign-up">
+            <{ "sign up" }>
+          </a>
+
+          <span>
+            <{ "to add comments on this article." }>
+          </span>
+        </div>
+    }
   }
 }

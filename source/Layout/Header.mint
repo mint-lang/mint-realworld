@@ -13,18 +13,21 @@ component Header {
   }
 
   style brand {
-    text-transform: uppercase;
-    font-family: Righteous;
+    font-family: Expletus Sans;
     text-decoration: none;
     letter-spacing: 1px;
-    line-height: 24px;
-    font-size: 24px;
+    align-items: center;
+    font-size: 28px;
     color: inherit;
     display: flex;
+    height: 28px;
   }
 
   style brand-name {
     margin-left: 10px;
+    line-height: 34px;
+    display: block;
+    height: 28px;
   }
 
   style links {
@@ -43,17 +46,17 @@ component Header {
 
   get links : Array(Html) {
     case (userStatus) {
-      Api.Status::Error  =>
+      Api.Status::Error =>
         [
-          <a::link href="/login">
+          <a::link href="/sign-in">
             <{ "Sign in" }>
           </a>,
-          <a::link href="/register">
+          <a::link href="/sign-up">
             <{ "Sign up" }>
           </a>
         ]
 
-      Api.Status::Ok  =>
+      Api.Status::Ok =>
         [
           <a::link href="">
             <{ " New Post" }>
@@ -66,12 +69,7 @@ component Header {
           </a>
         ]
 
-      =>
-        [
-          <a::link>
-            <{ "Loading..." }>
-          </a>
-        ]
+      => [<Loader color="white"/>]
     }
   }
 

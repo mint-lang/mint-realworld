@@ -1,5 +1,7 @@
 component Pages.Home {
   connect Stores.Articles exposing { articles, status }
+  connect Stores.User exposing { userStatus }
+
   connect Theme exposing { primary, primaryText }
 
   get articlePreviews : Array(Html) {
@@ -34,17 +36,26 @@ component Pages.Home {
     margin-top: 30px;
   }
 
+  get banner : Html {
+    case (userStatus) {
+      Api.Status::Ok => Html.empty()
+
+      =>
+        <div::banner>
+          <h1>
+            <{ "Conduit" }>
+          </h1>
+
+          <p>
+            <{ "A place to share your knowledge." }>
+          </p>
+        </div>
+    }
+  }
+
   fun render : Html {
     <div::base>
-      <div::banner>
-        <h1>
-          <{ "Conduit" }>
-        </h1>
-
-        <p>
-          <{ "A place to share your knowledge." }>
-        </p>
-      </div>
+      <{ banner }>
 
       <Container>
         <div::layout>

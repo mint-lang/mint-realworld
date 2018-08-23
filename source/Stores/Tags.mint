@@ -17,7 +17,7 @@ store Stores.Tags {
     } else {
       with Http {
         sequence {
-          next { status = Api.nextStatus(status) }
+          next { status = Api.Status::Loading }
 
           status =
             Http.get(Api.endpoint() + "/tags")

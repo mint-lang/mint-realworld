@@ -1,7 +1,6 @@
 enum Api.Status(a) {
   Error
   Loading
-  Reloading
   Initial
   Ok(a)
 }
@@ -21,15 +20,15 @@ module Api {
     }
   }
 
-  fun endpoint : String {
-    "https://conduit.productionready.io/api"
+  fun isLoading (status : Api.Status(a)) : Bool {
+    case (status) {
+      Api.Status::Loading => true
+      => false
+    }
   }
 
-  fun nextStatus (status : Api.Status(a)) : Api.Status(a) {
-    case (status) {
-      Api.Status::Initial  => Api.Status::Loading
-      => Api.Status::Reloading
-    }
+  fun endpoint : String {
+    "https://conduit.productionready.io/api"
   }
 
   fun send (
@@ -39,6 +38,7 @@ module Api {
     sequence {
       response =
         request
+        |> Http.header("Content-Type", "application/json")
         |> Http.send()
 
       if (response.status == 401) {

@@ -48,7 +48,7 @@ component Image {
 
   fun render : Html {
     case (status) {
-      Image.Status::Ok  => <img::image src={src}/>
+      Image.Status::Ok => <img::image src={src}/>
       => <div::placeholder/>
     }
   }

@@ -1,5 +1,6 @@
 component Pages.Article {
   connect Stores.Article exposing { article, status }
+
   connect Theme exposing { primary, primaryText }
 
   style base {
@@ -12,9 +13,9 @@ component Pages.Article {
   }
 
   style header {
-    background: {primary};
-    color: {primaryText};
+    background: #EEE;
     padding: 40px 0;
+    color: #333;
   }
 
   style content {
@@ -52,8 +53,11 @@ component Pages.Article {
 
             <hr::hr/>
 
-            <Forms.Comment/>
             <Article.Comments/>
+
+            <hr::hr/>
+
+            <Forms.Comment/>
           </Container>
         </div>
       </div>

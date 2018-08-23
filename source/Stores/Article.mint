@@ -24,7 +24,7 @@ store Stores.Article {
         next { status = Api.Status::Ok(nextArticle) }
       } else {
         sequence {
-          next { status = Api.nextStatus(status) }
+          next { status = Api.Status::Loading }
 
           status =
             Api.endpoint() + "/articles/" + slug

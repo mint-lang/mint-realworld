@@ -1,66 +1,55 @@
 component Loader {
-  property children : Array(Html) = []
-  property overlay : Bool = false
-  property loading : Bool = true
-
-  style overlay {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-
-    pointer-events: {pointerEvents};
-    opacity: {opacity};
-    position: absolute;
-    transition: 320ms;
-    background: #FFF;
-    z-index: 10000;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-  }
+  property color : String = "#999"
 
   style base {
-    position: relative;
+    margin: 20px auto;
+    height: 20px;
+    width: 28px;
   }
 
-  get pointerEvents : String {
-    if (loading) {
-      ""
-    } else {
-      "none"
+  style text {
+    margin-bottom: 10px;
+  }
+
+  style line {
+    background-color: {color};
+    animation-fill-mode: both;
+    display: inline-block;
+    height: 20px;
+    width: 4px;
+
+    & + * {
+      margin-left: 2px;
     }
-  }
 
-  get opacity : Number {
-    if (loading) {
-      if (overlay) {
-        0.5
-      } else {
-        1
-      }
-    } else {
-      0
+    &:nth-child(1) {
+      animation: line-scale 1s -0.4s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
     }
-  }
 
-  get content : Html {
-    if (overlay) {
-      <div::overlay key="overlay">
-        <{ "Loading..." }>
-      </div>
-    } else {
-      <div>
-        <{ "Loading..." }>
-      </div>
+    &:nth-child(2) {
+      animation: line-scale 1s -0.3s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+    }
+
+    &:nth-child(3) {
+      animation: line-scale 1s -0.2s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+    }
+
+    &:nth-child(4) {
+      animation: line-scale 1s -0.1s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
+    }
+
+    &:nth-child(5) {
+      animation: line-scale 1s 0s infinite cubic-bezier(0.2, 0.68, 0.18, 1.08);
     }
   }
 
   fun render : Html {
     <div::base>
-      <{ children }>
-
-      <{ content }>
+      <div::line/>
+      <div::line/>
+      <div::line/>
+      <div::line/>
+      <div::line/>
     </div>
   }
 }

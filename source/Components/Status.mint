@@ -44,40 +44,27 @@ component Status {
   }
 
   get isLoading : Bool {
-    case (status) {
-      Api.Status::Reloading  => true
-      Api.Status::Loading  => true
-      => false
-    }
+    Api.isLoading(status)
   }
 
   fun render : Html {
     case (status) {
-      Api.Status::Error  =>
+      Api.Status::Error =>
         <div>
           <{ message }>
         </div>
 
-      Api.Status::Ok  =>
+      Api.Status::Ok =>
         <div>
           <{ children }>
         </div>
 
-      Api.Status::Loading  =>
+      Api.Status::Loading =>
         <div>
-          <{ "Loading..." }>
+          <Loader/>
         </div>
 
-      Api.Status::Reloading  =>
-        <div::base>
-          <div::loader>
-            <{ "Loading..." }>
-          </div>
-
-          <{ children }>
-        </div>
-
-      Api.Status::Initial  => <div/>
+      Api.Status::Initial => <div/>
     }
   }
 }

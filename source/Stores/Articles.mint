@@ -26,7 +26,7 @@ store Stores.Articles {
       sequence {
         next
           {
-            status = Api.nextStatus(status),
+            status = Api.Status::Loading,
             params = newParams
           }
 

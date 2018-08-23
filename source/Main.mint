@@ -1,30 +1,6 @@
-component Layout {
-  property children : Array(Html) = []
-
-  style base {
-    flex-direction: column;
-    min-height: 100vh;
-    display: flex;
-  }
-
-  style content {
-    flex: 1;
-  }
-
-  fun render : Html {
-    <div::base>
-      <Header/>
-
-      <div::content>
-        <{ children }>
-      </div>
-
-      <Footer/>
-    </div>
-  }
-}
-
 component Logo {
+  property size : String = "24"
+
   style base {
     fill: currentColor;
   }
@@ -33,14 +9,13 @@ component Logo {
     <svg::base
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      height="24"
-      width="24">
+      height={size}
+      width={size}>
 
       <path
         d={
-          "M4 4v20h20v-20h-20zm18 18h-16v-13h16v13zm-3-3h-10v-1h10v" \
-          "1zm0-3h-10v-1h10v1zm0-3h-10v-1h10v1zm2-11h-19v19h-2v-21h" \
-          "21v2z"
+          "M16 0l-3 9h9l-1.866 2h-14.4l10.266-11zm2.267 13h-14.4l-1" \
+          ".867 2h9l-3 9 10.267-11z"
         }/>
 
     </svg>
@@ -50,23 +25,26 @@ component Logo {
 component Main {
   connect Application exposing { page }
 
-  get content : Html {
-    case (page) {
-      Page::Home  => <Pages.Home/>
-      Page::Article  => <Pages.Article/>
-      Page::Login  => <Pages.Login/>
-
-      =>
-        <div>
-          <{ "WTF" }>
-        </div>
-    }
-  }
-
   fun render : Html {
-    <Layout>
-      <{ content }>
-    </Layout>
+    case (page) {
+      Page::Home =>
+        <Layout>
+          <Pages.Home/>
+        </Layout>
+
+      Page::Article =>
+        <Layout>
+          <Pages.Article/>
+        </Layout>
+
+      Page::NotFound =>
+        <Layout>
+          <{ "WTF" }>
+        </Layout>
+
+      Page::Login => <Pages.Login/>
+      => Html.empty()
+    }
   }
 }
 
@@ -74,15 +52,15 @@ store Application {
   state page : Page = Page::Initial
 
   fun initializeWithPage (page : Page) : Promise(Never, Void) {
-    Array.do([
-      setPage(page),
+    sequence {
+      setPage(page)
       initialize()
-    ])
+    }
   }
 
   fun initialize : Promise(Never, Void) {
     case (Stores.User.userStatus) {
-      Api.Status::Initial  => Stores.User.getCurrentUser()
+      Api.Status::Initial => Stores.User.getCurrentUser()
       => Promise.never()
     }
   }
@@ -97,6 +75,7 @@ enum Page {
   Initial
   Home
   Article
+  NotFound
 }
 
 routes {
@@ -128,16 +107,12 @@ routes {
     }
   }
 
-  /login {
+  /sign-in {
     sequence {
       Application.initialize()
 
       case (Stores.User.userStatus) {
-        Api.Status::Ok user =>
-          sequence {
-            Window.navigate("/")
-          }
-
+        Api.Status::Ok user => Window.navigate("/")
         => Application.setPage(Page::Login)
       }
     }
@@ -166,15 +141,11 @@ routes {
     parallel {
       Application.initializeWithPage(Page::Article)
       Stores.Article.load(slug)
-
-      sequence {
-        Stores.Comments.reset()
-        Stores.Comments.load(slug)
-      }
+      Stores.Comments.load(slug)
     }
   }
 
   * {
-    Application.initialize()
+    Application.initializeWithPage(Page::NotFound)
   }
 }

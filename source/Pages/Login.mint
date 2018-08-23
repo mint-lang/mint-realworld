@@ -1,53 +1,63 @@
-component Input {
-  property onChange : Function(String, a) = (value : String) : a => { void }
-  property disabled : Bool = false
-  property value : String = ""
-  property type : String = "text"
-
-  style base {
-    border: 1px solid #CCC;
-    margin-bottom: 15px;
-    border-radius: 2px;
-    padding: 5px 10px;
-    font-size: 20px;
-  }
-
-  fun handleInput (event : Html.Event) : a {
-    onChange(Dom.getValue(event.target))
-  }
-
-  fun render : Html {
-    <input::base
-      onInput={handleInput}
-      disabled={disabled}
-      value={value}
-      type={type}/>
-  }
-}
-
 component Pages.Login {
-  connect Stores.User exposing { login, loginStatus }
+  connect Stores.User exposing { login, loginStatus, userStatus }
+  connect Theme exposing { primary }
 
   state password : String = ""
   state email : String = ""
 
-  style hidden {
-    display: none;
+  style base {
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    display: flex;
+    height: 100vh;
+  }
+
+  style subtitle {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 20px;
   }
 
   style form {
     flex-direction: column;
+    max-width: 350px;
     display: flex;
+    width: 100%;
   }
 
-  style base {
-    max-width: 500px;
-    margin: 0 auto;
+  style title {
+    font-family: Expletus Sans;
+    font-size: 50px;
+    display: flex;
+    height: 40px;
   }
 
-  style label {
+  style brand {
+    line-height: 50px;
+    margin-left: 5px;
+    height: 40px;
+  }
+
+  style button {
+    background: {primary};
+    border-radius: 2px;
     font-weight: bold;
-    font-size: 14px;
+    cursor: pointer;
+    height: 40px;
+    color: white;
+    width: 100%;
+    border: 0;
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  style hr {
+    border: 0;
+    border-top: 1px solid #EEE;
+    margin: 20px 0;
   }
 
   fun handleEmail (value : String) : Promise(Never, Void) {
@@ -58,24 +68,17 @@ component Pages.Login {
     next { password = value }
   }
 
-  fun handleSubmit (event : Html.Event) : Promise(Never, Void) {
-    sequence {
-      Html.Event.preventDefault(event)
-      login(email, password)
-    }
+  fun handleSubmit : Promise(Never, Void) {
+    login(email, password)
   }
 
   get disabled : Bool {
-    case (loginStatus) {
-      Api.Status::Reloading  => true
-      Api.Status::Loading  => true
-      => false
-    }
+    Api.isLoading(loginStatus)
   }
 
   get error : Html {
     case (loginStatus) {
-      Api.Status::Error  =>
+      Api.Status::Error =>
         <div>
           <{ "Invalid email or password!" }>
         </div>
@@ -84,48 +87,66 @@ component Pages.Login {
     }
   }
 
+  get buttonText : String {
+    if (disabled) {
+      "Loading..."
+    } else {
+      "Sign in"
+    }
+  }
+
   fun render : Html {
     <div::base>
-      <h1>
-        <{ "Sign in" }>
-      </h1>
+      <div::title>
+        <Logo size="40px"/>
 
-      <form::form
-        onSubmit={handleSubmit}
-        autocomplete="false">
+        <span::brand>
+          <{ "Conduit" }>
+        </span>
+      </div>
 
-        <input::hidden
-          name="prevent_autofill"
-          id="prevent_autofill"
-          type="text"
-          value=""/>
+      <div::form>
+        <div::subtitle>
+          <{ "Sign In" }>
+        </div>
 
-        <{ error }>
+        <hr::hr/>
 
-        <label::label>
-          <{ "Email" }>
-        </label>
+        <Form onSubmit={handleSubmit}>
+          <{ error }>
 
-        <Input
-          onChange={handleEmail}
-          disabled={disabled}
-          value={email}/>
+          <Form.Field>
+            <Label>
+              <{ "Email" }>
+            </Label>
 
-        <label::label>
-          <{ "Password" }>
-        </label>
+            <Input
+              placeholder="demo@realworld.io"
+              onChange={handleEmail}
+              disabled={disabled}
+              value={email}/>
+          </Form.Field>
 
-        <Input
-          onChange={handlePassword}
-          disabled={disabled}
-          value={password}
-          type="password"/>
+          <Form.Field>
+            <Label>
+              <{ "Password" }>
+            </Label>
 
-        <button disabled={disabled}>
-          <{ "Sign in" }>
-        </button>
+            <Input
+              onChange={handlePassword}
+              placeholder="********"
+              disabled={disabled}
+              value={password}
+              type="password"/>
+          </Form.Field>
 
-      </form>
+          <hr::hr/>
+
+          <button::button disabled={disabled}>
+            <{ buttonText }>
+          </button>
+        </Form>
+      </div>
     </div>
   }
 }

@@ -1,3 +1,12 @@
+record LoginForm.User {
+  password : String,
+  email : String
+}
+
+record LoginForm {
+  user : LoginForm.User
+}
+
 store Stores.User {
   state loginStatus : Api.Status(User) = Api.Status::Initial
   state userStatus : Api.Status(User) = Api.Status::Initial
@@ -11,7 +20,7 @@ store Stores.User {
 
   fun getCurrentUser : Promise(Never, Void) {
     sequence {
-      next { userStatus = Api.nextStatus(userStatus) }
+      next { userStatus = Api.Status::Loading }
 
       userStatus =
         Api.endpoint() + "/user"
@@ -43,33 +52,27 @@ store Stores.User {
 
   fun login (email : String, password : String) : Promise(Never, Void) {
     sequence {
-      next { loginStatus = Api.nextStatus(loginStatus) }
-
-      userObject =
-        with Object.Encode {
-          object(
-            [
-              field("email", string(email)),
-              field("password", string(password))
-            ])
-        }
+      next { loginStatus = Api.Status::Loading }
 
       body =
-        with Object.Encode {
-          object([field("user", userObject)])
-          |> Json.stringify()
+        encode {
+          user =
+            {
+              email = email,
+              password = password
+            }
         }
 
       loginStatus =
         Http.post(Api.endpoint() + "/users/login")
-        |> Http.header("Content-Type", "application/json")
-        |> Http.stringBody(body)
+        |> Http.jsonBody(body)
         |> Api.send(decodeUser)
 
       case (loginStatus) {
         Api.Status::Ok user =>
           sequence {
             Storage.Session.set("token", user.token)
+
             resetStores()
 
             next
