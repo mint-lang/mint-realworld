@@ -1,43 +1,47 @@
-component Pages.Login {
-  connect Stores.User exposing { login, loginStatus, userStatus }
-  connect Theme exposing { primary }
+component Pages.SignUp {
+  connect Stores.User exposing { register, registerStatus }
 
+  state username : String = ""
   state password : String = ""
   state email : String = ""
 
-  fun handleEmail (value : String) : Promise(Never, Void) {
-    next { email = value }
+  fun handleUsername (value : String) : Promise(Never, Void) {
+    next { username = value }
   }
 
   fun handlePassword (value : String) : Promise(Never, Void) {
     next { password = value }
   }
 
-  fun handleSubmit : Promise(Never, Void) {
-    login(email, password)
+  fun handleEmail (value : String) : Promise(Never, Void) {
+    next { email = value }
   }
 
   get disabled : Bool {
-    Api.isLoading(loginStatus)
-  }
-
-  get error : Html {
-    case (loginStatus) {
-      Api.Status::Error =>
-        <div>
-          <{ "Invalid email or password!" }>
-        </div>
-
-      => Html.empty()
-    }
+    Api.isLoading(registerStatus)
   }
 
   get buttonText : String {
     if (disabled) {
       "Loading..."
     } else {
-      "Sign In"
+      "Sign Up"
     }
+  }
+
+  get error : Html {
+    case (registerStatus) {
+      Api.Status::Error errors =>
+        <div>
+          <{ errors }>
+        </div>
+
+      => Html.empty()
+    }
+  }
+
+  fun handleSubmit : Promise(Never, Void) {
+    register(username, email, password)
   }
 
   fun render : Html {
@@ -45,10 +49,22 @@ component Pages.Login {
       buttonText={buttonText}
       onClick={handleSubmit}
       disabled={disabled}
-      title="Sign In">
+      title="Sign Up">
 
       <Form>
         <{ error }>
+
+        <Form.Field>
+          <Label>
+            <{ "Username" }>
+          </Label>
+
+          <Input
+            placeholder="realworld"
+            onChange={handleUsername}
+            disabled={disabled}
+            value={username}/>
+        </Form.Field>
 
         <Form.Field>
           <Label>

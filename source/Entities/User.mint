@@ -3,7 +3,7 @@ record User {
   createdAt : Time,
   email : String,
   id : Number,
-  image : String,
+  image : Maybe(String),
   token : String,
   updatedAt : Time,
   username : String

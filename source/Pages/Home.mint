@@ -38,6 +38,8 @@ component Pages.Home {
 
   get banner : Html {
     case (userStatus) {
+      Api.Status::Initial => Html.empty()
+      Api.Status::Loading => Html.empty()
       Api.Status::Ok => Html.empty()
 
       =>

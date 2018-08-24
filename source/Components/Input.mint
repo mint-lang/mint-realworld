@@ -1,3 +1,40 @@
+component Textarea {
+  connect Theme exposing { primary }
+
+  property onChange : Function(String, a) = (value : String) : a => { void }
+  property placeholder : String = ""
+  property disabled : Bool = false
+  property value : String = ""
+  property rows : String = ""
+
+  style base {
+    border: 1px solid #CCC;
+    font-family: inherit;
+    border-radius: 2px;
+    font-size: 14px;
+    padding: 10px;
+    margin: 0;
+
+    &:focus {
+      border-color: {primary};
+      outline: none;
+    }
+  }
+
+  fun handleInput (event : Html.Event) : a {
+    onChange(Dom.getValue(event.target))
+  }
+
+  fun render : Html {
+    <textarea::base
+      placeholder={placeholder}
+      onInput={handleInput}
+      disabled={disabled}
+      value={value}
+      rows={rows}/>
+  }
+}
+
 component Input {
   connect Theme exposing { primary }
 
@@ -9,6 +46,7 @@ component Input {
 
   style base {
     border: 1px solid #CCC;
+    font-family: inherit;
     border-radius: 2px;
     font-size: 14px;
     padding: 10px;
@@ -70,8 +108,11 @@ component Form.Field {
 
   style base {
     flex-direction: column;
-    margin-bottom: 15px;
     display: flex;
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
 
     & > *:first-child {
       margin-bottom: 5px;

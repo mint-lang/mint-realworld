@@ -2,7 +2,7 @@ component Container {
   property children : Array(Html) = []
 
   style base {
-    max-width: 1140px;
+    max-width: 960px;
     margin: 0 auto;
   }
 

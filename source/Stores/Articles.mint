@@ -20,34 +20,30 @@ store Stores.Articles {
   }
 
   fun load (newParams : Stores.Articles.Params) : Promise(Never, Void) {
-    if (newParams == params && status != Api.Status::Initial) {
-      Promise.never()
-    } else {
-      sequence {
-        next
-          {
-            status = Api.Status::Loading,
-            params = newParams
-          }
+    sequence {
+      next
+        {
+          status = Api.Status::Loading,
+          params = newParams
+        }
 
-        params =
-          SearchParams.empty()
-          |> SearchParams.append("tag", newParams.tag)
-          |> SearchParams.append("limit", Number.toString(newParams.limit))
-          |> SearchParams.toString()
+      params =
+        SearchParams.empty()
+        |> SearchParams.append("tag", newParams.tag)
+        |> SearchParams.append("limit", Number.toString(newParams.limit))
+        |> SearchParams.toString()
 
-        status =
-          Http.get(Api.endpoint() + "/articles?" + params)
-          |> Api.send(
-            (object : Object) : Result(Object.Error, Array(Article)) => {
-              Object.Decode.field(
-                "articles",
-                (input : Object) : Result(Object.Error, Array(Article)) => { decode input as Array(Article) },
-                object)
-            })
+      status =
+        Http.get(Api.endpoint() + "/articles?" + params)
+        |> Api.send(
+          (object : Object) : Result(Object.Error, Array(Article)) => {
+            Object.Decode.field(
+              "articles",
+              (input : Object) : Result(Object.Error, Array(Article)) => { decode input as Array(Article) },
+              object)
+          })
 
-        next { status = status }
-      }
+      next { status = status }
     }
   }
 }

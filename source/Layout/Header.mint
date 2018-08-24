@@ -58,7 +58,7 @@ component Header {
 
       Api.Status::Ok =>
         [
-          <a::link href="">
+          <a::link href="/new">
             <{ " New Post" }>
           </a>,
           <a::link href="">

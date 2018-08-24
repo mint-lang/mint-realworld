@@ -1,5 +1,5 @@
 record Article {
-  description : String,
+  description : Maybe(String),
   title : String,
   body : String,
   slug : String,
@@ -16,7 +16,7 @@ module Article {
     {
       body = "",
       createdAt = Time.now(),
-      description = "",
+      description = Maybe.nothing(),
       favorited = false,
       favoritesCount = 0,
       slug = "",

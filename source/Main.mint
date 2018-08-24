@@ -37,12 +37,18 @@ component Main {
           <Pages.Article/>
         </Layout>
 
+      Page::NewArticle =>
+        <Layout>
+          <Pages.NewArticle/>
+        </Layout>
+
       Page::NotFound =>
         <Layout>
           <{ "WTF" }>
         </Layout>
 
       Page::Login => <Pages.Login/>
+      Page::SignUp => <Pages.SignUp/>
       => Html.empty()
     }
   }
@@ -72,8 +78,10 @@ store Application {
 
 enum Page {
   Login
+  SignUp
   Initial
   Home
+  NewArticle
   Article
   NotFound
 }
@@ -114,6 +122,28 @@ routes {
       case (Stores.User.userStatus) {
         Api.Status::Ok user => Window.navigate("/")
         => Application.setPage(Page::Login)
+      }
+    }
+  }
+
+  /sign-up {
+    sequence {
+      Application.initialize()
+
+      case (Stores.User.userStatus) {
+        Api.Status::Ok user => Window.navigate("/")
+        => Application.setPage(Page::SignUp)
+      }
+    }
+  }
+
+  /new {
+    sequence {
+      Application.initialize()
+
+      case (Stores.User.userStatus) {
+        Api.Status::Ok user => Application.setPage(Page::NewArticle)
+        => Window.navigate("/")
       }
     }
   }

@@ -1,5 +1,5 @@
 enum Api.Status(a) {
-  Error
+  Error(Array(String))
   Loading
   Initial
   Ok(a)
@@ -28,7 +28,8 @@ module Api {
   }
 
   fun endpoint : String {
-    "https://conduit.productionready.io/api"
+    /* "https://conduit.productionready.io/api" */
+    "http://localhost:3001/api"
   }
 
   fun send (
@@ -41,26 +42,28 @@ module Api {
         |> Http.header("Content-Type", "application/json")
         |> Http.send()
 
-      if (response.status == 401) {
-        Api.Status::Error
-      } else {
-        try {
-          object =
-            Json.parse(response.body)
-            |> Maybe.toResult("")
+      case (response.status) {
+        401 => Api.Status::Error(["Unauthorized."])
+        422 => Api.Status::Error(["Invalid data."])
 
-          data =
-            decoder(object)
+        =>
+          try {
+            object =
+              Json.parse(response.body)
+              |> Maybe.toResult("")
 
-          Api.Status::Ok(data)
-        } catch Object.Error => error {
-          Api.Status::Error
-        } catch String => error {
-          Api.Status::Error
-        }
+            data =
+              decoder(object)
+
+            Api.Status::Ok(data)
+          } catch Object.Error => error {
+            Api.Status::Error(["Could not decode the response."])
+          } catch String => error {
+            Api.Status::Error(["Could not parse the response."])
+          }
       }
     } catch Http.ErrorResponse => error {
-      Api.Status::Error
+      Api.Status::Error(["Network error."])
     }
   } where {
     request =

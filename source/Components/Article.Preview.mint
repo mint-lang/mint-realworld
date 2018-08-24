@@ -74,7 +74,7 @@ component Article.Preview {
           </div>
 
           <div::description>
-            <Markdown content={article.body}/>
+            <Markdown content={Maybe.withDefault("", article.description)}/>
           </div>
 
           <TagList
