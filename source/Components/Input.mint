@@ -13,7 +13,9 @@ component Textarea {
     border-radius: 2px;
     font-size: 14px;
     padding: 10px;
+    resize: none;
     margin: 0;
+    flex: 1;
 
     &:focus {
       border-color: {primary};

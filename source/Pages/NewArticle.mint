@@ -5,20 +5,41 @@ component Pages.NewArticle {
   state title : String = ""
   state tag : String = ""
 
-  style row {
-    display: flex;
+  style grid {
+    grid-gap: 20px;
+    display: grid;
+    height: 70vh;
+
+    grid-template-rows: min-content 1fr 1fr min-content;
+
+    grid-template-areas: "title content"
+                         "extract content"
+                         "extract content"
+                         "tags content";
+
+    & > *:nth-child(1) {
+      grid-area: title;
+    }
+
+    & > *:nth-child(2) {
+      grid-area: extract;
+    }
+
+    & > *:nth-child(3) {
+      grid-area: tags;
+    }
+
+    & > *:last-child {
+      grid-area: content;
+    }
+  }
+
+  style cell {
+    display: grid;
   }
 
   style base {
 
-  }
-
-  style column {
-    flex: 1;
-
-    & + * {
-      margin-left: 10px;
-    }
   }
 
   fun handleExtract (value : String) : Promise(Never, Void) {
@@ -47,8 +68,8 @@ component Pages.NewArticle {
         <{ "new Article" }>
 
         <Form>
-          <div::row>
-            <div::column>
+          <div::grid>
+            <div::cell>
               <Form.Field>
                 <Label>
                   <{ "Title" }>
@@ -59,7 +80,9 @@ component Pages.NewArticle {
                   onChange={handleTitle}
                   value={title}/>
               </Form.Field>
+            </div>
 
+            <div::cell>
               <Form.Field>
                 <Label>
                   <{ "Extract" }>
@@ -68,10 +91,11 @@ component Pages.NewArticle {
                 <Textarea
                   placeholder="Short description of the article..."
                   onChange={handleExtract}
-                  value={extract}
-                  rows="20"/>
+                  value={extract}/>
               </Form.Field>
+            </div>
 
+            <div::cell>
               <Form.Field>
                 <Label>
                   <{ "Tags" }>
@@ -84,7 +108,7 @@ component Pages.NewArticle {
               </Form.Field>
             </div>
 
-            <div::column>
+            <div::cell>
               <Form.Field>
                 <Label>
                   <{ "Content" }>
@@ -93,8 +117,7 @@ component Pages.NewArticle {
                 <Textarea
                   placeholder="The articles content in markdown..."
                   onChange={handleContent}
-                  value={content}
-                  rows="28"/>
+                  value={content}/>
               </Form.Field>
             </div>
           </div>
