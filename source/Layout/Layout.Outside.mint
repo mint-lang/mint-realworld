@@ -37,7 +37,7 @@ component Layout.Outside {
 
   style button {
     background: {primary};
-    border-radius: 2px;
+    border-radius: 1px;
     font-weight: bold;
     cursor: pointer;
     height: 40px;

@@ -40,7 +40,7 @@ module Api {
 
       /* Get the response. */
       response =
-        { request | url = "http://localhost:3001/api" + request.url }
+        { request | url = "https://conduit.productionready.io/api" + request.url }
         |> Http.header("Content-Type", "application/json")
         |> Http.send()
 

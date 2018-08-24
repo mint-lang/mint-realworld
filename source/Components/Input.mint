@@ -8,12 +8,12 @@ component Textarea {
   property rows : String = ""
 
   style base {
-    border: 1px solid #CCC;
+    border: 2px solid #EEE;
     font-family: inherit;
-    border-radius: 2px;
     font-size: 14px;
     padding: 10px;
     resize: none;
+    color: #333;
     margin: 0;
     flex: 1;
 
@@ -47,11 +47,11 @@ component Input {
   property value : String = ""
 
   style base {
-    border: 1px solid #CCC;
+    border: 2px solid #EEE;
     font-family: inherit;
-    border-radius: 2px;
     font-size: 14px;
     padding: 10px;
+    color: #333;
 
     &:focus {
       border-color: {primary};
