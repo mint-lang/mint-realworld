@@ -34,7 +34,7 @@ store Stores.Articles {
         |> SearchParams.toString()
 
       status =
-        Http.get(Api.endpoint() + "/articles?" + params)
+        Http.get("/articles?" + params)
         |> Api.send(
           (object : Object) : Result(Object.Error, Array(Article)) => {
             Object.Decode.field(

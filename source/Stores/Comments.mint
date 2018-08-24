@@ -13,8 +13,7 @@ store Stores.Comments {
         encode { comment = { body = comment } }
 
       status =
-        Api.endpoint() + "/articles/" + slug + "/comments"
-        |> Http.post()
+        Http.post("/articles/" + slug + "/comments")
         |> Http.jsonBody(params)
         |> Api.send(
           (object : Object) : Result(Object.Error, Comment) => {
@@ -37,8 +36,7 @@ store Stores.Comments {
       next { status = Api.Status::Loading }
 
       status =
-        Api.endpoint() + "/articles/" + newSlug + "/comments"
-        |> Http.get()
+        Http.get("/articles/" + newSlug + "/comments")
         |> Api.send(
           (object : Object) : Result(Object.Error, Array(Comment)) => {
             Object.Decode.field(

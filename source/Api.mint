@@ -6,13 +6,6 @@ enum Api.Status(a) {
 }
 
 module Api {
-  fun then (
-    updater : Function(Result(a, b), c),
-    promise : Promise(a, b)
-  ) : Promise(Never, c) {
-    `promise.then((data) => { return updater(new Ok(data)) })`
-  }
-
   fun withDefault (a : a, status : Api.Status(a)) : a {
     case (status) {
       Api.Status::Ok value => value
@@ -27,21 +20,31 @@ module Api {
     }
   }
 
-  fun endpoint : String {
-    /* "https://conduit.productionready.io/api" */
-    "http://localhost:3001/api"
-  }
-
   fun send (
     decoder : Function(Object, Result(Object.Error, a)),
     rawRequest : Http.Request
   ) : Promise(Never, Api.Status(a)) {
     sequence {
+      /* We try to get a token from session storage. */
+      request =
+        try {
+          token =
+            Storage.Session.get("token")
+
+          Http.header("Authorization", "Token " + token, rawRequest)
+        } catch Storage.Error => error {
+          rawRequest
+        }
+
+      /* "https://conduit.productionready.io/api" */
+
+      /* Get the response. */
       response =
-        request
+        { request | url = "http://localhost:3001/api" + request.url }
         |> Http.header("Content-Type", "application/json")
         |> Http.send()
 
+      /* Handle response based on status. */
       case (response.status) {
         401 => Api.Status::Error(["Unauthorized."])
         422 => Api.Status::Error(["Invalid data."])
@@ -65,16 +68,5 @@ module Api {
     } catch Http.ErrorResponse => error {
       Api.Status::Error(["Network error."])
     }
-  } where {
-    request =
-      try {
-        token =
-          Storage.Session.get("token")
-
-        rawRequest
-        |> Http.header("Authorization", "Token " + token)
-      } catch Storage.Error => error {
-        rawRequest
-      }
   }
 }

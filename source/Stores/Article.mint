@@ -37,7 +37,7 @@ store Stores.Article {
         }
 
       status =
-        Http.post(Api.endpoint() + "/articles")
+        Http.post("/articles")
         |> Http.jsonBody(body)
         |> Api.send(decodeArticle)
 
@@ -68,8 +68,7 @@ store Stores.Article {
           next { status = Api.Status::Loading }
 
           status =
-            Api.endpoint() + "/articles/" + slug
-            |> Http.get()
+            Http.get("/articles/" + slug)
             |> Api.send(decodeArticle)
 
           next { status = status }

@@ -1,21 +1,10 @@
-store Stores.Forms.Comment {
-  state value : String = ""
-
-  fun setValue (value : String) : Promise(Never, Void) {
-    next { value = value }
-  }
-
-  fun clearValue : Promise(Never, Void) {
-    next { value = "" }
-  }
-}
-
 component Forms.Comment {
-  connect Stores.Forms.Comment exposing { value, setValue, clearValue }
   connect Stores.Comments exposing { post, reload, slug }
   connect Stores.User exposing { userStatus }
 
   connect Theme exposing { link }
+
+  state value : String = ""
 
   style textarea {
     border: 1px solid #EEE;
@@ -35,10 +24,17 @@ component Forms.Comment {
     }
   }
 
+  fun clearValue : Promise(Never, Void) {
+    next { value = "" }
+  }
+
   fun handleChange (event : Html.Event) : Promise(Never, Void) {
-    event.target
-    |> Dom.getValue()
-    |> setValue()
+    sequence {
+      value =
+        Dom.getValue(event.target)
+
+      next { value = value }
+    }
   }
 
   fun handleClick (event : Html.Event) : Promise(Never, Void) {

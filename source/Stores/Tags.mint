@@ -20,7 +20,7 @@ store Stores.Tags {
           next { status = Api.Status::Loading }
 
           status =
-            Http.get(Api.endpoint() + "/tags")
+            Http.get("/tags")
             |> Api.send(decodeTags)
 
           next

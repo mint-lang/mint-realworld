@@ -1,12 +1,3 @@
-record LoginForm.User {
-  password : String,
-  email : String
-}
-
-record LoginForm {
-  user : LoginForm.User
-}
-
 store Stores.User {
   state registerStatus : Api.Status(User) = Api.Status::Initial
   state loginStatus : Api.Status(User) = Api.Status::Initial
@@ -24,8 +15,7 @@ store Stores.User {
       next { userStatus = Api.Status::Loading }
 
       userStatus =
-        Api.endpoint() + "/user"
-        |> Http.get()
+        Http.get("/user")
         |> Api.send(decodeUser)
 
       next { userStatus = userStatus }
@@ -66,7 +56,7 @@ store Stores.User {
         }
 
       status =
-        Http.post(Api.endpoint() + "/users")
+        Http.post("/users")
         |> Http.jsonBody(body)
         |> Api.send(decodeUser)
 
@@ -107,7 +97,7 @@ store Stores.User {
         }
 
       status =
-        Http.post(Api.endpoint() + "/users/login")
+        Http.post("/users/login")
         |> Http.jsonBody(body)
         |> Api.send(decodeUser)
 
