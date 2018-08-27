@@ -1,19 +1,20 @@
 component Pages.NewArticle {
   connect Stores.Article exposing { create, createStatus }
+
+  state tags : Set(String) = Set.empty()
   state extract : String = ""
   state content : String = ""
   state title : String = ""
-  state tag : String = ""
 
   style grid {
     grid-gap: 20px;
     display: grid;
     height: 70vh;
 
-    grid-template-rows: min-content 1fr 1fr min-content;
+    grid-template-rows: min-content 1fr min-content;
+    grid-template-columns: 1fr 1fr;
 
     grid-template-areas: "title content"
-                         "extract content"
                          "extract content"
                          "tags content";
 
@@ -34,12 +35,31 @@ component Pages.NewArticle {
     }
   }
 
+  style title {
+    border-bottom: 1px solid #EEE;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-size: 22px;
+  }
+
   style cell {
     display: grid;
   }
 
   style base {
+    padding: 30px 0;
+  }
 
+  style hr {
+    border: 0;
+    border-top: 1px solid #EEE;
+    margin: 20px 0;
+  }
+
+  style button {
+    margin-left: auto;
+    width: 150px;
   }
 
   fun handleExtract (value : String) : Promise(Never, Void) {
@@ -54,18 +74,24 @@ component Pages.NewArticle {
     next { title = value }
   }
 
-  fun handleTag (value : String) : Promise(Never, Void) {
-    next { tag = value }
+  fun handleTags (value : Set(String)) : Promise(Never, Void) {
+    next { tags = value }
   }
 
   fun submit : Promise(Never, Void) {
-    create(title, extract, content)
+    create(title, extract, content, tags)
+  }
+
+  get disabled : Bool {
+    Api.isLoading(createStatus)
   }
 
   fun render : Html {
     <div::base>
       <Container>
-        <{ "new Article" }>
+        <div::title>
+          <{ "New Article" }>
+        </div>
 
         <Form>
           <div::grid>
@@ -78,7 +104,12 @@ component Pages.NewArticle {
                 <Input
                   placeholder="Article Title..."
                   onChange={handleTitle}
+                  disabled={disabled}
                   value={title}/>
+
+                <Errors
+                  errors={Api.errorsOf("title", createStatus)}
+                  prefix="Title"/>
               </Form.Field>
             </div>
 
@@ -91,7 +122,12 @@ component Pages.NewArticle {
                 <Textarea
                   placeholder="Short description of the article..."
                   onChange={handleExtract}
+                  disabled={disabled}
                   value={extract}/>
+
+                <Errors
+                  errors={Api.errorsOf("description", createStatus)}
+                  prefix="Extract"/>
               </Form.Field>
             </div>
 
@@ -101,10 +137,11 @@ component Pages.NewArticle {
                   <{ "Tags" }>
                 </Label>
 
-                <Input
+                <Tagger
+                  onChange={handleTags}
+                  disabled={disabled}
                   placeholder="Tags"
-                  onChange={handleTag}
-                  value={tag}/>
+                  tags={tags}/>
               </Form.Field>
             </div>
 
@@ -117,15 +154,28 @@ component Pages.NewArticle {
                 <Textarea
                   placeholder="The articles content in markdown..."
                   onChange={handleContent}
+                  disabled={disabled}
                   value={content}/>
+
+                <Errors
+                  errors={Api.errorsOf("body", createStatus)}
+                  prefix="Content"/>
               </Form.Field>
             </div>
           </div>
-
-          <button onClick={(event : Html.Event) : Promise(Never, Void) => { submit() }}>
-            <{ "Submit" }>
-          </button>
         </Form>
+
+        <hr::hr/>
+
+        <div::button>
+          <Button
+            disabled={disabled}
+            onClick={(event : Html.Event) : Promise(Never, Void) => { submit() }}>
+
+            <{ "Submit" }>
+
+          </Button>
+        </div>
       </Container>
     </div>
   }

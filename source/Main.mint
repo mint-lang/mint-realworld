@@ -140,6 +140,7 @@ routes {
   /new {
     sequence {
       Application.initialize()
+      Stores.Article.reset()
 
       case (Stores.User.userStatus) {
         Api.Status::Ok user => Application.setPage(Page::NewArticle)

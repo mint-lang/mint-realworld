@@ -35,21 +35,6 @@ component Layout.Outside {
     height: 40px;
   }
 
-  style button {
-    background: {primary};
-    border-radius: 1px;
-    font-weight: bold;
-    cursor: pointer;
-    height: 40px;
-    color: white;
-    width: 100%;
-    border: 0;
-
-    &:disabled {
-      opacity: 0.5;
-    }
-  }
-
   style hr {
     border: 0;
     border-top: 1px solid #EEE;
@@ -87,13 +72,13 @@ component Layout.Outside {
 
         <hr::hr/>
 
-        <button::button
+        <Button
           onClick={handleClick}
           disabled={disabled}>
 
           <{ buttonText }>
 
-        </button>
+        </Button>
       </div>
     </div>
   }

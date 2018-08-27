@@ -1,7 +1,7 @@
 component Textarea {
   connect Theme exposing { primary }
 
-  property onChange : Function(String, a) = (value : String) : a => { void }
+  property onChange : Function(String, a) = (value : String) : Void => { void }
   property placeholder : String = ""
   property disabled : Bool = false
   property value : String = ""
@@ -40,7 +40,9 @@ component Textarea {
 component Input {
   connect Theme exposing { primary }
 
-  property onChange : Function(String, a) = (value : String) : a => { void }
+  property onBlur : Function(Html.Event, a) = (value : Html.Event) : Void => { void }
+  property onChange : Function(String, a) = (value : String) : Void => { void }
+  property onEnter : Function(a) = () : Void => { void }
   property placeholder : String = ""
   property disabled : Bool = false
   property type : String = "text"
@@ -63,11 +65,25 @@ component Input {
     onChange(Dom.getValue(event.target))
   }
 
+  fun handleKeyDown (event : Html.Event) : a {
+    case (event.keyCode) {
+      13 =>
+        sequence {
+          Html.Event.preventDefault(event)
+          onEnter()
+        }
+
+      => Promise.never()
+    }
+  }
+
   fun render : Html {
     <input::base
       placeholder={placeholder}
+      onKeyDown={handleKeyDown}
       onInput={handleInput}
       disabled={disabled}
+      onBlur={onBlur}
       value={value}
       type={type}/>
   }

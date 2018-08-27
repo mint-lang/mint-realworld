@@ -19,10 +19,19 @@ store Stores.Article {
 
   /* Resets the store to the initial values. */
   fun reset : Promise(Never, Void) {
-    next { status = Api.Status::Initial }
+    next
+      {
+        status = Api.Status::Initial,
+        createStatus = Api.Status::Initial
+      }
   }
 
-  fun create (title : String, extract : String, content : String) : Promise(Never, Void) {
+  fun create (
+    title : String,
+    extract : String,
+    content : String,
+    tags : Set(String)
+  ) : Promise(Never, Void) {
     sequence {
       next { createStatus = Api.Status::Loading }
 
@@ -30,6 +39,7 @@ store Stores.Article {
         encode {
           article =
             {
+              tagList = Set.toArray(tags),
               description = extract,
               title = title,
               body = content

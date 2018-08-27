@@ -1,8 +1,12 @@
 enum Api.Status(a) {
-  Error(Array(String))
+  Error(Map(String, Array(String)))
   Loading
   Initial
   Ok(a)
+}
+
+record ErrorResponse {
+  errors : Map(String, Array(String))
 }
 
 module Api {
@@ -17,6 +21,25 @@ module Api {
     case (status) {
       Api.Status::Loading => true
       => false
+    }
+  }
+
+  fun errorStatus (key : String, value : String) : Api.Status(a) {
+    Api.Status::Error(error)
+  } where {
+    error =
+      Map.empty()
+      |> Map.set(key, [value])
+  }
+
+  fun errorsOf (key : String, status : Api.Status(a)) : Array(String) {
+    case (status) {
+      Api.Status::Error errors =>
+        errors
+        |> Map.get(key)
+        |> Maybe.withDefault([])
+
+      => []
     }
   }
 
@@ -46,8 +69,23 @@ module Api {
 
       /* Handle response based on status. */
       case (response.status) {
-        401 => Api.Status::Error(["Unauthorized."])
-        422 => Api.Status::Error(["Invalid data."])
+        401 => errorStatus("request", "Unauthorized!")
+
+        422 =>
+          try {
+            object =
+              Json.parse(response.body)
+              |> Maybe.toResult("")
+
+            errors =
+              decode object as ErrorResponse
+
+            Api.Status::Error(errors.errors)
+          } catch Object.Error => error {
+            errorStatus("request", "Could not decode the error response.")
+          } catch String => error {
+            errorStatus("request", "Could not parse the error response.")
+          }
 
         =>
           try {
@@ -60,13 +98,13 @@ module Api {
 
             Api.Status::Ok(data)
           } catch Object.Error => error {
-            Api.Status::Error(["Could not decode the response."])
+            errorStatus("request", "Could not decode the response.")
           } catch String => error {
-            Api.Status::Error(["Could not parse the response."])
+            errorStatus("request", "Could not parse the response.")
           }
       }
     } catch Http.ErrorResponse => error {
-      Api.Status::Error(["Network error."])
+      errorStatus("request", "Network error.")
     }
   }
 }

@@ -30,14 +30,16 @@ component Pages.SignUp {
   }
 
   get error : Html {
-    case (registerStatus) {
-      Api.Status::Error errors =>
-        <div>
-          <{ errors }>
-        </div>
-
-      => Html.empty()
+    if (Array.isEmpty(errors)) {
+      Html.empty()
+    } else {
+      <div>
+        <{ errors }>
+      </div>
     }
+  } where {
+    errors =
+      Api.errorsOf("request", registerStatus)
   }
 
   fun handleSubmit : Promise(Never, Void) {
@@ -59,6 +61,8 @@ component Pages.SignUp {
             <{ "Username" }>
           </Label>
 
+          <{ Api.errorsOf("username", registerStatus) }>
+
           <Input
             placeholder="realworld"
             onChange={handleUsername}
@@ -71,6 +75,8 @@ component Pages.SignUp {
             <{ "Email" }>
           </Label>
 
+          <{ Api.errorsOf("email", registerStatus) }>
+
           <Input
             placeholder="demo@realworld.io"
             onChange={handleEmail}
@@ -82,6 +88,8 @@ component Pages.SignUp {
           <Label>
             <{ "Password" }>
           </Label>
+
+          <{ Api.errorsOf("password", registerStatus) }>
 
           <Input
             onChange={handlePassword}
