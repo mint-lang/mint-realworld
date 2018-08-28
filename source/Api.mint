@@ -59,8 +59,6 @@ module Api {
           rawRequest
         }
 
-      /* "https://conduit.productionready.io/api" */
-
       /* Get the response. */
       response =
         { request | url = "https://conduit.productionready.io/api" + request.url }

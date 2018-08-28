@@ -29,19 +29,6 @@ component Pages.SignUp {
     }
   }
 
-  get error : Html {
-    if (Array.isEmpty(errors)) {
-      Html.empty()
-    } else {
-      <div>
-        <{ errors }>
-      </div>
-    }
-  } where {
-    errors =
-      Api.errorsOf("request", registerStatus)
-  }
-
   fun handleSubmit : Promise(Never, Void) {
     register(username, email, password)
   }
@@ -54,49 +41,37 @@ component Pages.SignUp {
       title="Sign Up">
 
       <Form>
-        <{ error }>
+        <GlobalErrors errors={Api.errorsOf("request", registerStatus)}/>
 
         <Form.Field>
-          <Label>
-            <{ "Username" }>
-          </Label>
-
-          <{ Api.errorsOf("username", registerStatus) }>
-
           <Input
+            errors={Api.errorsOf("username", registerStatus)}
             placeholder="realworld"
             onChange={handleUsername}
             disabled={disabled}
-            value={username}/>
+            value={username}
+            name="Username"/>
         </Form.Field>
 
         <Form.Field>
-          <Label>
-            <{ "Email" }>
-          </Label>
-
-          <{ Api.errorsOf("email", registerStatus) }>
-
           <Input
+            errors={Api.errorsOf("email", registerStatus)}
             placeholder="demo@realworld.io"
             onChange={handleEmail}
             disabled={disabled}
-            value={email}/>
+            value={email}
+            name="Email"/>
         </Form.Field>
 
         <Form.Field>
-          <Label>
-            <{ "Password" }>
-          </Label>
-
-          <{ Api.errorsOf("password", registerStatus) }>
-
           <Input
+            errors={Api.errorsOf("password", registerStatus)}
             onChange={handlePassword}
             placeholder="********"
             disabled={disabled}
             value={password}
-            type="password"/>
+            type="password"
+            name="Password"/>
         </Form.Field>
       </Form>
 

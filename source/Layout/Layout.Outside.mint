@@ -1,11 +1,11 @@
 component Layout.Outside {
   connect Theme exposing { primary }
 
+  property onClick : Function(a) = () : Void => { void }
   property children : Array(Html) = []
   property buttonText : String = ""
   property disabled : Bool = false
   property title : String = ""
-  property onClick : Function(a) = () : Void => { void }
 
   style base {
     justify-content: center;
@@ -17,7 +17,7 @@ component Layout.Outside {
 
   style form {
     flex-direction: column;
-    max-width: 350px;
+    max-width: 400px;
     display: flex;
     width: 100%;
   }

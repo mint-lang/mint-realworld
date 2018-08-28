@@ -23,13 +23,20 @@ component Pages.Login {
 
   get error : Html {
     case (loginStatus) {
-      Api.Status::Error =>
-        <div>
-          <{ "Invalid email or password!" }>
-        </div>
+      Api.Status::Error => <GlobalErrors errors={errors}/>
 
       => Html.empty()
     }
+  } where {
+    requestErrors =
+      Api.errorsOf("request", loginStatus)
+
+    errors =
+      if (Array.isEmpty(requestErrors)) {
+        ["Invalid email or password!"]
+      } else {
+        requestErrors
+      }
   }
 
   get buttonText : String {
@@ -51,28 +58,22 @@ component Pages.Login {
         <{ error }>
 
         <Form.Field>
-          <Label>
-            <{ "Email" }>
-          </Label>
-
           <Input
             placeholder="demo@realworld.io"
             onChange={handleEmail}
             disabled={disabled}
-            value={email}/>
+            value={email}
+            name="Email"/>
         </Form.Field>
 
         <Form.Field>
-          <Label>
-            <{ "Password" }>
-          </Label>
-
           <Input
             onChange={handlePassword}
             placeholder="********"
             disabled={disabled}
             value={password}
-            type="password"/>
+            type="password"
+            name="Password"/>
         </Form.Field>
       </Form>
 

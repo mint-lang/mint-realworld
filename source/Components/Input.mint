@@ -2,13 +2,15 @@ component Textarea {
   connect Theme exposing { primary }
 
   property onChange : Function(String, a) = (value : String) : Void => { void }
+  property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
   property value : String = ""
+  property name : String = ""
   property rows : String = ""
 
   style base {
-    border: 2px solid #EEE;
+    border: 2px solid {borderColor};
     font-family: inherit;
     font-size: 14px;
     padding: 10px;
@@ -18,8 +20,24 @@ component Textarea {
     flex: 1;
 
     &:focus {
-      border-color: {primary};
+      border-color: {focusColor};
       outline: none;
+    }
+  }
+
+  get borderColor : String {
+    if (Array.isEmpty(errors)) {
+      "#EEE"
+    } else {
+      "#f7b6b6"
+    }
+  }
+
+  get focusColor : String {
+    if (Array.isEmpty(errors)) {
+      primary
+    } else {
+      "#e84848"
     }
   }
 
@@ -28,12 +46,22 @@ component Textarea {
   }
 
   fun render : Html {
-    <textarea::base
-      placeholder={placeholder}
-      onInput={handleInput}
-      disabled={disabled}
-      value={value}
-      rows={rows}/>
+    <>
+      <Label>
+        <{ name }>
+      </Label>
+
+      <textarea::base
+        placeholder={placeholder}
+        onInput={handleInput}
+        disabled={disabled}
+        value={value}
+        rows={rows}/>
+
+      <Errors
+        errors={errors}
+        prefix={name}/>
+    </>
   }
 }
 
@@ -43,21 +71,39 @@ component Input {
   property onBlur : Function(Html.Event, a) = (value : Html.Event) : Void => { void }
   property onChange : Function(String, a) = (value : String) : Void => { void }
   property onEnter : Function(a) = () : Void => { void }
+  property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
   property type : String = "text"
   property value : String = ""
+  property name : String = ""
 
   style base {
-    border: 2px solid #EEE;
+    border: 2px solid {borderColor};
     font-family: inherit;
     font-size: 14px;
     padding: 10px;
     color: #333;
 
     &:focus {
-      border-color: {primary};
+      border-color: {focusColor};
       outline: none;
+    }
+  }
+
+  get borderColor : String {
+    if (Array.isEmpty(errors)) {
+      "#EEE"
+    } else {
+      "#f7b6b6"
+    }
+  }
+
+  get focusColor : String {
+    if (Array.isEmpty(errors)) {
+      primary
+    } else {
+      "#e84848"
     }
   }
 
@@ -78,14 +124,24 @@ component Input {
   }
 
   fun render : Html {
-    <input::base
-      placeholder={placeholder}
-      onKeyDown={handleKeyDown}
-      onInput={handleInput}
-      disabled={disabled}
-      onBlur={onBlur}
-      value={value}
-      type={type}/>
+    <>
+      <Label>
+        <{ name }>
+      </Label>
+
+      <input::base
+        placeholder={placeholder}
+        onKeyDown={handleKeyDown}
+        onInput={handleInput}
+        disabled={disabled}
+        onBlur={onBlur}
+        value={value}
+        type={type}/>
+
+      <Errors
+        errors={errors}
+        prefix={name}/>
+    </>
   }
 }
 

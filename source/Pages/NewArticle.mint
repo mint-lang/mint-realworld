@@ -93,41 +93,31 @@ component Pages.NewArticle {
           <{ "New Article" }>
         </div>
 
+        <GlobalErrors errors={Api.errorsOf("request", createStatus)}/>
+
         <Form>
           <div::grid>
             <div::cell>
               <Form.Field>
-                <Label>
-                  <{ "Title" }>
-                </Label>
-
                 <Input
+                  errors={Api.errorsOf("title", createStatus)}
                   placeholder="Article Title..."
                   onChange={handleTitle}
                   disabled={disabled}
-                  value={title}/>
-
-                <Errors
-                  errors={Api.errorsOf("title", createStatus)}
-                  prefix="Title"/>
+                  value={title}
+                  name="Title"/>
               </Form.Field>
             </div>
 
             <div::cell>
               <Form.Field>
-                <Label>
-                  <{ "Extract" }>
-                </Label>
-
                 <Textarea
+                  errors={Api.errorsOf("description", createStatus)}
                   placeholder="Short description of the article..."
                   onChange={handleExtract}
                   disabled={disabled}
-                  value={extract}/>
-
-                <Errors
-                  errors={Api.errorsOf("description", createStatus)}
-                  prefix="Extract"/>
+                  value={extract}
+                  name="Extract"/>
               </Form.Field>
             </div>
 
@@ -147,19 +137,13 @@ component Pages.NewArticle {
 
             <div::cell>
               <Form.Field>
-                <Label>
-                  <{ "Content" }>
-                </Label>
-
                 <Textarea
                   placeholder="The articles content in markdown..."
+                  errors={Api.errorsOf("body", createStatus)}
                   onChange={handleContent}
                   disabled={disabled}
-                  value={content}/>
-
-                <Errors
-                  errors={Api.errorsOf("body", createStatus)}
-                  prefix="Content"/>
+                  value={content}
+                  name="Content"/>
               </Form.Field>
             </div>
           </div>
