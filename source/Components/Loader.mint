@@ -2,13 +2,8 @@ component Loader {
   property color : String = "#999"
 
   style base {
-    margin: 20px auto;
     height: 20px;
     width: 28px;
-  }
-
-  style text {
-    margin-bottom: 10px;
   }
 
   style line {

@@ -40,6 +40,7 @@ component PopularTags {
 
       <Status
         message="There was an error loading the popular tags."
+        loadingMessage="Loading popular tags..."
         status={status}>
 
         <div::tags>

@@ -1,33 +1,41 @@
 component Article.Preview {
+  connect Stores.Article exposing { toggleFavorite, favoriteStatus }
   connect Theme exposing { secondary, secondaryText }
 
   property article : Article = Article.empty()
 
+  state loading : Bool = false
+
   style base {
-    border: 1px solid #EEE;
+    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.1);
     border-radius: 2px;
+    background: #FFF;
+    padding: 10px;
   }
 
   style footer {
     justify-content: space-between;
     border-top: 1px solid #EEE;
     margin-bottom: 10px;
-    background: #F6F6F6;
+    padding-top: 10px;
     margin-bottom: 0;
     display: flex;
-    padding: 10px;
   }
 
   style button {
-    background: #a7a7a7;
-    color: {secondaryText};
+    background: transparent;
     align-items: center;
+    color: {buttonColor};
     border-radius: 2px;
     display: flex;
     border: 0;
 
     &:hover {
       cursor: pointer;
+    }
+
+    &:disabled {
+      opacity: 0.5;
     }
   }
 
@@ -58,11 +66,28 @@ component Article.Preview {
     transition: 150ms;
     color: inherit;
     display: block;
-    padding: 10px;
+  }
+
+  get buttonColor : String {
+    if (article.favorited) {
+      "#e84848"
+    } else {
+      "inherit"
+    }
   }
 
   get href : String {
     "/article/" + article.slug
+  }
+
+  fun toggle (event : Html.Event) : Promise(Never, Void) {
+    sequence {
+      next { loading = true }
+
+      toggleFavorite(article)
+
+      next { loading = false }
+    }
   }
 
   fun render : Html {
@@ -86,12 +111,16 @@ component Article.Preview {
       <div::footer>
         <Article.Profile article={article}/>
 
-        <button::button>
+        <button::button
+          onClick={toggle}
+          disabled={loading}>
+
           <HeartIcon/>
 
           <span::button-text>
             <{ Number.toString(article.favoritesCount) }>
           </span>
+
         </button>
       </div>
     </div>

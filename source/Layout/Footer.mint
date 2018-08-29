@@ -1,25 +1,39 @@
 component Footer {
+  style hr {
+    border: 0;
+    border-top: 1px solid #EEE;
+  }
+
+  style container {
+    text-align: center;
+    padding: 40px 0;
+  }
+
   fun render : Html {
-    <footer>
-      <div class="container">
-        <a
-          href="/"
-          class="logo-font">
+    <div>
+      <Container>
+        <hr::hr/>
 
-          <{ "conduit" }>
+        <div::container>
+          <a
+            href="/"
+            class="logo-font">
 
-        </a>
+            <{ "conduit" }>
 
-        <span class="attribution">
-          <{ "An interactive learning project from" }>
-
-          <a href="https://thinkster.io">
-            <{ "Thinkster" }>
           </a>
 
-          <{ ". Code &amp; design licensed under MIT." }>
-        </span>
-      </div>
-    </footer>
+          <span class="attribution">
+            <{ "An interactive learning project from" }>
+
+            <a href="https://thinkster.io">
+              <{ "Thinkster" }>
+            </a>
+
+            <{ ". Code &amp; design licensed under MIT." }>
+          </span>
+        </div>
+      </Container>
+    </div>
   }
 }

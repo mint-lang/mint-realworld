@@ -1,46 +1,20 @@
 component Status {
   property status : Api.Status(a) = Api.Status::Initial
+  property loadingMessage : String = ""
   property children : Array(Html) = []
   property message : String = ""
 
   style base {
-    position: relative;
-  }
-
-  style loader {
-    position: absolute;
-    z-index: 1000;
-    bottom: 0;
-    right: 0;
-    left: 0;
-    top: 0;
-
-    background: rgba(255,255,255,0.8);
-    transition-delay: 320ms;
-    transition: 320ms;
-
-    pointer-events: {pointerEvents};
-    opacity: {opacity};
-
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
+    margin: 40px 0;
     display: flex;
   }
 
-  get pointerEvents : String {
-    if (isLoading) {
-      ""
-    } else {
-      "none"
-    }
-  }
-
-  get opacity : Number {
-    if (isLoading) {
-      1
-    } else {
-      0
-    }
+  style message {
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #999;
   }
 
   get isLoading : Bool {
@@ -55,12 +29,16 @@ component Status {
         </div>
 
       Api.Status::Ok =>
-        <div>
+        <>
           <{ children }>
-        </div>
+        </>
 
       Api.Status::Loading =>
-        <div>
+        <div::base>
+          <div::message>
+            <{ loadingMessage }>
+          </div>
+
           <Loader/>
         </div>
 

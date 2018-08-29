@@ -70,8 +70,12 @@ component Article.Comments {
   }
 
   fun render : Html {
-    <Status status={status}>
+    <Status
+      loadingMessage="Loading comments..."
+      status={status}>
+
       <{ content }>
+
     </Status>
   }
 }

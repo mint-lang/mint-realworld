@@ -1,13 +1,10 @@
 store Stores.User {
   state registerStatus : Api.Status(User) = Api.Status::Initial
-  state loginStatus : Api.Status(User) = Api.Status::Initial
+
   state userStatus : Api.Status(User) = Api.Status::Initial
 
-  fun decodeUser (object : Object) : Result(Object.Error, User) {
-    object
-    |> Object.Decode.field(
-      "user",
-      (input : Object) : Result(Object.Error, User) => { decode input as User })
+  fun updateUser (user : User) : Promise(Never, Void) {
+    next { userStatus = Api.Status::Ok(user) }
   }
 
   fun getCurrentUser : Promise(Never, Void) {
@@ -16,7 +13,7 @@ store Stores.User {
 
       userStatus =
         Http.get("/user")
-        |> Api.send(decodeUser)
+        |> Api.send(User.fromResponse)
 
       next { userStatus = userStatus }
     }
@@ -34,7 +31,7 @@ store Stores.User {
   }
 
   fun resetStores : Promise(Never, Void) {
-    sequence {
+    parallel {
       Stores.Articles.reset()
       Stores.Comments.reset()
       Stores.Article.reset()
@@ -58,7 +55,7 @@ store Stores.User {
       status =
         Http.post("/users")
         |> Http.jsonBody(body)
-        |> Api.send(decodeUser)
+        |> Api.send(User.fromResponse)
 
       next { registerStatus = status }
 
@@ -80,33 +77,6 @@ store Stores.User {
       Window.navigate("/")
     } catch Storage.Error => error {
       void
-    }
-  }
-
-  fun login (email : String, password : String) : Promise(Never, Void) {
-    sequence {
-      next { loginStatus = Api.Status::Loading }
-
-      body =
-        encode {
-          user =
-            {
-              password = password,
-              email = email
-            }
-        }
-
-      status =
-        Http.post("/users/login")
-        |> Http.jsonBody(body)
-        |> Api.send(decodeUser)
-
-      next { loginStatus = status }
-
-      case (status) {
-        Api.Status::Ok user => loginUser(user)
-        => Promise.never()
-      }
     }
   }
 }

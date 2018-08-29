@@ -9,6 +9,8 @@ store Stores.Comments {
 
   fun post (comment : String) : Promise(Never, Void) {
     sequence {
+      next { postStatus = Api.Status::Loading }
+
       params =
         encode { comment = { body = comment } }
 

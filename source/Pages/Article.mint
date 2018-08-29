@@ -33,7 +33,10 @@ component Pages.Article {
   }
 
   fun render : Html {
-    <Status status={status}>
+    <Status
+      loadingMessage="Loading article..."
+      status={status}>
+
       <div::base>
         <div::header>
           <Container>
@@ -61,6 +64,7 @@ component Pages.Article {
           </Container>
         </div>
       </div>
+
     </Status>
   }
 }

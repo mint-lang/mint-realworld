@@ -4,19 +4,8 @@ component Pages.Home {
 
   connect Theme exposing { primary, primaryText }
 
-  get articlePreviews : Array(Html) {
-    articles
-    |> Array.map(
-      (article : Article) : Html => { <Article.Preview article={article}/> })
-    |> Array.intersperse(<div::divider/>)
-  }
-
   style base {
 
-  }
-
-  style divider {
-    margin: 20px 0;
   }
 
   style banner {
@@ -32,8 +21,8 @@ component Pages.Home {
 
   style layout {
     grid-template-columns: 1fr 300px;
+    padding: 40px 0;
     display: grid;
-    margin-top: 30px;
   }
 
   get banner : Html {
@@ -62,13 +51,7 @@ component Pages.Home {
       <Container>
         <div::layout>
           <div>
-            <Status
-              message="There was an error loading the articles."
-              status={status}>
-
-              <{ articlePreviews }>
-
-            </Status>
+            <Articles status={status}/>
           </div>
 
           <PopularTags/>

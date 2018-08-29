@@ -12,6 +12,30 @@ component Image {
 
   state status : Image.Status = Image.Status::Initial
 
+  style image {
+    border-radius: {borderRadius};
+    transition: 320ms;
+    opacity: {opacity};
+    object-fit: cover;
+    height: {height};
+    display: block;
+    width: {width};
+  }
+
+  style base {
+    border-radius: {borderRadius};
+    background: #AAA;
+    height: {height};
+    width: {width};
+  }
+
+  get opacity : Number {
+    case (status) {
+      Image.Status::Ok => 1
+      => 0
+    }
+  }
+
   fun componentDidMount : Promise(Never, Void) {
     sequence {
       status =
@@ -32,24 +56,9 @@ component Image {
     `
   }
 
-  style image {
-    border-radius: {borderRadius};
-    height: {height};
-    display: block;
-    width: {width};
-  }
-
-  style placeholder {
-    border-radius: {borderRadius};
-    background: #AAA;
-    height: {height};
-    width: {width};
-  }
-
   fun render : Html {
-    case (status) {
-      Image.Status::Ok => <img::image src={src}/>
-      => <div::placeholder/>
-    }
+    <div::base>
+      <img::image src={src}/>
+    </div>
   }
 }

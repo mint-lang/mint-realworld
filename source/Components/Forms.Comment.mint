@@ -1,26 +1,18 @@
 component Forms.Comment {
-  connect Stores.Comments exposing { post, reload, slug }
+  connect Stores.Comments exposing { post, reload, slug, postStatus }
   connect Stores.User exposing { userStatus }
 
   connect Theme exposing { link }
 
   state value : String = ""
 
-  style textarea {
-    border: 1px solid #EEE;
-    font-family: inherit;
-    border-bottom: none;
-    resize: vertical;
-    display: block;
-    padding: 15px;
-    width: 100%;
-  }
+  style form {
+    flex-direction: column;
+    display: flex;
 
-  style button {
-    background-color: {link};
-
-    &:hover {
-      background-color: #a5b85b;
+    & > button {
+      align-self: flex-end;
+      width: auto;
     }
   }
 
@@ -28,35 +20,46 @@ component Forms.Comment {
     next { value = "" }
   }
 
-  fun handleChange (event : Html.Event) : Promise(Never, Void) {
-    sequence {
-      value =
-        Dom.getValue(event.target)
-
-      next { value = value }
-    }
+  fun handleChange (value : String) : Promise(Never, Void) {
+    next { value = value }
   }
 
   fun handleClick (event : Html.Event) : Promise(Never, Void) {
     sequence {
       post(value)
-      clearValue()
-      reload()
+
+      case (postStatus) {
+        Api.Status::Ok =>
+          parallel {
+            clearValue()
+            reload()
+          }
+
+        => Promise.never()
+      }
     }
   }
 
   fun render : Html {
     case (userStatus) {
       Api.Status::Ok user =>
-        <div>
-          <textarea::textarea
-            placeholder="Write a comment..."
-            onInput={handleChange}
-            value={value}/>
+        <div::form>
+          <Form.Field>
+            <Textarea
+              errors={Api.errorsOf("body", postStatus)}
+              placeholder="Write a comment..."
+              name="Comment on this post:"
+              onChange={handleChange}
+              value={value}/>
+          </Form.Field>
 
-          <button::button onClick={handleClick}>
-            <{ "Push me" }>
-          </button>
+          <Button
+            onClick={handleClick}
+            disabled={Api.isLoading(postStatus)}>
+
+            <{ "Post Comment" }>
+
+          </Button>
         </div>
 
       =>

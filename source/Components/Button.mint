@@ -10,6 +10,7 @@ component Button {
     border-radius: 1px;
     font-weight: bold;
     cursor: pointer;
+    padding: 0 20px;
     height: 40px;
     color: white;
     width: 100%;

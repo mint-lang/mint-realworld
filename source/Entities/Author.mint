@@ -14,4 +14,14 @@ module Author {
       username = ""
     }
   }
+
+  fun decode (object : Object) : Result(Object.Error, Author) {
+    decode object as Author
+  }
+
+  fun fromResponse (object : Object) : Result(Object.Error, Author) {
+    with Object.Decode {
+      field("profile", decode, object)
+    }
+  }
 }

@@ -32,44 +32,62 @@ component Header {
 
   style links {
     text-transform: uppercase;
+    align-items: center;
     margin-left: auto;
     font-weight: 600;
     font-size: 14px;
     display: flex;
+
+    & > * + * {
+      margin-left: 15px;
+    }
   }
 
   style link {
     text-decoration: none;
-    margin-left: 15px;
     color: inherit;
   }
 
-  get links : Array(Html) {
+  style separator {
+    border-left: 1px solid #999;
+    height: 20px;
+  }
+
+  get links : Html {
     case (userStatus) {
       Api.Status::Error =>
-        [
+        <>
           <a::link href="/sign-in">
             <{ "Sign in" }>
-          </a>,
+          </a>
+
           <a::link href="/sign-up">
             <{ "Sign up" }>
           </a>
-        ]
+        </>
 
-      Api.Status::Ok =>
-        [
+      Api.Status::Ok user =>
+        <>
           <a::link href="/new">
             <{ " New Post" }>
-          </a>,
-          <a::link href="">
+          </a>
+
+          <a::link href="/settings">
             <{ " Settings" }>
-          </a>,
+          </a>
+
           <a::link href="/logout">
             <{ "Sign out" }>
           </a>
-        ]
 
-      => [<Loader color="white"/>]
+          <div::separator/>
+
+          <a::link href={"/users/" + user.username}>
+            <{ user.username }>
+          </a>
+        </>
+
+      => <Loader color="white"/>
     }
   }
 

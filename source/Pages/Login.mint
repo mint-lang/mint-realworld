@@ -1,5 +1,5 @@
 component Pages.Login {
-  connect Stores.User exposing { login, loginStatus, userStatus }
+  connect Stores.Login exposing { login, status }
   connect Theme exposing { primary }
 
   state password : String = ""
@@ -18,18 +18,18 @@ component Pages.Login {
   }
 
   get disabled : Bool {
-    Api.isLoading(loginStatus)
+    Api.isLoading(status)
   }
 
   get error : Html {
-    case (loginStatus) {
+    case (status) {
       Api.Status::Error => <GlobalErrors errors={errors}/>
 
       => Html.empty()
     }
   } where {
     requestErrors =
-      Api.errorsOf("request", loginStatus)
+      Api.errorsOf("request", status)
 
     errors =
       if (Array.isEmpty(requestErrors)) {

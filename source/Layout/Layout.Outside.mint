@@ -8,6 +8,7 @@ component Layout.Outside {
   property title : String = ""
 
   style base {
+    background: radial-gradient(circle, farthest-corner, #FFF, #f5f5f5);
     justify-content: center;
     flex-direction: column;
     align-items: center;

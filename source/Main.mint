@@ -42,6 +42,16 @@ component Main {
           <Pages.NewArticle/>
         </Layout>
 
+      Page::Profile =>
+        <Layout>
+          <Pages.Profile/>
+        </Layout>
+
+      Page::Settings =>
+        <Layout>
+          <Pages.Settings/>
+        </Layout>
+
       Page::NotFound =>
         <Layout>
           <{ "WTF" }>
@@ -78,6 +88,8 @@ store Application {
 
 enum Page {
   Login
+  Settings
+  Profile
   SignUp
   Initial
   Home
@@ -96,7 +108,10 @@ routes {
         params =
           Stores.Articles.params
 
-        Stores.Articles.load({ params | tag = "" })
+        Stores.Articles.load({ params |
+          tag = "",
+          author = ""
+        })
       }
     }
   }
@@ -110,7 +125,41 @@ routes {
         params =
           Stores.Articles.params
 
-        Stores.Articles.load({ params | tag = tag })
+        Stores.Articles.load({ params |
+          tag = tag,
+          author = ""
+        })
+      }
+    }
+  }
+
+  /users/:username (username : String) {
+    parallel {
+      Application.initializeWithPage(Page::Profile)
+      Stores.Profile.load(username)
+
+      Stores.Articles.load(
+        {
+          tag = "",
+          limit = 10,
+          author = username
+        })
+    }
+  }
+
+  /settings {
+    sequence {
+      Application.initialize()
+      Stores.Login.reset()
+
+      case (Stores.User.userStatus) {
+        Api.Status::Ok user =>
+          sequence {
+            Stores.Settings.set(user)
+            Application.setPage(Page::Settings)
+          }
+
+        => Window.navigate("/")
       }
     }
   }
@@ -118,6 +167,7 @@ routes {
   /sign-in {
     sequence {
       Application.initialize()
+      Stores.Login.reset()
 
       case (Stores.User.userStatus) {
         Api.Status::Ok user => Window.navigate("/")

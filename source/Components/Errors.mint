@@ -3,9 +3,9 @@ component GlobalErrors {
 
   style base {
     padding: 20px;
-    background: #e84848;
+    background: #f7b6b6;
     border-radius: 4px;
-    color: white;
+    color: #902e2e;
     margin-bottom: 20px;
     font-weight: bold;
     font-size: 14px;
@@ -33,12 +33,15 @@ component Errors {
   property prefix : String = ""
 
   style base {
-    padding-left: 20px;
+    border-radius: 0 0 2px 2px;
+    background: #f7b6b6;
     font-weight: bold;
-    margin-bottom: 0;
-    margin-top: 5px;
     font-size: 14px;
-    color: #e84848;
+    color: #902e2e;
+    margin: 0;
+
+    padding: 10px;
+    padding-left: 30px;
   }
 
   fun renderError (error : String) : Html {

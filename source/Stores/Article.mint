@@ -1,5 +1,6 @@
 /* This store contains the data of the currenty viewed article. */
 store Stores.Article {
+  state favoriteStatus : Api.Status(Article) = Api.Status::Initial
   state createStatus : Api.Status(Article) = Api.Status::Initial
 
   /* Represents the status of the article. */
@@ -24,6 +25,47 @@ store Stores.Article {
         status = Api.Status::Initial,
         createStatus = Api.Status::Initial
       }
+  }
+
+  fun toggleFavorite (article : Article) : Promise(Never, Void) {
+    sequence {
+      next { favoriteStatus = Api.Status::Loading }
+
+      url =
+        "/articles/" + article.slug + "/favorite"
+
+      request =
+        if (article.favorited) {
+          Http.delete(url)
+        } else {
+          Http.post(url)
+        }
+
+      nextStatus =
+        Api.send(decodeArticle, request)
+
+      next { favoriteStatus = nextStatus }
+
+      case (nextStatus) {
+        Api.Status::Ok updatedArticle =>
+          parallel {
+            Stores.Articles.replaceArticle(updatedArticle)
+
+            case (status) {
+              Api.Status::Ok currentArticle =>
+                if (updatedArticle.slug == currentArticle.slug) {
+                  next { status = nextStatus }
+                } else {
+                  Promise.never()
+                }
+
+              => Promise.never()
+            }
+          }
+
+        => Promise.never()
+      }
+    }
   }
 
   fun create (
