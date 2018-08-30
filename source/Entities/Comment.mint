@@ -16,4 +16,14 @@ module Comment {
       id = 0
     }
   }
+
+  fun decode (object : Object) : Result(Object.Error, Comment) {
+    decode object as Comment
+  }
+
+  fun fromResponse (object : Object) : Result(Object.Error, Comment) {
+    with Object.Decode {
+      field("comment", decode, object)
+    }
+  }
 }

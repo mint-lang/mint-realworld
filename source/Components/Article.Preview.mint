@@ -1,6 +1,6 @@
 component Article.Preview {
-  connect Stores.Article exposing { toggleFavorite, favoriteStatus }
-  connect Theme exposing { secondary, secondaryText }
+  connect Theme exposing { primary, secondary, secondaryText }
+  connect Actions exposing { toggleFavorite }
 
   property article : Article = Article.empty()
 
@@ -63,9 +63,13 @@ component Article.Preview {
 
   style link {
     text-decoration: none;
-    transition: 150ms;
+    transition: 50ms;
     color: inherit;
     display: block;
+
+    &:hover {
+      color: {primary};
+    }
   }
 
   get buttonColor : String {

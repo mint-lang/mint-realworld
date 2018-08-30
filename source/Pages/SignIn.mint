@@ -1,5 +1,6 @@
-component Pages.Login {
-  connect Forms.Login exposing { submit, status, setEmail, setPassword, email, password }
+component Pages.SignIn {
+  connect Forms.SignIn exposing { submit, status, setEmail, setPassword, email, password }
+
   connect Theme exposing { primary }
 
   get disabled : Bool {
@@ -9,7 +10,6 @@ component Pages.Login {
   get error : Html {
     case (status) {
       Api.Status::Error => <GlobalErrors errors={errors}/>
-
       => Html.empty()
     }
   } where {

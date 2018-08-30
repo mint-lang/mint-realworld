@@ -21,12 +21,16 @@ store Forms.Article {
   fun set (article : Article) : Promise(Never, Void) {
     next
       {
-        slug = Maybe.just(article.slug),
-        tags = Set.fromArray(article.tags),
         extract = Maybe.withDefault("", article.description),
+        tags = Set.fromArray(article.tags),
+        slug = Maybe.just(article.slug),
         content = article.body,
         title = article.title
       }
+  }
+
+  fun setTags (value : Set(String)) : Promise(Never, Void) {
+    next { tags = value }
   }
 
   fun setExtract (value : String) : Promise(Never, Void) {
@@ -39,10 +43,6 @@ store Forms.Article {
 
   fun setTitle (value : String) : Promise(Never, Void) {
     next { title = value }
-  }
-
-  fun setTags (value : Set(String)) : Promise(Never, Void) {
-    next { tags = value }
   }
 
   fun submit : Promise(Never, Void) {

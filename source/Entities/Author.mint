@@ -1,8 +1,8 @@
 record Author {
   bio : Maybe(String),
+  username : String,
   following : Bool,
-  image : String,
-  username : String
+  image : String
 }
 
 module Author {
@@ -10,8 +10,8 @@ module Author {
     {
       bio = Maybe.nothing(),
       following = false,
-      image = "",
-      username = ""
+      username = "",
+      image = ""
     }
   }
 

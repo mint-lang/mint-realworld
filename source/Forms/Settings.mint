@@ -56,7 +56,7 @@ store Forms.Settings {
       case (status) {
         Api.Status::Ok user =>
           parallel {
-            Stores.User.updateUser(user)
+            Application.setUser(user)
             Window.navigate("/users/" + username)
           }
 

@@ -5,7 +5,7 @@ component Markdown {
     `
     (() => {
       let reader = new commonmark.Parser()
-      let writer = new commonmark.HtmlRenderer()
+      let writer = new commonmark.HtmlRenderer({ safe: true })
       let parsed = reader.parse(this.content)
       let result = writer.render(parsed)
 

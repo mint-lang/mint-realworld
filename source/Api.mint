@@ -67,13 +67,14 @@ module Api {
     sequence {
       /* We try to get a token from session storage. */
       request =
-        try {
-          token =
-            Storage.Session.get("token")
+        case (Application.user) {
+          UserStatus::LoggedIn user =>
+            Http.header(
+              "Authorization",
+              "Token " + user.token,
+              rawRequest)
 
-          Http.header("Authorization", "Token " + token, rawRequest)
-        } catch Storage.Error => error {
-          rawRequest
+          UserStatus::LoggedOut => rawRequest
         }
 
       /* Get the response. */

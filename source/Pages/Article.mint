@@ -1,12 +1,9 @@
 component Pages.Article {
-  connect Stores.Article exposing { article, status, destroy, deleteStatus }
-  connect Stores.User exposing { userStatus }
+  connect Stores.Article exposing { article, status }
+  connect Actions exposing { deleteArticle }
+  connect Application exposing { user }
 
   connect Theme exposing { primary, primaryText }
-
-  style base {
-
-  }
 
   style title {
     margin-bottom: 20px;
@@ -14,8 +11,8 @@ component Pages.Article {
   }
 
   style header {
+    padding: 40px 0 50px 0;
     background: #EEE;
-    padding: 40px 0;
     color: #333;
   }
 
@@ -34,12 +31,12 @@ component Pages.Article {
   }
 
   fun handleDelete (event : Html.Event) : Promise(Never, Void) {
-    destroy(article.slug)
+    deleteArticle(article.slug)
   }
 
   get isMine : Bool {
-    case (userStatus) {
-      Api.Status::Ok user => user.username == article.author.username
+    case (user) {
+      UserStatus::LoggedIn user => user.username == article.author.username
       => false
     }
   }
@@ -50,7 +47,7 @@ component Pages.Article {
       loadingMessage="Loading article..."
       status={status}>
 
-      <div::base>
+      <div>
         <div::header>
           <Container>
             <div::title>
@@ -83,7 +80,7 @@ component Pages.Article {
 
             <hr::hr/>
 
-            <Forms.Comment/>
+            <CommentForm article={article}/>
           </Container>
         </div>
       </div>

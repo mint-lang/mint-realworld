@@ -58,6 +58,18 @@ component Pages.Editor {
     }
   }
 
+  get buttonText : String {
+    if (disabled) {
+      "Loading..."
+    } else {
+      if (Maybe.isJust(slug)) {
+        "Update"
+      } else {
+        "Create"
+      }
+    }
+  }
+
   get errors : Array(String) {
     Api.errorsOf("request", status)
     |> Array.concat(Api.errorsOf("article", status))
@@ -65,9 +77,10 @@ component Pages.Editor {
 
   fun render : Html {
     <Layout.Form
-      errors={errors}
+      buttonText={buttonText}
+      onSubmit={submit}
       title={formTitle}
-      onSubmit={submit}>
+      errors={errors}>
 
       <div::grid>
         <div::cell>
@@ -85,8 +98,8 @@ component Pages.Editor {
         <div::cell>
           <Form.Field>
             <Textarea
-              errors={Api.errorsOf("description", status)}
               placeholder="Short description of the article..."
+              errors={Api.errorsOf("description", status)}
               onChange={setExtract}
               disabled={disabled}
               value={extract}

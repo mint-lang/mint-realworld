@@ -1,32 +1,30 @@
-component Errors {
+component GlobalErrors {
   property errors : Array(String) = []
-  property prefix : String = ""
 
   style base {
-    border-radius: 0 0 2px 2px;
+    margin-bottom: 20px;
     background: #f7b6b6;
+    text-align: center;
+    border-radius: 2px;
     font-weight: bold;
     font-size: 14px;
     color: #902e2e;
-    margin: 0;
-
-    padding: 10px;
-    padding-left: 30px;
+    padding: 20px;
   }
 
   fun renderError (error : String) : Html {
-    <li>
-      <{ prefix + " " + error }>
-    </li>
+    <div>
+      <{ error }>
+    </div>
   }
 
   fun render : Html {
     if (Array.isEmpty(errors)) {
       Html.empty()
     } else {
-      <ul::base>
+      <div::base>
         <{ Array.map(renderError, errors) }>
-      </ul>
+      </div>
     }
   }
 }

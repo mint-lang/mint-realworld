@@ -2,19 +2,16 @@ component Article.Comment {
   property comment : Comment = Comment.empty()
 
   style base {
-    border: 1px solid #EEE;
     margin-bottom: 20px;
     border-radius: 2px;
   }
 
   style content {
-    padding: 5px 15px;
+
   }
 
   style footer {
     align-items: center;
-    padding: 10px 15px;
-    background: #EEE;
     font-size: 12px;
     display: flex;
 
@@ -32,7 +29,7 @@ component Article.Comment {
       <div::footer>
         <Image
           src={comment.author.image}
-          borderRadius="50%"
+          borderRadius="3px"
           height="20px"
           width="20px"/>
 

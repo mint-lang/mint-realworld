@@ -1,6 +1,6 @@
 component Pages.Home {
   connect Stores.Articles exposing { articles, status }
-  connect Stores.User exposing { userStatus }
+  connect Application exposing { user }
 
   connect Theme exposing { primary, primaryText }
 
@@ -26,12 +26,10 @@ component Pages.Home {
   }
 
   get banner : Html {
-    case (userStatus) {
-      Api.Status::Initial => Html.empty()
-      Api.Status::Loading => Html.empty()
-      Api.Status::Ok => Html.empty()
+    case (user) {
+      UserStatus::LoggedIn => Html.empty()
 
-      =>
+      UserStatus::LoggedOut =>
         <div::banner>
           <h1>
             <{ "Conduit" }>

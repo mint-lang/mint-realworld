@@ -7,7 +7,7 @@ component Button {
 
   style base {
     background: {primary};
-    border-radius: 1px;
+    border-radius: 2px;
     font-weight: bold;
     cursor: pointer;
     padding: 0 20px;

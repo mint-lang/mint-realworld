@@ -1,24 +1,17 @@
 component Pages.SignUp {
-  connect Stores.User exposing { register, registerStatus }
-
-  state username : String = ""
-  state password : String = ""
-  state email : String = ""
-
-  fun handleUsername (value : String) : Promise(Never, Void) {
-    next { username = value }
-  }
-
-  fun handlePassword (value : String) : Promise(Never, Void) {
-    next { password = value }
-  }
-
-  fun handleEmail (value : String) : Promise(Never, Void) {
-    next { email = value }
+  connect Forms.SignUp exposing {
+    setPassword,
+    setUsername,
+    setEmail,
+    username,
+    password,
+    submit,
+    status,
+    email
   }
 
   get disabled : Bool {
-    Api.isLoading(registerStatus)
+    Api.isLoading(status)
   }
 
   get buttonText : String {
@@ -29,25 +22,21 @@ component Pages.SignUp {
     }
   }
 
-  fun handleSubmit : Promise(Never, Void) {
-    register(username, email, password)
-  }
-
   fun render : Html {
     <Layout.Outside
       buttonText={buttonText}
-      onClick={handleSubmit}
       disabled={disabled}
+      onClick={submit}
       title="Sign Up">
 
       <Form>
-        <GlobalErrors errors={Api.errorsOf("request", registerStatus)}/>
+        <GlobalErrors errors={Api.errorsOf("request", status)}/>
 
         <Form.Field>
           <Input
-            errors={Api.errorsOf("username", registerStatus)}
+            errors={Api.errorsOf("username", status)}
             placeholder="realworld"
-            onChange={handleUsername}
+            onChange={setUsername}
             disabled={disabled}
             value={username}
             name="Username"/>
@@ -55,9 +44,9 @@ component Pages.SignUp {
 
         <Form.Field>
           <Input
-            errors={Api.errorsOf("email", registerStatus)}
+            errors={Api.errorsOf("email", status)}
             placeholder="demo@realworld.io"
-            onChange={handleEmail}
+            onChange={setEmail}
             disabled={disabled}
             value={email}
             name="Email"/>
@@ -65,8 +54,8 @@ component Pages.SignUp {
 
         <Form.Field>
           <Input
-            errors={Api.errorsOf("password", registerStatus)}
-            onChange={handlePassword}
+            errors={Api.errorsOf("password", status)}
+            onChange={setPassword}
             placeholder="********"
             disabled={disabled}
             value={password}

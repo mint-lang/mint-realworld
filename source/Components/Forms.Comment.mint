@@ -1,10 +1,9 @@
-component Forms.Comment {
-  connect Stores.Comments exposing { post, reload, slug, postStatus }
-  connect Stores.User exposing { userStatus }
-
+component CommentForm {
+  connect Forms.Comment exposing { submit, status, comment, setComment }
+  connect Application exposing { user }
   connect Theme exposing { link }
 
-  state value : String = ""
+  property article : Article = Article.empty()
 
   style form {
     flex-direction: column;
@@ -16,53 +15,33 @@ component Forms.Comment {
     }
   }
 
-  fun clearValue : Promise(Never, Void) {
-    next { value = "" }
-  }
-
-  fun handleChange (value : String) : Promise(Never, Void) {
-    next { value = value }
-  }
-
   fun handleClick (event : Html.Event) : Promise(Never, Void) {
-    sequence {
-      post(value)
-
-      case (postStatus) {
-        Api.Status::Ok =>
-          parallel {
-            clearValue()
-            reload()
-          }
-
-        => Promise.never()
-      }
-    }
+    submit(article.slug)
   }
 
   fun render : Html {
-    case (userStatus) {
-      Api.Status::Ok user =>
+    case (user) {
+      UserStatus::LoggedIn user =>
         <div::form>
           <Form.Field>
             <Textarea
-              errors={Api.errorsOf("body", postStatus)}
+              errors={Api.errorsOf("body", status)}
               placeholder="Write a comment..."
               name="Comment on this post:"
-              onChange={handleChange}
-              value={value}/>
+              onChange={setComment}
+              value={comment}/>
           </Form.Field>
 
           <Button
-            onClick={handleClick}
-            disabled={Api.isLoading(postStatus)}>
+            disabled={Api.isLoading(status)}
+            onClick={handleClick}>
 
             <{ "Post Comment" }>
 
           </Button>
         </div>
 
-      =>
+      UserStatus::LoggedOut =>
         <div>
           <a href="/sign-in">
             <{ "Sign in" }>
