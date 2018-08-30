@@ -37,9 +37,9 @@ component Main {
           <Pages.Article/>
         </Layout>
 
-      Page::NewArticle =>
+      Page::Editor =>
         <Layout>
-          <Pages.NewArticle/>
+          <Pages.Editor/>
         </Layout>
 
       Page::Profile =>
@@ -93,7 +93,7 @@ enum Page {
   SignUp
   Initial
   Home
-  NewArticle
+  Editor
   Article
   NotFound
 }
@@ -150,12 +150,11 @@ routes {
   /settings {
     sequence {
       Application.initialize()
-      Stores.Login.reset()
 
       case (Stores.User.userStatus) {
         Api.Status::Ok user =>
           sequence {
-            Stores.Settings.set(user)
+            Forms.Settings.set(user)
             Application.setPage(Page::Settings)
           }
 
@@ -167,11 +166,15 @@ routes {
   /sign-in {
     sequence {
       Application.initialize()
-      Stores.Login.reset()
 
       case (Stores.User.userStatus) {
         Api.Status::Ok user => Window.navigate("/")
-        => Application.setPage(Page::Login)
+
+        =>
+          parallel {
+            Application.setPage(Page::Login)
+            Forms.Login.reset()
+          }
       }
     }
   }
@@ -190,10 +193,10 @@ routes {
   /new {
     sequence {
       Application.initialize()
-      Stores.Article.reset()
+      Forms.Article.reset()
 
       case (Stores.User.userStatus) {
-        Api.Status::Ok user => Application.setPage(Page::NewArticle)
+        Api.Status::Ok user => Application.setPage(Page::Editor)
         => Window.navigate("/")
       }
     }
@@ -223,6 +226,25 @@ routes {
       Application.initializeWithPage(Page::Article)
       Stores.Article.load(slug)
       Stores.Comments.load(slug)
+    }
+  }
+
+  /edit/:slug (slug : String) {
+    sequence {
+      parallel {
+        Application.initialize()
+        Stores.Article.load(slug)
+      }
+
+      case (Stores.Article.status) {
+        Api.Status::Ok article =>
+          parallel {
+            Forms.Article.set(article)
+            Application.setPage(Page::Editor)
+          }
+
+        => Promise.never()
+      }
     }
   }
 

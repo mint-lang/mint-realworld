@@ -1,11 +1,27 @@
-store Stores.Login {
+store Forms.Login {
   state status : Api.Status(User) = Api.Status::Initial
 
-  fun reset : Promise(Never, Void) {
-    next { status = Api.Status::Initial }
+  state password : String = ""
+  state email : String = ""
+
+  fun setEmail (value : String) : Promise(Never, Void) {
+    next { email = value }
   }
 
-  fun login (email : String, password : String) : Promise(Never, Void) {
+  fun setPassword (value : String) : Promise(Never, Void) {
+    next { password = value }
+  }
+
+  fun reset : Promise(Never, Void) {
+    next
+      {
+        status = Api.Status::Initial,
+        password = "",
+        email = ""
+      }
+  }
+
+  fun submit : Promise(Never, Void) {
     sequence {
       next { status = Api.Status::Loading }
 

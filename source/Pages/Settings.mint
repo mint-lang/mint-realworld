@@ -1,5 +1,5 @@
 component Pages.Settings {
-  connect Stores.Settings exposing {
+  connect Forms.Settings exposing {
     submit,
     email,
     image,

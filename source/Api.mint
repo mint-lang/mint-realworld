@@ -43,6 +43,23 @@ module Api {
     }
   }
 
+  fun decodeErrors (body : String) : Api.Status(a) {
+    try {
+      object =
+        Json.parse(body)
+        |> Maybe.toResult("")
+
+      errors =
+        decode object as ErrorResponse
+
+      Api.Status::Error(errors.errors)
+    } catch Object.Error => error {
+      errorStatus("request", "Could not decode the error response.")
+    } catch String => error {
+      errorStatus("request", "Could not parse the error response.")
+    }
+  }
+
   fun send (
     decoder : Function(Object, Result(Object.Error, a)),
     rawRequest : Http.Request
@@ -68,22 +85,8 @@ module Api {
       /* Handle response based on status. */
       case (response.status) {
         401 => errorStatus("request", "Unauthorized!")
-
-        422 =>
-          try {
-            object =
-              Json.parse(response.body)
-              |> Maybe.toResult("")
-
-            errors =
-              decode object as ErrorResponse
-
-            Api.Status::Error(errors.errors)
-          } catch Object.Error => error {
-            errorStatus("request", "Could not decode the error response.")
-          } catch String => error {
-            errorStatus("request", "Could not parse the error response.")
-          }
+        403 => decodeErrors(response.body)
+        422 => decodeErrors(response.body)
 
         =>
           try {

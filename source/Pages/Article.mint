@@ -1,5 +1,6 @@
 component Pages.Article {
-  connect Stores.Article exposing { article, status }
+  connect Stores.Article exposing { article, status, destroy, deleteStatus }
+  connect Stores.User exposing { userStatus }
 
   connect Theme exposing { primary, primaryText }
 
@@ -32,8 +33,20 @@ component Pages.Article {
     height: 20px;
   }
 
+  fun handleDelete (event : Html.Event) : Promise(Never, Void) {
+    destroy(article.slug)
+  }
+
+  get isMine : Bool {
+    case (userStatus) {
+      Api.Status::Ok user => user.username == article.author.username
+      => false
+    }
+  }
+
   fun render : Html {
     <Status
+      message="The article cannot be found."
       loadingMessage="Loading article..."
       status={status}>
 
@@ -47,6 +60,16 @@ component Pages.Article {
             <Article.Profile article={article}/>
             <div::spacer/>
             <TagList tags={article.tags}/>
+
+            <If condition={isMine}>
+              <a href={"/edit/" + article.slug}>
+                <{ "edit" }>
+              </a>
+
+              <a onClick={handleDelete}>
+                <{ "delete" }>
+              </a>
+            </If>
           </Container>
         </div>
 

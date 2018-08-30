@@ -1,4 +1,4 @@
-store Stores.Settings {
+store Forms.Settings {
   state status : Api.Status(User) = Api.Status::Initial
 
   state username : String = ""

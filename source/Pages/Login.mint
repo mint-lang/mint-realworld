@@ -1,21 +1,6 @@
 component Pages.Login {
-  connect Stores.Login exposing { login, status }
+  connect Forms.Login exposing { submit, status, setEmail, setPassword, email, password }
   connect Theme exposing { primary }
-
-  state password : String = ""
-  state email : String = ""
-
-  fun handleEmail (value : String) : Promise(Never, Void) {
-    next { email = value }
-  }
-
-  fun handlePassword (value : String) : Promise(Never, Void) {
-    next { password = value }
-  }
-
-  fun handleSubmit : Promise(Never, Void) {
-    login(email, password)
-  }
 
   get disabled : Bool {
     Api.isLoading(status)
@@ -50,8 +35,8 @@ component Pages.Login {
   fun render : Html {
     <Layout.Outside
       buttonText={buttonText}
-      onClick={handleSubmit}
       disabled={disabled}
+      onClick={submit}
       title="Sign In">
 
       <Form>
@@ -60,7 +45,7 @@ component Pages.Login {
         <Form.Field>
           <Input
             placeholder="demo@realworld.io"
-            onChange={handleEmail}
+            onChange={setEmail}
             disabled={disabled}
             value={email}
             name="Email"/>
@@ -68,7 +53,7 @@ component Pages.Login {
 
         <Form.Field>
           <Input
-            onChange={handlePassword}
+            onChange={setPassword}
             placeholder="********"
             disabled={disabled}
             value={password}

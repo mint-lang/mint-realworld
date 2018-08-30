@@ -1,10 +1,17 @@
-component Pages.NewArticle {
-  connect Stores.Article exposing { create, createStatus }
-
-  state tags : Set(String) = Set.empty()
-  state extract : String = ""
-  state content : String = ""
-  state title : String = ""
+component Pages.Editor {
+  connect Forms.Article exposing {
+    submit,
+    status,
+    slug,
+    tags,
+    extract,
+    content,
+    title,
+    setExtract,
+    setContent,
+    setTitle,
+    setTags
+  }
 
   style grid {
     grid-gap: 20px;
@@ -39,43 +46,36 @@ component Pages.NewArticle {
     display: grid;
   }
 
-  fun handleExtract (value : String) : Promise(Never, Void) {
-    next { extract = value }
-  }
-
-  fun handleContent (value : String) : Promise(Never, Void) {
-    next { content = value }
-  }
-
-  fun handleTitle (value : String) : Promise(Never, Void) {
-    next { title = value }
-  }
-
-  fun handleTags (value : Set(String)) : Promise(Never, Void) {
-    next { tags = value }
-  }
-
-  fun submit : Promise(Never, Void) {
-    create(title, extract, content, tags)
-  }
-
   get disabled : Bool {
-    Api.isLoading(createStatus)
+    Api.isLoading(status)
+  }
+
+  get formTitle : String {
+    if (Maybe.isJust(slug)) {
+      "Edit Article"
+    } else {
+      "New Article"
+    }
+  }
+
+  get errors : Array(String) {
+    Api.errorsOf("request", status)
+    |> Array.concat(Api.errorsOf("article", status))
   }
 
   fun render : Html {
     <Layout.Form
-      errors={Api.errorsOf("request", createStatus)}
-      title="New Article"
+      errors={errors}
+      title={formTitle}
       onSubmit={submit}>
 
       <div::grid>
         <div::cell>
           <Form.Field>
             <Input
-              errors={Api.errorsOf("title", createStatus)}
+              errors={Api.errorsOf("title", status)}
               placeholder="Article Title..."
-              onChange={handleTitle}
+              onChange={setTitle}
               disabled={disabled}
               value={title}
               name="Title"/>
@@ -85,9 +85,9 @@ component Pages.NewArticle {
         <div::cell>
           <Form.Field>
             <Textarea
-              errors={Api.errorsOf("description", createStatus)}
+              errors={Api.errorsOf("description", status)}
               placeholder="Short description of the article..."
-              onChange={handleExtract}
+              onChange={setExtract}
               disabled={disabled}
               value={extract}
               name="Extract"/>
@@ -101,7 +101,7 @@ component Pages.NewArticle {
             </Label>
 
             <Tagger
-              onChange={handleTags}
+              onChange={setTags}
               disabled={disabled}
               placeholder="Tags"
               tags={tags}/>
@@ -112,8 +112,8 @@ component Pages.NewArticle {
           <Form.Field>
             <Textarea
               placeholder="The articles content in markdown..."
-              errors={Api.errorsOf("body", createStatus)}
-              onChange={handleContent}
+              errors={Api.errorsOf("body", status)}
+              onChange={setContent}
               disabled={disabled}
               value={content}
               name="Content"/>

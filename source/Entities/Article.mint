@@ -26,4 +26,14 @@ module Article {
       tags = []
     }
   }
+
+  fun decode (object : Object) : Result(Object.Error, Article) {
+    decode object as Article
+  }
+
+  fun fromResponse (object : Object) : Result(Object.Error, Article) {
+    with Object.Decode {
+      field("article", decode, object)
+    }
+  }
 }
