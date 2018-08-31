@@ -8,7 +8,11 @@
     "assets/commonmark.js"
   ],
   "application": {
+    "name": "Conduit",
     "title": "Conduit",
+    "orientation": "landscape",
+    "display": "standalone",
+    "theme-color": "#03a9f4",
     "icon": "assets/icon.png",
     "head": "assets/head.html",
     "meta": {
