@@ -1,6 +1,6 @@
 component Profile {
+  connect Stores.Profile exposing { status, profile }
   connect Actions exposing { toggleUserFollow }
-  connect Stores.Profile exposing { status }
   connect Application exposing { user }
 
   state loading : Bool = false
@@ -38,10 +38,6 @@ component Profile {
       height: 10px;
       width: 10px;
     }
-  }
-
-  get profile : Author {
-    Api.withDefault(Author.empty(), status)
   }
 
   get bio : Html {
@@ -120,10 +116,10 @@ component Profile {
     sequence {
       next { loading = true }
 
-      status =
+      newStatus =
         toggleUserFollow(profile)
 
-      case (status) {
+      case (newStatus) {
         Api.Status::Ok profile => Stores.Profile.setProfile(profile)
         => Promise.never()
       }
@@ -157,6 +153,9 @@ component Profile {
 }
 
 component Pages.Profile {
+  connect Stores.Articles exposing { params }
+  connect Stores.Profile exposing { profile }
+
   style articles {
     padding: 40px 0;
   }
@@ -167,6 +166,18 @@ component Pages.Profile {
 
       <Container>
         <div::articles>
+          <Tabs>
+            <Tab
+              href={"/users/" + profile.username}
+              active={!Debug.log(params.favorited)}
+              label="Articles"/>
+
+            <Tab
+              href={"/users/" + profile.username + "/favorites"}
+              label="Favorited Articles"
+              active={params.favorited}/>
+          </Tabs>
+
           <Articles/>
         </div>
       </Container>

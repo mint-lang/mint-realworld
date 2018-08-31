@@ -9,6 +9,17 @@
   ],
   "application": {
     "title": "Conduit",
-    "head": "assets/head.html"
+    "head": "assets/head.html",
+    "meta": {
+      "charset": "utf-8",
+      "description": "A place to share your knowledge.",
+      "keywords": [
+        "mint",
+        "mint-lang",
+        "conduit",
+        "realworld.io"
+      ],
+      "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
+    }
   }
 }

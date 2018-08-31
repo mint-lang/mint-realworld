@@ -18,11 +18,11 @@ store Stores.Article {
     sequence {
       next { status = Api.Status::Loading }
 
-      status =
+      newStatus =
         Http.get("/articles/" + slug)
         |> Api.send(Article.fromResponse)
 
-      next { status = status }
+      next { status = newStatus }
     }
   }
 }

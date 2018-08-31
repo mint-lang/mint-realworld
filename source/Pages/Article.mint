@@ -54,7 +54,7 @@ component Pages.Article {
               <{ article.title }>
             </div>
 
-            <Article.Profile article={article}/>
+            <Article.Info article={article}/>
             <div::spacer/>
             <TagList tags={article.tags}/>
 

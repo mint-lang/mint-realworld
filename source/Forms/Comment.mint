@@ -18,21 +18,19 @@ store Forms.Comment {
       params =
         encode { comment = { body = comment } }
 
-      status =
+      newStatus =
         Http.post("/articles/" + slug + "/comments")
         |> Http.jsonBody(params)
         |> Api.send(Comment.fromResponse)
 
-      next { status = status }
-
-      case (status) {
+      case (newStatus) {
         Api.Status::Ok =>
           parallel {
             Stores.Comments.load(slug)
             reset()
           }
 
-        => Promise.never()
+        => next { status = newStatus }
       }
     }
   }

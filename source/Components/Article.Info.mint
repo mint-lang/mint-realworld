@@ -1,4 +1,4 @@
-component Article.Profile {
+component Article.Info {
   connect Theme exposing { link }
 
   property article : Article = Article.empty()

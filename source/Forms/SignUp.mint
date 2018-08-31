@@ -31,16 +31,14 @@ store Forms.SignUp {
             }
         }
 
-      status =
+      newStatus =
         Http.post("/users")
         |> Http.jsonBody(body)
         |> Api.send(User.fromResponse)
 
-      next { status = status }
-
-      case (status) {
+      case (newStatus) {
         Api.Status::Ok user => Application.login(user)
-        => Promise.never()
+        => next { status = newStatus }
       }
     }
   }

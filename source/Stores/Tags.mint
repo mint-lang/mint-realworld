@@ -19,13 +19,13 @@ store Stores.Tags {
         sequence {
           next { status = Api.Status::Loading }
 
-          status =
+          newStatus =
             Http.get("/tags")
             |> Api.send(decodeTags)
 
           next
             {
-              status = status,
+              status = newStatus,
               cached = true
             }
         }

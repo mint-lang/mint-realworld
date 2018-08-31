@@ -2,7 +2,7 @@ routes {
   /?page=:page (page : String) {
     parallel {
       Application.initializeWithPage(Page::Home)
-      Stores.Articles.load("", page, "")
+      Stores.Articles.load("", page, "", false, false)
       Stores.Tags.load()
     }
   }
@@ -10,7 +10,23 @@ routes {
   / {
     parallel {
       Application.initializeWithPage(Page::Home)
-      Stores.Articles.load("", "", "")
+      Stores.Articles.load("", "", "", false, false)
+      Stores.Tags.load()
+    }
+  }
+
+  /feed?tag=:tag&page=:page (tag : String, page : String) {
+    parallel {
+      Application.initializeWithPage(Page::Home)
+      Stores.Articles.load("", page, tag, true, false)
+      Stores.Tags.load()
+    }
+  }
+
+  /feed?page=:page (page : String) {
+    parallel {
+      Application.initializeWithPage(Page::Home)
+      Stores.Articles.load("", page, "", true, false)
       Stores.Tags.load()
     }
   }
@@ -18,7 +34,7 @@ routes {
   /articles?tag=:tag&page=:page (tag : String, page : String) {
     parallel {
       Application.initializeWithPage(Page::Home)
-      Stores.Articles.load("", page, tag)
+      Stores.Articles.load("", page, tag, false, false)
       Stores.Tags.load()
     }
   }
@@ -26,7 +42,7 @@ routes {
   /articles?page=:page (page : String) {
     parallel {
       Application.initializeWithPage(Page::Home)
-      Stores.Articles.load("", page, "")
+      Stores.Articles.load("", page, "", false, false)
       Stores.Tags.load()
     }
   }
@@ -34,7 +50,7 @@ routes {
   /users/:username?page=:page (username : String, page : String) {
     parallel {
       Application.initializeWithPage(Page::Profile)
-      Stores.Articles.load(username, page, "")
+      Stores.Articles.load(username, page, "", false, false)
       Stores.Profile.load(username)
     }
   }
@@ -42,7 +58,23 @@ routes {
   /users/:username (username : String) {
     parallel {
       Application.initializeWithPage(Page::Profile)
-      Stores.Articles.load(username, "", "")
+      Stores.Articles.load(username, "", "", false, false)
+      Stores.Profile.load(username)
+    }
+  }
+
+  /users/:username/favorites?page=:page (username : String, page : String) {
+    parallel {
+      Application.initializeWithPage(Page::Profile)
+      Stores.Articles.load(username, page, "", false, true)
+      Stores.Profile.load(username)
+    }
+  }
+
+  /users/:username/favorites (username : String) {
+    parallel {
+      Application.initializeWithPage(Page::Profile)
+      Stores.Articles.load(username, "", "", false, true)
       Stores.Profile.load(username)
     }
   }

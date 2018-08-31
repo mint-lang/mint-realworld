@@ -1,4 +1,4 @@
-component Article.Preview {
+component Articles.Item {
   connect Theme exposing { primary, secondary, secondaryText }
   connect Actions exposing { toggleFavorite }
 
@@ -113,7 +113,7 @@ component Article.Preview {
       </div>
 
       <div::footer>
-        <Article.Profile article={article}/>
+        <Article.Info article={article}/>
 
         <button::button
           onClick={toggle}

@@ -38,10 +38,10 @@ component Image {
 
   fun componentDidMount : Promise(Never, Void) {
     sequence {
-      status =
+      newStatus =
         load()
 
-      next { status = status }
+      next { status = newStatus }
     }
   }
 

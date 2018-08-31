@@ -9,7 +9,7 @@ store Stores.Comments {
     sequence {
       next { status = Api.Status::Loading }
 
-      status =
+      newStatus =
         Http.get("/articles/" + slug + "/comments")
         |> Api.send(
           (object : Object) : Result(Object.Error, Array(Comment)) => {
@@ -19,7 +19,7 @@ store Stores.Comments {
               object)
           })
 
-      next { status = status }
+      next { status = newStatus }
     }
   }
 }

@@ -48,19 +48,19 @@ store Forms.Settings {
             }
         }
 
-      status =
+      newStatus =
         Http.put("/user")
         |> Http.jsonBody(body)
         |> Api.send(User.fromResponse)
 
-      case (status) {
+      case (newStatus) {
         Api.Status::Ok user =>
           parallel {
             Application.setUser(user)
             Window.navigate("/users/" + username)
           }
 
-        => next { status = status }
+        => next { status = newStatus }
       }
     }
   }

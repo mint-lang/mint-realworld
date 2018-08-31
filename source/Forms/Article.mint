@@ -67,20 +67,14 @@ store Forms.Article {
           Http.post("/articles")
         }
 
-      status =
+      newStatus =
         request
         |> Http.jsonBody(body)
         |> Api.send(Article.fromResponse)
 
-      next { status = status }
-
-      case (status) {
-        Api.Status::Ok article =>
-          sequence {
-            Window.navigate("/article/" + article.slug)
-          }
-
-        => Promise.never()
+      case (newStatus) {
+        Api.Status::Ok article => Window.navigate("/article/" + article.slug)
+        => next { status = newStatus }
       }
     }
   }

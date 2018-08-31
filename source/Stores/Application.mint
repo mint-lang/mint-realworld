@@ -38,10 +38,10 @@ store Application {
           Json.parse(data)
           |> Maybe.toResult("")
 
-        user =
+        currentUser =
           decode object as User
 
-        next { user = UserStatus::LoggedIn(user) }
+        next { user = UserStatus::LoggedIn(currentUser) }
       } catch Storage.Error => error {
         next { user = UserStatus::LoggedOut }
       } catch Object.Error => error {

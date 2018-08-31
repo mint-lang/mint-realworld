@@ -1,8 +1,10 @@
 record Stores.Articles.Params {
+  favorited : Bool,
   author : String,
   limit : Number,
   page : Number,
-  tag : String
+  tag : String,
+  feed : Bool
 }
 
 record Stores.Articles {
@@ -14,6 +16,8 @@ store Stores.Articles {
   state status : Api.Status(Stores.Articles) = Api.Status::Initial
 
   state params : Stores.Articles.Params = {
+    favorited = false,
+    feed = false,
     author = "",
     limit = 10,
     page = 0,
@@ -49,7 +53,13 @@ store Stores.Articles {
       }
   }
 
-  fun load (author : String, rawPage : String, tag : String) : Promise(Never, Void) {
+  fun load (
+    author : String,
+    rawPage : String,
+    tag : String,
+    feed : Bool,
+    favorited : Bool
+  ) : Promise(Never, Void) {
     sequence {
       page =
         Number.fromString(rawPage)
@@ -61,8 +71,10 @@ store Stores.Articles {
           status = Api.Status::Loading,
           params =
             { params |
+              favorited = favorited,
               author = author,
               page = page - 1,
+              feed = feed,
               tag = tag
             }
         }
@@ -73,20 +85,35 @@ store Stores.Articles {
       offset =
         Number.toString(params.page * params.limit)
 
-      params =
+      favoritedValue =
+        if (params.favorited) {
+          params.author
+        } else {
+          ""
+        }
+
+      search =
         SearchParams.empty()
+        |> SearchParams.append("favorited", favoritedValue)
         |> SearchParams.append("author", params.author)
         |> SearchParams.append("tag", params.tag)
         |> SearchParams.append("offset", offset)
         |> SearchParams.append("limit", limit)
         |> SearchParams.toString()
 
-      status =
-        Http.get("/articles?" + params)
-        |> Api.send(
-          (object : Object) : Result(Object.Error, Stores.Articles) => { decode object as Stores.Articles })
+      request =
+        if (params.feed) {
+          Http.get("/articles/feed?" + search)
+        } else {
+          Http.get("/articles?" + search)
+        }
 
-      next { status = status }
+      newStatus =
+        Api.send(
+          (object : Object) : Result(Object.Error, Stores.Articles) => { decode object as Stores.Articles },
+          request)
+
+      next { status = newStatus }
     }
   }
 }
