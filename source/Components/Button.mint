@@ -1,16 +1,20 @@
 component Button {
-  connect Theme exposing { primary }
+  connect Theme exposing { primary, primaryDark }
 
   property onClick : Function(Html.Event, a) = (event : Html.Event) : Void => { void }
   property children : Array(Html) = []
   property disabled : Bool = false
 
   style base {
+    justify-content: center;
     background: {primary};
+    display: inline-flex;
+    align-items: center;
     border-radius: 2px;
     font-weight: bold;
     cursor: pointer;
     padding: 0 20px;
+    outline: none;
     height: 40px;
     color: white;
     width: 100%;
@@ -18,6 +22,11 @@ component Button {
 
     &:disabled {
       opacity: 0.5;
+    }
+
+    &:hover,
+    &:focus {
+      background: {primaryDark};
     }
   }
 

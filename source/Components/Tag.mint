@@ -55,7 +55,7 @@ component Tag {
 
   fun render : Html {
     <div::base>
-      <a::link href={"/articles?tag=" + name}>
+      <a::link href={"/articles?tag=" + name + "&page=1"}>
         <{ name }>
       </a>
     </div>

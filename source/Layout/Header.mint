@@ -235,7 +235,7 @@ component Header {
     <div::base>
       <Container>
         <div::wrapper>
-          <a::brand href="/">
+          <a::brand href="/?page=1">
             <Logo/>
 
             <span::brand-name>

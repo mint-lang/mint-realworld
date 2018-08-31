@@ -12,8 +12,6 @@ component PopularTags {
     align-self: flex-start;
     background: #f3f3f3;
     border-radius: 3px;
-    margin-left: 20px;
-    padding: 10px;
   }
 
   style title {

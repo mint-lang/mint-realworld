@@ -1,20 +1,23 @@
 record Stores.Articles.Params {
   author : String,
   limit : Number,
+  page : Number,
   tag : String
 }
 
+record Stores.Articles {
+  count : Number using "articlesCount",
+  articles : Array(Article)
+}
+
 store Stores.Articles {
-  state status : Api.Status(Array(Article)) = Api.Status::Initial
+  state status : Api.Status(Stores.Articles) = Api.Status::Initial
 
   state params : Stores.Articles.Params = {
     author = "",
     limit = 10,
+    page = 0,
     tag = ""
-  }
-
-  get articles : Array(Article) {
-    Api.withDefault([], status)
   }
 
   fun reset : Promise(Never, Void) {
@@ -26,45 +29,62 @@ store Stores.Articles {
   } where {
     nextStatus =
       case (status) {
-        Api.Status::Ok articles =>
-          Api.Status::Ok(Array.map(
-            (item : Article) : Article => {
-              if (item.slug == article.slug) {
-                article
-              } else {
-                item
-              }
-            },
-            articles))
+        Api.Status::Ok data =>
+          try {
+            articles =
+              Array.map(
+                (item : Article) : Article => {
+                  if (item.slug == article.slug) {
+                    article
+                  } else {
+                    item
+                  }
+                },
+                data.articles)
+
+            Api.Status::Ok({ data | articles = articles })
+          }
 
         => status
       }
   }
 
-  fun load (newParams : Stores.Articles.Params) : Promise(Never, Void) {
+  fun load (author : String, rawPage : String, tag : String) : Promise(Never, Void) {
     sequence {
+      page =
+        Number.fromString(rawPage)
+        |> Maybe.withDefault(1)
+        |> Math.max(1)
+
       next
         {
           status = Api.Status::Loading,
-          params = newParams
+          params =
+            { params |
+              author = author,
+              page = page - 1,
+              tag = tag
+            }
         }
+
+      limit =
+        Number.toString(params.limit)
+
+      offset =
+        Number.toString(params.page * params.limit)
 
       params =
         SearchParams.empty()
-        |> SearchParams.append("author", newParams.author)
-        |> SearchParams.append("tag", newParams.tag)
-        |> SearchParams.append("limit", Number.toString(newParams.limit))
+        |> SearchParams.append("author", params.author)
+        |> SearchParams.append("tag", params.tag)
+        |> SearchParams.append("offset", offset)
+        |> SearchParams.append("limit", limit)
         |> SearchParams.toString()
 
       status =
         Http.get("/articles?" + params)
         |> Api.send(
-          (object : Object) : Result(Object.Error, Array(Article)) => {
-            Object.Decode.field(
-              "articles",
-              (input : Object) : Result(Object.Error, Array(Article)) => { decode input as Array(Article) },
-              object)
-          })
+          (object : Object) : Result(Object.Error, Stores.Articles) => { decode object as Stores.Articles })
 
       next { status = status }
     }

@@ -1,49 +1,49 @@
 routes {
-  / {
+  /?page=:page (page : String) {
     parallel {
       Application.initializeWithPage(Page::Home)
+      Stores.Articles.load("", page, "")
       Stores.Tags.load()
-
-      sequence {
-        params =
-          Stores.Articles.params
-
-        Stores.Articles.load({ params |
-          author = "",
-          tag = ""
-        })
-      }
     }
   }
 
-  /articles?tag=:tag (tag : String) {
+  / {
     parallel {
       Application.initializeWithPage(Page::Home)
+      Stores.Articles.load("", "", "")
       Stores.Tags.load()
+    }
+  }
 
-      sequence {
-        params =
-          Stores.Articles.params
+  /articles?tag=:tag&page=:page (tag : String, page : String) {
+    parallel {
+      Application.initializeWithPage(Page::Home)
+      Stores.Articles.load("", page, tag)
+      Stores.Tags.load()
+    }
+  }
 
-        Stores.Articles.load({ params |
-          author = "",
-          tag = tag
-        })
-      }
+  /articles?page=:page (page : String) {
+    parallel {
+      Application.initializeWithPage(Page::Home)
+      Stores.Articles.load("", page, "")
+      Stores.Tags.load()
+    }
+  }
+
+  /users/:username?page=:page (username : String, page : String) {
+    parallel {
+      Application.initializeWithPage(Page::Profile)
+      Stores.Articles.load(username, page, "")
+      Stores.Profile.load(username)
     }
   }
 
   /users/:username (username : String) {
     parallel {
       Application.initializeWithPage(Page::Profile)
+      Stores.Articles.load(username, "", "")
       Stores.Profile.load(username)
-
-      Stores.Articles.load(
-        {
-          tag = "",
-          limit = 10,
-          author = username
-        })
     }
   }
 

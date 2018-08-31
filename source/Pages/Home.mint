@@ -1,12 +1,8 @@
 component Pages.Home {
-  connect Stores.Articles exposing { articles, status }
+  connect Stores.Articles exposing { status }
   connect Application exposing { user }
 
   connect Theme exposing { primary, primaryText }
-
-  style base {
-
-  }
 
   style banner {
     justify-content: center;
@@ -22,6 +18,7 @@ component Pages.Home {
   style layout {
     grid-template-columns: 1fr 300px;
     padding: 40px 0;
+    grid-gap: 30px;
     display: grid;
   }
 
@@ -43,13 +40,13 @@ component Pages.Home {
   }
 
   fun render : Html {
-    <div::base>
+    <div>
       <{ banner }>
 
       <Container>
         <div::layout>
           <div>
-            <Articles status={status}/>
+            <Articles/>
           </div>
 
           <PopularTags/>

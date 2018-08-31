@@ -28,8 +28,16 @@ component Profile {
   }
 
   style button {
-    max-width: 200px;
     margin-top: 20px;
+    line-height: 1;
+    width: 180px;
+
+    & svg {
+      fill: currentColor;
+      margin-right: 5px;
+      height: 10px;
+      width: 10px;
+    }
   }
 
   get profile : Author {
@@ -58,6 +66,34 @@ component Profile {
     }
   }
 
+  get followIcon : Html {
+    if (loading) {
+      Html.empty()
+    } else {
+      if (profile.following) {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24">
+
+          <path d="M0 9h24v6h-24z"/>
+
+        </svg>
+      } else {
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24">
+
+          <path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z"/>
+
+        </svg>
+      }
+    }
+  }
+
   get followButton : Html {
     case (user) {
       UserStatus::LoggedOut => Html.empty()
@@ -65,8 +101,13 @@ component Profile {
       UserStatus::LoggedIn user =>
         if (user.username != profile.username) {
           <div::button>
-            <Button onClick={handleFollow}>
+            <Button
+              onClick={handleFollow}
+              disabled={loading}>
+
+              <{ followIcon }>
               <{ followText }>
+
             </Button>
           </div>
         } else {
@@ -116,8 +157,6 @@ component Profile {
 }
 
 component Pages.Profile {
-  connect Stores.Articles exposing { status }
-
   style articles {
     padding: 40px 0;
   }
@@ -128,7 +167,7 @@ component Pages.Profile {
 
       <Container>
         <div::articles>
-          <Articles status={status}/>
+          <Articles/>
         </div>
       </Container>
     </div>
