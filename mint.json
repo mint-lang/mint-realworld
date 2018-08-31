@@ -9,6 +9,7 @@
   ],
   "application": {
     "title": "Conduit",
+    "icon": "assets/icon.png",
     "head": "assets/head.html",
     "meta": {
       "charset": "utf-8",
