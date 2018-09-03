@@ -23,6 +23,8 @@ store Forms.Comment {
         |> Http.jsonBody(params)
         |> Api.send(Comment.fromResponse)
 
+      next { status = newStatus }
+
       case (newStatus) {
         Api.Status::Ok =>
           parallel {
@@ -30,7 +32,7 @@ store Forms.Comment {
             reset()
           }
 
-        => next { status = newStatus }
+        => Promise.never()
       }
     }
   }

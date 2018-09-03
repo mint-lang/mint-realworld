@@ -10,7 +10,7 @@
   "application": {
     "name": "Conduit",
     "title": "Conduit",
-    "orientation": "landscape",
+    "orientation": "portrait",
     "display": "standalone",
     "theme-color": "#03a9f4",
     "icon": "assets/icon.png",
