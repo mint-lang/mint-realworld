@@ -5,9 +5,13 @@ component Pages.Article {
   connect Application exposing { user }
 
   style title {
-    padding-right: {paddingRight};
     margin-bottom: 20px;
     font-size: 36px;
+
+    @media (max-width: 960px) {
+      line-height: 1.2;
+      font-size: 26px;
+    }
   }
 
   style header {
@@ -75,14 +79,6 @@ component Pages.Article {
 
   fun handleEdit (event : Html.Event) : Promise(Never, Void) {
     Window.navigate("/edit/" + article.slug)
-  }
-
-  get paddingRight : String {
-    if (isMine) {
-      "180px"
-    } else {
-      ""
-    }
   }
 
   get isMine : Bool {

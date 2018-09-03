@@ -18,6 +18,14 @@ component CommentForm {
     }
   }
 
+  get buttonText : String {
+    if (Api.isLoading(status)) {
+      "Loading..."
+    } else {
+      "Post Comment"
+    }
+  }
+
   fun handleClick (event : Html.Event) : Promise(Never, Void) {
     submit(article.slug)
   }
@@ -40,7 +48,7 @@ component CommentForm {
               disabled={Api.isLoading(status)}
               onClick={handleClick}>
 
-              <{ "Post Comment" }>
+              <{ buttonText }>
 
             </Button>
           </div>
