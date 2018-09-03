@@ -12,8 +12,12 @@ component Layout.Outside {
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
     display: flex;
-    height: 100vh;
+
+    @media (max-width: 960px) {
+      padding: 40px 20px;
+    }
   }
 
   style form {

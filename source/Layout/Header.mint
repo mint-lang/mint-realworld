@@ -1,10 +1,10 @@
 component Header {
+  connect Theme exposing { primary, primaryText }
   connect Application exposing { user }
-  connect Theme exposing { primary }
 
   style base {
-    background: #222;
-    color: #EEE;
+    background: {primary};
+    color: {primaryText};
   }
 
   style wrapper {
@@ -13,6 +13,7 @@ component Header {
     height: 56px;
 
     @media (max-width: 960px) {
+      padding: 5px 0;
       display: block;
       height: auto;
     }
@@ -60,8 +61,8 @@ component Header {
     display: grid;
 
     @media (max-width: 960px) {
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
       grid-template-columns: 1fr 1fr;
-      border-top: 1px solid #333;
       padding: 10px 0;
       grid-gap: 10px;
       display: grid;
@@ -88,18 +89,17 @@ component Header {
     }
 
     &:focus {
-      border-bottom: 1px solid {primary};
-      color: {primary};
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
       outline: none;
     }
 
     @media (max-width: 960px) {
-      text-align: left;
+      justify-content: center;
     }
   }
 
   style separator {
-    border-left: 1px solid #999;
+    border-left: 1px solid rgba(255, 255, 255, 0.6);
     height: 20px;
 
     @media (max-width: 960px) {

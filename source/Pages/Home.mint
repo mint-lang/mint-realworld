@@ -66,12 +66,12 @@ component Pages.Home {
   style banner {
     justify-content: center;
     flex-direction: column;
-    background: {primary};
-    color: {primaryText};
+    background: #2c668e;
     align-items: center;
     text-align: center;
     display: flex;
     height: 300px;
+    color: #EEE;
   }
 
   style layout {
