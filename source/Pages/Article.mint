@@ -14,16 +14,28 @@ component Pages.Article {
     padding: 40px 0 50px 0;
     background: #EEE;
     color: #333;
+
+    @media (max-width: 960px) {
+      padding: 15px 0;
+    }
   }
 
   style content {
-    margin-top: 50px;
+    padding-top: 50px;
+
+    @media (max-width: 960px) {
+      padding: 15px 0;
+    }
   }
 
   style hr {
     border: 0;
     margin: 40px 0;
     border-top: 1px solid #EEE;
+
+    @media (max-width: 960px) {
+      margin: 20px 0;
+    }
   }
 
   style spacer {

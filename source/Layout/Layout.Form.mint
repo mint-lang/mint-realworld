@@ -23,6 +23,10 @@ component Layout.Form {
   style button {
     margin-left: auto;
     width: 150px;
+
+    @media (max-width: 960px) {
+      width: 100%;
+    }
   }
 
   style base {

@@ -8,10 +8,14 @@ component CommentForm {
   style form {
     flex-direction: column;
     display: flex;
+  }
 
-    & > button {
-      align-self: flex-end;
-      width: auto;
+  style button {
+    align-self: flex-end;
+    width: auto;
+
+    @media (max-width: 960px) {
+      width: 100%;
     }
   }
 
@@ -32,13 +36,15 @@ component CommentForm {
               value={comment}/>
           </Form.Field>
 
-          <Button
-            disabled={Api.isLoading(status)}
-            onClick={handleClick}>
+          <div::button>
+            <Button
+              disabled={Api.isLoading(status)}
+              onClick={handleClick}>
 
-            <{ "Post Comment" }>
+              <{ "Post Comment" }>
 
-          </Button>
+            </Button>
+          </div>
         </div>
 
       UserStatus::LoggedOut =>

@@ -66,7 +66,7 @@ store Application {
 
       Window.navigate("/")
     } catch Storage.Error => error {
-      void
+      Promise.never()
     }
   }
 
@@ -80,7 +80,7 @@ store Application {
 
       Window.navigate("/")
     } catch Storage.Error => error {
-      void
+      Promise.never()
     }
   }
 

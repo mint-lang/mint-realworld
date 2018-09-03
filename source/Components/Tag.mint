@@ -20,6 +20,10 @@ component Tag {
     &:hover {
       background: {backgroundHover};
     }
+
+    @media (max-width: 960px) {
+      font-size: 9px;
+    }
   }
 
   style link {

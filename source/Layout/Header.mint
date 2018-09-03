@@ -11,6 +11,11 @@ component Header {
     align-items: center;
     display: flex;
     height: 56px;
+
+    @media (max-width: 960px) {
+      display: block;
+      height: auto;
+    }
   }
 
   style brand {
@@ -26,6 +31,12 @@ component Header {
     &:focus {
       color: {primary};
       outline: none;
+    }
+
+    @media (max-width: 960px) {
+      justify-content: center;
+      padding: 10px 0;
+      height: auto;
     }
   }
 
@@ -43,16 +54,24 @@ component Header {
     font-weight: 600;
     font-size: 14px;
     line-height: 1;
-    display: flex;
 
-    & > * + * {
-      margin-left: 25px;
+    grid-template-columns: repeat(5, min-content);
+    grid-gap: 20px;
+    display: grid;
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid #333;
+      padding: 10px 0;
+      grid-gap: 10px;
+      display: grid;
     }
   }
 
   style link {
     text-decoration: none;
     align-items: center;
+    white-space: nowrap;
     color: inherit;
     padding: 3px 0;
     display: flex;
@@ -73,11 +92,19 @@ component Header {
       color: {primary};
       outline: none;
     }
+
+    @media (max-width: 960px) {
+      text-align: left;
+    }
   }
 
   style separator {
     border-left: 1px solid #999;
     height: 20px;
+
+    @media (max-width: 960px) {
+      display: none;
+    }
   }
 
   get links : Html {

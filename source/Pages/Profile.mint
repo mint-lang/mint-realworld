@@ -13,6 +13,10 @@ component Profile {
     min-height: 400px;
     padding: 80px 0;
     display: flex;
+
+    @media (max-width: 960px) {
+      padding: 40px 15px;
+    }
   }
 
   style username {
@@ -158,6 +162,10 @@ component Pages.Profile {
 
   style articles {
     padding: 40px 0;
+
+    @media (max-width: 960px) {
+      padding: 15px 0;
+    }
   }
 
   fun render : Html {

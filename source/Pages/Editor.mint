@@ -14,9 +14,9 @@ component Pages.Editor {
   }
 
   style grid {
+    min-height: 70vh;
     grid-gap: 20px;
     display: grid;
-    height: 70vh;
 
     grid-template-rows: min-content 1fr min-content;
     grid-template-columns: 1fr 1fr;
@@ -39,6 +39,13 @@ component Pages.Editor {
 
     & > *:last-child {
       grid-area: content;
+    }
+
+    @media (max-width: 960px) {
+      grid-template-areas: "title" "extract" "tags" "content";
+      grid-template-rows: min-content 150px min-content 400px;
+      grid-template-columns: 1fr;
+      grid-gap: 15px;
     }
   }
 

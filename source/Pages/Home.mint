@@ -79,6 +79,11 @@ component Pages.Home {
     padding: 40px 0;
     grid-gap: 30px;
     display: grid;
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+      padding: 15px 0;
+    }
   }
 
   get banner : Html {

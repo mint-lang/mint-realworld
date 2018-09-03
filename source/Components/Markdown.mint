@@ -1,6 +1,16 @@
 component Markdown {
   property content : String = ""
 
+  style base {
+    & > *:first-child {
+      margin-top: 0;
+    }
+
+    & > *:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   get html : String {
     `
     (() => {
@@ -15,6 +25,6 @@ component Markdown {
   }
 
   fun render : Html {
-    <div dangerouslySetInnerHTML={`{__html: this.html}`}/>
+    <div::base dangerouslySetInnerHTML={`{__html: this.html}`}/>
   }
 }

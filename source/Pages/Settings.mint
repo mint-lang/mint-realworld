@@ -39,6 +39,13 @@ component Pages.Settings {
     & > *:last-child {
       grid-area: bio;
     }
+
+    @media (max-width: 960px) {
+      grid-template-areas: "image" "username" "email" "bio";
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      grid-gap: 15px;
+    }
   }
 
   style cell {

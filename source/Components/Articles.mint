@@ -13,12 +13,11 @@ component Articles {
   }
 
   style pagination {
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr) );
     text-align: center;
     margin-top: 30px;
-
-    & * + * {
-      margin-left: 10px;
-    }
+    grid-gap: 10px;
+    display: grid;
   }
 
   get data : Stores.Articles {
@@ -28,7 +27,20 @@ component Articles {
     }, status)
   }
 
-  get pagination : Array(Html) {
+  get pagination : Html {
+    if (Array.isEmpty(pages)) {
+      Html.empty()
+    } else {
+      <div::pagination>
+        <{ pages }>
+      </div>
+    }
+  } where {
+    pages =
+      getPages()
+  }
+
+  fun getPages : Array(Html) {
     try {
       start =
         Math.max(1, params.page - 3)
@@ -79,10 +91,7 @@ component Articles {
       status={status}>
 
       <{ articles }>
-
-      <div::pagination>
-        <{ pagination }>
-      </div>
+      <{ pagination }>
 
     </Status>
   }
