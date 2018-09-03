@@ -25,6 +25,7 @@ component Article.Comments {
 
   fun render : Html {
     <Status
+      message="There was an error loading the comments."
       loadingMessage="Loading comments..."
       status={status}>
 

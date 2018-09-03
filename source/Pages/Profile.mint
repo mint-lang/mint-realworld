@@ -135,6 +135,7 @@ component Profile {
   fun render : Html {
     <div::base>
       <Status
+        message="There was an error loading the profile..."
         loadingMessage="Loading profile..."
         status={status}>
 
@@ -177,7 +178,7 @@ component Pages.Profile {
           <Tabs>
             <Tab
               href={"/users/" + profile.username}
-              active={!Debug.log(params.favorited)}
+              active={!params.favorited}
               label="Articles"/>
 
             <Tab

@@ -12,7 +12,7 @@
     "title": "Conduit",
     "orientation": "portrait",
     "display": "standalone",
-    "theme-color": "#03a9f4",
+    "theme-color": "#00a0e8",
     "icon": "assets/icon.png",
     "head": "assets/head.html",
     "meta": {

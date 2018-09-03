@@ -10,7 +10,6 @@ component PopularTags {
 
   style base {
     align-self: flex-start;
-    background: #f3f3f3;
     border-radius: 3px;
 
     @media (max-width: 960px) {

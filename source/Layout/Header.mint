@@ -30,7 +30,6 @@ component Header {
     height: 28px;
 
     &:focus {
-      color: {primary};
       outline: none;
     }
 
@@ -85,7 +84,7 @@ component Header {
     }
 
     &:hover {
-      border-bottom: 1px solid #999;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.6);
     }
 
     &:focus {

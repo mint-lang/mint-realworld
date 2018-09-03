@@ -28,9 +28,13 @@ component Tag {
 
   style link {
     text-decoration: none;
+    padding: 5px 9px;
     color: inherit;
     display: block;
-    padding: 5px;
+
+    @media (max-width: 960px) {
+      padding: 3px 5px;
+    }
   }
 
   get pointerEvents : String {

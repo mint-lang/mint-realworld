@@ -8,6 +8,10 @@ store Stores.Article {
     Api.withDefault(Article.empty(), status)
   }
 
+  fun set (article : Article) : Promise(Never, Void) {
+    next { status = Api.Status::Ok(article) }
+  }
+
   /* Resets the store to the initial values. */
   fun reset : Promise(Never, Void) {
     next { status = Api.Status::Initial }

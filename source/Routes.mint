@@ -158,7 +158,17 @@ routes {
     sequence {
       parallel {
         Application.initialize()
-        Stores.Article.load(slug)
+
+        sequence {
+          article =
+            Stores.Article.article
+
+          if (article.slug == slug) {
+            Stores.Article.set(article)
+          } else {
+            Stores.Article.load(slug)
+          }
+        }
       }
 
       case (Stores.Article.status) {

@@ -7,6 +7,17 @@ component Footer {
   style container {
     text-align: center;
     padding: 40px 0;
+    color: #999;
+
+    & a {
+      color: inherit;
+    }
+
+    @media (max-width: 960px) {
+      padding-bottom: 20px;
+      padding-top: 10px;
+      font-size: 10px;
+    }
   }
 
   fun render : Html {
@@ -15,23 +26,27 @@ component Footer {
         <hr::hr/>
 
         <div::container>
-          <a
-            href="/"
-            class="logo-font">
+          <span>
+            <{ "Implementation of " }>
+          </span>
 
-            <{ "conduit" }>
-
+          <a href="https://realworld.io/">
+            <{ "https://realworld.io/" }>
           </a>
 
-          <span class="attribution">
-            <{ "An interactive learning project from" }>
-
-            <a href="https://thinkster.io">
-              <{ "Thinkster" }>
-            </a>
-
-            <{ ". Code &amp; design licensed under MIT." }>
+          <span>
+            <{ " in the Mint language." }>
           </span>
+
+          <br/>
+
+          <span>
+            <{ "Check out the source on Github: " }>
+          </span>
+
+          <a href="https://github.com/mint-lang/mint-realworld">
+            <{ "https://github.com/mint-lang/mint-realworld" }>
+          </a>
         </div>
       </Container>
     </div>

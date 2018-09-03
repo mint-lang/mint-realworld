@@ -1,7 +1,8 @@
 component Article.Info {
-  connect Theme exposing { link }
+  connect Theme exposing { primaryDark }
 
-  property article : Article = Article.empty()
+  property author : Author = Author.empty()
+  property time : Time = Time.now()
 
   style base {
     grid-template-areas: "image author"
@@ -20,11 +21,11 @@ component Article.Info {
   style author {
     text-transform: uppercase;
     text-decoration: none;
+    color: {primaryDark};
     grid-area: author;
     font-weight: 600;
     font-size: 14px;
     display: block;
-    color: {link};
   }
 
   style date {
@@ -38,23 +39,22 @@ component Article.Info {
     <div::base>
       <a::profile href={profileUrl}>
         <Image
-          src={article.author.image}
-          key={article.slug}
+          src={author.image}
           borderRadius="3px"
           height="32px"
           width="32px"/>
       </a>
 
       <a::author href={profileUrl}>
-        <{ article.author.username }>
+        <{ author.username }>
       </a>
 
       <span::date>
-        <{ Time.relative(article.createdAt, Time.now()) }>
+        <{ Time.relative(time, Time.now()) }>
       </span>
     </div>
   } where {
     profileUrl =
-      "/users/" + article.author.username
+      "/users/" + author.username
   }
 }

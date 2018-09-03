@@ -1,7 +1,6 @@
 component CommentForm {
   connect Forms.Comment exposing { submit, status, comment, setComment }
   connect Application exposing { user }
-  connect Theme exposing { link }
 
   property article : Article = Article.empty()
 

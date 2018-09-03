@@ -2,12 +2,14 @@ component Article.Comment {
   property comment : Comment = Comment.empty()
 
   style base {
+    background: #fafafa;
     margin-bottom: 20px;
     border-radius: 2px;
+    padding: 15px;
   }
 
   style content {
-
+    margin-bottom: 15px;
   }
 
   style footer {
@@ -27,15 +29,9 @@ component Article.Comment {
       </div>
 
       <div::footer>
-        <Image
-          src={comment.author.image}
-          borderRadius="3px"
-          height="20px"
-          width="20px"/>
-
-        <a>
-          <{ comment.author.username }>
-        </a>
+        <Article.Info
+          author={comment.author}
+          time={comment.createdAt}/>
       </div>
     </div>
   }

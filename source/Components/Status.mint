@@ -24,8 +24,10 @@ component Status {
   fun render : Html {
     case (status) {
       Api.Status::Error =>
-        <div>
-          <{ message }>
+        <div::base>
+          <div::message>
+            <{ message }>
+          </div>
         </div>
 
       Api.Status::Ok =>

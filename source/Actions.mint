@@ -18,6 +18,8 @@ store Actions {
 
   fun deleteArticle (slug : String) : Promise(Never, Void) {
     sequence {
+      Window.confirm("Are you sure?")
+
       status =
         Http.delete("/articles/" + slug)
         |> Api.send(
@@ -27,6 +29,8 @@ store Actions {
         Api.Status::Ok => Window.navigate("/")
         => Promise.never()
       }
+    } catch String => error {
+      Promise.never()
     }
   }
 

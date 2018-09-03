@@ -1,6 +1,6 @@
 component Articles.Item {
-  connect Theme exposing { primary, secondary, secondaryText }
   connect Actions exposing { toggleFavorite }
+  connect Theme exposing { primary }
 
   property article : Article = Article.empty()
 
@@ -113,7 +113,9 @@ component Articles.Item {
       </div>
 
       <div::footer>
-        <Article.Info article={article}/>
+        <Article.Info
+          time={article.createdAt}
+          author={article.author}/>
 
         <button::button
           onClick={toggle}
