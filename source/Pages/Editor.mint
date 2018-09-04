@@ -68,12 +68,10 @@ component Pages.Editor {
   get buttonText : String {
     if (disabled) {
       "Loading..."
+    } else if (Maybe.isJust(slug)) {
+      "Update"
     } else {
-      if (Maybe.isJust(slug)) {
-        "Update"
-      } else {
-        "Create"
-      }
+      "Create"
     }
   }
 

@@ -57,40 +57,36 @@ component Profile {
   get followText : String {
     if (loading) {
       "Loading..."
+    } else if (profile.following) {
+      "Unfollow " + profile.username
     } else {
-      if (profile.following) {
-        "Unfollow " + profile.username
-      } else {
-        "Follow " + profile.username
-      }
+      "Follow " + profile.username
     }
   }
 
   get followIcon : Html {
     if (loading) {
       Html.empty()
+    } else if (profile.following) {
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        height="24"
+        width="24">
+
+        <path d="M0 9h24v6h-24z"/>
+
+      </svg>
     } else {
-      if (profile.following) {
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        height="24"
+        width="24">
 
-          <path d="M0 9h24v6h-24z"/>
+        <path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z"/>
 
-        </svg>
-      } else {
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24">
-
-          <path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z"/>
-
-        </svg>
-      }
+      </svg>
     }
   }
 

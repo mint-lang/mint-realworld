@@ -148,8 +148,28 @@ routes {
   /article/:slug (slug : String) {
     parallel {
       Application.initializeWithPage(Page::Article)
+
+      sequence {
+        article =
+          case (Stores.Articles.status) {
+            Api.Status::Ok data =>
+              data.articles
+              |> Array.find(
+                (article : Article) : Bool => { article.slug == slug })
+              |> Maybe.withDefault(Article.empty())
+
+            => Article.empty()
+          }
+
+        if (article.slug == slug) {
+          Stores.Article.set(article)
+        } else {
+          Stores.Article.load(slug)
+        }
+      }
+
+      Window.setScrollTop(0)
       Stores.Comments.load(slug)
-      Stores.Article.load(slug)
       Forms.Comment.reset()
     }
   }
