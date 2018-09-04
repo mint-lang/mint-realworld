@@ -107,7 +107,10 @@ component Tagger {
         value={tag}/>
 
       <div::tags>
-        <{ Set.map(renderTag, tags) }>
+        <{
+          Set.map(renderTag, tags)
+          |> Set.toArray()
+        }>
       </div>
     </div>
   }
