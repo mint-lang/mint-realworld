@@ -76,8 +76,11 @@ component Pages.Editor {
   }
 
   get errors : Array(String) {
-    Api.errorsOf("request", status)
-    |> Array.concat(Api.errorsOf("article", status))
+    [
+      Api.errorsOf("request", status),
+      Api.errorsOf("article", status)
+    ]
+    |> Array.concat()
   }
 
   fun render : Html {
