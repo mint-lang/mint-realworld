@@ -1,7 +1,6 @@
 {
   "name": "mint-realworld",
   "source-directories": [
-    "../mint-core/source",
     "source"
   ],
   "external-javascripts": [
@@ -25,6 +24,12 @@
         "realworld.io"
       ],
       "viewport": "width=device-width, initial-scale=1, shrink-to-fit=no"
+    }
+  },
+  "dependencies": {
+    "mint-core": {
+      "repository": "https://github.com/mint-lang/core",
+      "constraint": "0.3.0 <= v < 1.0.0"
     }
   }
 }
