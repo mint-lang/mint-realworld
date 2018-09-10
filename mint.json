@@ -3,6 +3,9 @@
   "source-directories": [
     "source"
   ],
+  "test-directories": [
+    "tests"
+  ],
   "external-javascripts": [
     "assets/commonmark.js"
   ],
