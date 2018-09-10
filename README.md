@@ -14,14 +14,17 @@ For more information on how to this works with other frontends/backends, head ov
 
 # How it works
 
-> Todo
+This implemenation only uses the **Mint** language and it's standard library without any third party dependencies.
+
+To learn more about **Mint** check out the [Guide](guide.mint-lang.com)
 
 # Differences
 
 There are a few difference to other implementations:
 * since Mint has a built in way of styling HTML elements we wanted to showcase that, so the design of the 
-  application greatly differs from the original one.
-* the end result is also a Progressive Web App which is not included in the original spec.
+  application greatly differs from the original one
+* the end result is also a Progressive Web App which is not included in the original spec
+* the routes are not using hash
 
 # Development Server
 
