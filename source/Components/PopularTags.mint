@@ -36,7 +36,7 @@ component PopularTags {
   fun render : Html {
     <div::base>
       <div::title>
-        <{ "Popular Tags" }>
+        "Popular Tags"
       </div>
 
       <Status

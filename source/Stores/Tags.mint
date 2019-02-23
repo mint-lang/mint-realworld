@@ -6,7 +6,7 @@ store Stores.Tags {
     with Object.Decode {
       field(
         "tags",
-        (input : Object) : Result(Object.Error, Array(String)) => { decode input as Array(String) },
+        (input : Object) : Result(Object.Error, Array(String)) { decode input as Array(String) },
         object)
     }
   }

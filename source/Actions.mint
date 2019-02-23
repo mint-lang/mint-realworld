@@ -23,7 +23,7 @@ store Actions {
       status =
         Http.delete("/articles/" + slug)
         |> Api.send(
-          (object : Object) : Result(Object.Error, Void) => { Result.ok(void) })
+          (object : Object) : Result(Object.Error, Void) { Result.ok(void) })
 
       case (status) {
         Api.Status::Ok => Window.navigate("/")

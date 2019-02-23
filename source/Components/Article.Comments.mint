@@ -4,13 +4,13 @@ component Article.Comments {
   get content : Html {
     if (Array.isEmpty(comments)) {
       <div>
-        <{ "This article does not have any comments yet." }>
+        "This article does not have any comments yet."
       </div>
     } else {
       <div>
         <{
           Array.map(
-            (comment : Comment) : Html => { <Article.Comment comment={comment}/> },
+            (comment : Comment) : Html { <Article.Comment comment={comment}/> },
             comments)
         }>
       </div>

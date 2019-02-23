@@ -25,6 +25,6 @@ component Markdown {
   }
 
   fun render : Html {
-    <div::base dangerouslySetInnerHTML={`{__html: this.html}`}/>
+    <div::base dangerouslySetInnerHTML={`{__html: #{html}}`}/>
   }
 }

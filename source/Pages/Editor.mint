@@ -118,7 +118,7 @@ component Pages.Editor {
         <div::cell>
           <Form.Field>
             <Label>
-              <{ "Tags" }>
+              "Tags"
             </Label>
 
             <Tagger

@@ -93,11 +93,11 @@ component Pages.Home {
       UserStatus::LoggedOut =>
         <div::banner>
           <h1>
-            <{ "Conduit" }>
+            "Conduit"
           </h1>
 
           <p>
-            <{ "A place to share your knowledge." }>
+            "A place to share your knowledge."
           </p>
         </div>
     }

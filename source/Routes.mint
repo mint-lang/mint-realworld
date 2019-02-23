@@ -155,7 +155,7 @@ routes {
             Api.Status::Ok data =>
               data.articles
               |> Array.find(
-                (article : Article) : Bool => { article.slug == slug })
+                (article : Article) : Bool { article.slug == slug })
               |> Maybe.withDefault(Article.empty())
 
             => Article.empty()

@@ -37,7 +37,7 @@ store Stores.Articles {
           try {
             articles =
               Array.map(
-                (item : Article) : Article => {
+                (item : Article) : Article {
                   if (item.slug == article.slug) {
                     article
                   } else {
@@ -110,7 +110,7 @@ store Stores.Articles {
 
       newStatus =
         Api.send(
-          (object : Object) : Result(Object.Error, Stores.Articles) => { decode object as Stores.Articles },
+          (object : Object) : Result(Object.Error, Stores.Articles) { decode object as Stores.Articles },
           request)
 
       next { status = newStatus }

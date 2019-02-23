@@ -4,7 +4,7 @@ component Articles {
   get articles : Array(Html) {
     data.articles
     |> Array.map(
-      (article : Article) : Html => { <Articles.Item article={article}/> })
+      (article : Article) : Html { <Articles.Item article={article}/> })
     |> Array.intersperse(<div::divider/>)
   }
 
@@ -60,7 +60,7 @@ component Articles {
 
           Array.range(start, end)
           |> Array.map(
-            (page : Number) : Html => {
+            (page : Number) : Html {
               try {
                 pageString =
                   Number.toString(page)

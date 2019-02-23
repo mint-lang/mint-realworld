@@ -32,7 +32,7 @@ component Main {
 
       Page::NotFound =>
         <Layout>
-          <{ "WTF" }>
+          "WTF"
         </Layout>
 
       Page::SignUp => <Pages.SignUp/>

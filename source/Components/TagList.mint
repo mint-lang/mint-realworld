@@ -25,7 +25,7 @@ component TagList {
   } where {
     renderdTags =
       Array.map(
-        (tag : String) : Html => {
+        (tag : String) : Html {
           <Tag
             inactive={inactive}
             name={tag}/>

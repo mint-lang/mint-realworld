@@ -57,19 +57,19 @@ component CommentForm {
       UserStatus::LoggedOut =>
         <div>
           <a href="/sign-in">
-            <{ "Sign in" }>
+            "Sign in"
           </a>
 
           <span>
-            <{ "or" }>
+            "or"
           </span>
 
           <a href="/sign-up">
-            <{ "sign up" }>
+            "sign up"
           </a>
 
           <span>
-            <{ "to add comments on this article." }>
+            "to add comments on this article."
           </span>
         </div>
     }

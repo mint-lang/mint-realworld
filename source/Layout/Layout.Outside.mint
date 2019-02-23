@@ -1,7 +1,7 @@
 component Layout.Outside {
   connect Theme exposing { primary }
 
-  property onClick : Function(a) = () : Void => { void }
+  property onClick : Function(a) = () : Void { void }
   property children : Array(Html) = []
   property buttonText : String = ""
   property disabled : Bool = false
@@ -52,17 +52,13 @@ component Layout.Outside {
     font-size: 20px;
   }
 
-  fun handleClick (event : Html.Event) : a {
-    onClick()
-  }
-
   fun render : Html {
     <div::base>
       <div::title>
         <Logo size="40px"/>
 
         <span::brand>
-          <{ "Conduit" }>
+          "Conduit"
         </span>
       </div>
 
@@ -78,8 +74,8 @@ component Layout.Outside {
         <hr::hr/>
 
         <Button
-          onClick={handleClick}
-          disabled={disabled}>
+          disabled={disabled}
+          onClick={(event : Html.Event) : Void { onClick() }}>
 
           <{ buttonText }>
 

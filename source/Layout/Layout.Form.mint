@@ -1,5 +1,5 @@
 component Layout.Form {
-  property onSubmit : Function(a) = () : Void => { void }
+  property onSubmit : Function(a) = () : Void { void }
   property buttonText : String = "Submit"
   property children : Array(Html) = []
   property errors : Array(String) = []
@@ -51,7 +51,7 @@ component Layout.Form {
         <div::button>
           <Button
             disabled={disabled}
-            onClick={(event : Html.Event) : Promise(Never, Void) => { onSubmit() }}>
+            onClick={(event : Html.Event) : Void { onSubmit() }}>
 
             <{ buttonText }>
 

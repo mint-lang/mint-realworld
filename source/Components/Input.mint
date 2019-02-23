@@ -1,7 +1,7 @@
 component Textarea {
   connect Theme exposing { primary }
 
-  property onChange : Function(String, a) = (value : String) : Void => { void }
+  property onChange : Function(String, a) = (value : String) : Void { void }
   property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
@@ -68,9 +68,9 @@ component Textarea {
 component Input {
   connect Theme exposing { primary }
 
-  property onBlur : Function(Html.Event, a) = (value : Html.Event) : Void => { void }
-  property onChange : Function(String, a) = (value : String) : Void => { void }
-  property onEnter : Function(a) = () : Void => { void }
+  property onBlur : Function(Html.Event, a) = (value : Html.Event) : Void { void }
+  property onChange : Function(String, a) = (value : String) : Void { void }
+  property onEnter : Function(a) = () : Void { void }
   property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
@@ -146,7 +146,7 @@ component Input {
 }
 
 component Form {
-  property onSubmit : Function(a) = () : a => { void }
+  property onSubmit : Function(a) = () : a { void }
   property children : Array(Html) = []
 
   style hidden {

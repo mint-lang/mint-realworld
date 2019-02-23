@@ -27,25 +27,25 @@ component Footer {
 
         <div::container>
           <span>
-            <{ "Implementation of " }>
+            "Implementation of "
           </span>
 
           <a href="https://realworld.io/">
-            <{ "https://realworld.io/" }>
+            "https://realworld.io/"
           </a>
 
           <span>
-            <{ " in the Mint language." }>
+            " in the Mint language."
           </span>
 
           <br/>
 
           <span>
-            <{ "Check out the source on Github: " }>
+            "Check out the source on Github: "
           </span>
 
           <a href="https://github.com/mint-lang/mint-realworld">
-            <{ "https://github.com/mint-lang/mint-realworld" }>
+            "https://github.com/mint-lang/mint-realworld"
           </a>
         </div>
       </Container>

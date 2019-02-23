@@ -128,7 +128,7 @@ component Header {
 
             </svg>
 
-            <{ "Sign in" }>
+            "Sign in"
           </a>
 
           <a::link href="/sign-up">
@@ -142,7 +142,7 @@ component Header {
 
             </svg>
 
-            <{ "Sign up" }>
+            "Sign up"
           </a>
         </>
 
@@ -163,7 +163,7 @@ component Header {
 
             </svg>
 
-            <{ " New Article" }>
+            " New Article"
           </a>
 
           <a::link href="/settings">
@@ -204,7 +204,7 @@ component Header {
 
             </svg>
 
-            <{ " Settings" }>
+            " Settings"
           </a>
 
           <a::link href="/logout">
@@ -225,7 +225,7 @@ component Header {
 
             </svg>
 
-            <{ "Sign out" }>
+            "Sign out"
           </a>
 
           <div::separator/>
@@ -265,7 +265,7 @@ component Header {
             <Logo/>
 
             <span::brand-name>
-              <{ "Conduit" }>
+              "Conduit"
             </span>
           </a>
 

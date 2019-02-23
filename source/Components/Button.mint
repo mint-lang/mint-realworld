@@ -1,7 +1,7 @@
 component Button {
   connect Theme exposing { primary, primaryDark }
 
-  property onClick : Function(Html.Event, a) = (event : Html.Event) : Void => { void }
+  property onClick : Function(Html.Event, a) = (event : Html.Event) : Void { void }
   property children : Array(Html) = []
   property disabled : Bool = false
 

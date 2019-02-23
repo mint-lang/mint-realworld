@@ -1,7 +1,7 @@
 component Tagger {
   connect Theme exposing { primary, primaryText }
 
-  property onChange : Function(Set(String), a) = (value : Set(String)) : Void => { void }
+  property onChange : Function(Set(String), a) = (value : Set(String)) : Void { void }
   property tags : Set(String) = Set.empty()
   property placeholder : String = ""
   property disabled : Bool = false
@@ -77,7 +77,7 @@ component Tagger {
       <{ tag }>
 
       <svg::icon
-        onClick={(event : Html.Event) : Promise(Never, Void) => { removeTag(tag) }}
+        onClick={(event : Html.Event) : Promise(Never, Void) { removeTag(tag) }}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         height="12"

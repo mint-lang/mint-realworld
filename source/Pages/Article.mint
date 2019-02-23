@@ -127,7 +127,7 @@ component Pages.Article {
 
                   </svg>
 
-                  <{ "Edit" }>
+                  "Edit"
                 </Button>
 
                 <Button onClick={handleDelete}>
@@ -145,7 +145,7 @@ component Pages.Article {
 
                   </svg>
 
-                  <{ "Delete" }>
+                  "Delete"
                 </Button>
               </div>
             </If>
