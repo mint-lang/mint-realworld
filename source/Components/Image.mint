@@ -49,9 +49,9 @@ component Image {
     `
     new Promise((resolve, reject) => {
       let image = new Image()
-      image.onerror = () => {resolve(new $$Image_Status_Invalid)}
-      image.onload = () => {resolve(new $$Image_Status_Ok)}
-      image.src = this.src
+      image.onerror = () => {resolve(#{Image.Status::Invalid})}
+      image.onload = () => {resolve(#{Image.Status::Ok})}
+      image.src = #{src}
     })
     `
   }
