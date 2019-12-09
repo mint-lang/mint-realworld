@@ -1,13 +1,15 @@
 component Button {
   connect Theme exposing { primary, primaryDark }
 
-  property onClick : Function(Html.Event, a) = (event : Html.Event) : Void { void }
+  property onClick : Function(Html.Event, Promise(Never, Void)) =
+    (event : Html.Event) : Promise(Never, Void) { next {  } }
+
   property children : Array(Html) = []
   property disabled : Bool = false
 
   style base {
     justify-content: center;
-    background: {primary};
+    background: #{primary};
     display: inline-flex;
     align-items: center;
     border-radius: 2px;
@@ -26,7 +28,7 @@ component Button {
 
     &:hover,
     &:focus {
-      background: {primaryDark};
+      background: #{primaryDark};
     }
   }
 

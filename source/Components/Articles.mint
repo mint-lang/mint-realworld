@@ -88,7 +88,7 @@ component Articles {
     <Status
       message="There was an error loading the articles."
       loadingMessage="Loading articles..."
-      status={status}>
+      status={Api.toStatus(status)}>
 
       <{ articles }>
       <{ pagination }>

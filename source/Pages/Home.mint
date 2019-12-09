@@ -27,11 +27,11 @@ component Tab {
   property href : String = ""
 
   style base {
-    border-bottom: 2px solid {borderColor};
+    border-bottom: 2px solid #{borderColor};
     text-decoration: none;
     padding: 10px 20px;
     font-weight: bold;
-    color: {color};
+    color: #{color};
   }
 
   get borderColor : String {

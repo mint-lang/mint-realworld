@@ -21,7 +21,7 @@ component Article.Info {
   style author {
     text-transform: uppercase;
     text-decoration: none;
-    color: {primaryDark};
+    color: #{primaryDark};
     grid-area: author;
     font-weight: 600;
     font-size: 14px;

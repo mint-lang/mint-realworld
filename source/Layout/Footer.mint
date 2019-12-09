@@ -9,7 +9,7 @@ component Footer {
     padding: 40px 0;
     color: #999;
 
-    & a {
+    a {
       color: inherit;
     }
 

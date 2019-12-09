@@ -7,12 +7,12 @@ component Pagination.Page {
 
   style base {
     box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.1);
-    background: {background};
+    background: #{background};
     text-decoration: none;
     border-radius: 2px;
     font-weight: bold;
     font-size: 14px;
-    color: {color};
+    color: #{color};
 
     justify-content: center;
     display: inline-flex;

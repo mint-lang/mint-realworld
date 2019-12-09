@@ -1,7 +1,9 @@
 component Textarea {
   connect Theme exposing { primary }
 
-  property onChange : Function(String, a) = (value : String) : Void { void }
+  property onChange : Function(String, Promise(Never, Void)) =
+    (value : String) : Promise(Never, Void) { next {  } }
+
   property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
@@ -10,7 +12,7 @@ component Textarea {
   property rows : String = ""
 
   style base {
-    border: 2px solid {borderColor};
+    border: 2px solid #{borderColor};
     font-family: inherit;
     font-size: 14px;
     padding: 10px;
@@ -20,7 +22,7 @@ component Textarea {
     flex: 1;
 
     &:focus {
-      border-color: {focusColor};
+      border-color: #{focusColor};
       outline: none;
     }
   }
@@ -68,9 +70,9 @@ component Textarea {
 component Input {
   connect Theme exposing { primary }
 
-  property onBlur : Function(Html.Event, a) = (value : Html.Event) : Void { void }
-  property onChange : Function(String, a) = (value : String) : Void { void }
-  property onEnter : Function(a) = () : Void { void }
+  property onBlur : Function(Html.Event, Promise(Never, Void)) = (value : Html.Event) : Promise(Never, Void) { next {  } }
+  property onChange : Function(String, Promise(Never, Void)) = (value : String) : Promise(Never, Void) { next {  } }
+  property onEnter : Function(Promise(Never, Void)) = () : Promise(Never, Void) { next {  } }
   property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
@@ -79,14 +81,14 @@ component Input {
   property name : String = ""
 
   style base {
-    border: 2px solid {borderColor};
+    border: 2px solid #{borderColor};
     font-family: inherit;
     font-size: 14px;
     padding: 10px;
     color: #333;
 
     &:focus {
-      border-color: {focusColor};
+      border-color: #{focusColor};
       outline: none;
     }
   }
@@ -146,7 +148,7 @@ component Input {
 }
 
 component Form {
-  property onSubmit : Function(a) = () : a { void }
+  property onSubmit : Function(Promise(Never, Void)) = Promise.never
   property children : Array(Html) = []
 
   style hidden {
@@ -188,7 +190,7 @@ component Form.Field {
       margin-bottom: 15px;
     }
 
-    & > *:first-child {
+    > *:first-child {
       margin-bottom: 5px;
     }
   }

@@ -36,7 +36,7 @@ component Profile {
     line-height: 1;
     width: 180px;
 
-    & svg {
+    svg {
       fill: currentColor;
       margin-right: 5px;
       height: 10px;
@@ -133,7 +133,7 @@ component Profile {
       <Status
         message="There was an error loading the profile..."
         loadingMessage="Loading profile..."
-        status={status}>
+        status={Api.toStatus(status)}>
 
         <Image
           src={profile.image}

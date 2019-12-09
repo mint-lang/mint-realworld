@@ -42,7 +42,7 @@ component PopularTags {
       <Status
         message="There was an error loading the popular tags."
         loadingMessage="Loading popular tags..."
-        status={status}>
+        status={Api.toStatus(status)}>
 
         <div::tags>
           <{ Array.map(renderTag, tags) }>

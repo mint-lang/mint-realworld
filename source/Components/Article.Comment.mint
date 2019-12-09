@@ -17,7 +17,7 @@ component Article.Comment {
     font-size: 12px;
     display: flex;
 
-    & > * + * {
+    > * + * {
       margin-left: 10px;
     }
   }

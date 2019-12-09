@@ -6,9 +6,9 @@ component Tag {
   property name : String = ""
 
   style base {
-    pointer-events: {pointerEvents};
-    background: {background};
-    color: {primaryText};
+    pointer-events: #{pointerEvents};
+    background: #{background};
+    color: #{primaryText};
 
     text-transform: uppercase;
     display: inline-block;
@@ -18,7 +18,7 @@ component Tag {
     font-size: 12px;
 
     &:hover {
-      background: {backgroundHover};
+      background: #{backgroundHover};
     }
 
     @media (max-width: 960px) {

@@ -7,13 +7,13 @@ component Loader {
   }
 
   style line {
-    background-color: {color};
+    background-color: #{color};
     animation-fill-mode: both;
     display: inline-block;
     height: 20px;
     width: 4px;
 
-    & + * {
+    + * {
       margin-left: 2px;
     }
 

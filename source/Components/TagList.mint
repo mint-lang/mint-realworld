@@ -3,8 +3,8 @@ component TagList {
   property tags : Array(String) = []
 
   style base {
-    & > * {
-      opacity: {opacity};
+    > * {
+      opacity: #{opacity};
       margin-bottom: 5px;
       margin-right: 5px;
     }

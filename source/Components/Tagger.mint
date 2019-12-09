@@ -1,7 +1,9 @@
 component Tagger {
   connect Theme exposing { primary, primaryText }
 
-  property onChange : Function(Set(String), a) = (value : Set(String)) : Void { void }
+  property onChange : Function(Set(String), Promise(Never, Void)) =
+    (value : Set(String)) : Promise(Never, Void) { next {  } }
+
   property tags : Set(String) = Set.empty()
   property placeholder : String = ""
   property disabled : Bool = false
@@ -15,8 +17,8 @@ component Tagger {
 
   style tag {
     text-transform: uppercase;
-    background: {color};
-    color: {primaryText};
+    background: #{color};
+    color: #{primaryText};
     display: inline-flex;
     align-items: center;
     border-radius: 2px;

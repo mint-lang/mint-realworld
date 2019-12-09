@@ -13,20 +13,20 @@ component Image {
   state status : Image.Status = Image.Status::Initial
 
   style image {
-    border-radius: {borderRadius};
+    border-radius: #{borderRadius};
     transition: 320ms;
-    opacity: {opacity};
+    opacity: #{opacity};
     object-fit: cover;
-    height: {height};
+    height: #{height};
     display: block;
-    width: {width};
+    width: #{width};
   }
 
   style base {
-    border-radius: {borderRadius};
+    border-radius: #{borderRadius};
     background: #AAA;
-    height: {height};
-    width: {width};
+    height: #{height};
+    width: #{width};
   }
 
   get opacity : Number {

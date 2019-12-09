@@ -10,6 +10,15 @@ record ErrorResponse {
 }
 
 module Api {
+  fun toStatus (status : Api.Status(a)) : Status {
+    case (status) {
+      Api.Status::Loading => Status::Loading
+      Api.Status::Initial => Status::Initial
+      Api.Status::Error => Status::Error
+      Api.Status::Ok => Status::Ok
+    }
+  }
+
   fun withDefault (a : a, status : Api.Status(a)) : a {
     case (status) {
       Api.Status::Ok value => value

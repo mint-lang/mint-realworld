@@ -1,5 +1,12 @@
+enum Status {
+  Error
+  Ok
+  Loading
+  Initial
+}
+
 component Status {
-  property status : Api.Status(a) = Api.Status::Initial
+  property status : Status = Status::Initial
   property loadingMessage : String = ""
   property children : Array(Html) = []
   property message : String = ""
@@ -18,24 +25,24 @@ component Status {
   }
 
   get isLoading : Bool {
-    Api.isLoading(status)
+    status == Status::Loading
   }
 
   fun render : Html {
     case (status) {
-      Api.Status::Error =>
+      Status::Error =>
         <div::base>
           <div::message>
             <{ message }>
           </div>
         </div>
 
-      Api.Status::Ok =>
+      Status::Ok =>
         <>
           <{ children }>
         </>
 
-      Api.Status::Loading =>
+      Status::Loading =>
         <div::base>
           <div::message>
             <{ loadingMessage }>
@@ -44,7 +51,7 @@ component Status {
           <Loader/>
         </div>
 
-      Api.Status::Initial => <div/>
+      Status::Initial => <div/>
     }
   }
 }

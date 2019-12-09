@@ -24,7 +24,7 @@ component Pages.Article {
     }
 
     /* Styles for the container. */
-    & > * {
+    > * {
       position: relative;
     }
   }
@@ -52,16 +52,16 @@ component Pages.Article {
     display: flex;
     width: 160px;
 
-    & * + * {
+    * + * {
       margin-left: 10px;
     }
 
-    & > * {
+    > * {
       padding: 0 10px;
       height: 30px;
     }
 
-    & svg {
+    svg {
       fill: currentColor;
       margin-right: 10px;
       height: 12px;
@@ -92,7 +92,7 @@ component Pages.Article {
     <Status
       message="There was an error loading the article."
       loadingMessage="Loading article..."
-      status={status}>
+      status={Api.toStatus(status)}>
 
       <div>
         <div::header>

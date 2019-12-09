@@ -3,8 +3,8 @@ component Header {
   connect Application exposing { user }
 
   style base {
-    background: {primary};
-    color: {primaryText};
+    background: #{primary};
+    color: #{primaryText};
   }
 
   style wrapper {
@@ -76,7 +76,7 @@ component Header {
     padding: 3px 0;
     display: flex;
 
-    & svg {
+    svg {
       fill: currentColor;
       margin-right: 6px;
       height: 16px;

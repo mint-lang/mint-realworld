@@ -25,7 +25,7 @@ component Articles.Item {
   style button {
     background: transparent;
     align-items: center;
-    color: {buttonColor};
+    color: #{buttonColor};
     border-radius: 2px;
     display: flex;
     border: 0;
@@ -68,7 +68,7 @@ component Articles.Item {
     display: block;
 
     &:hover {
-      color: {primary};
+      color: #{primary};
     }
   }
 

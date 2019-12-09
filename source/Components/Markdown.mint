@@ -2,11 +2,11 @@ component Markdown {
   property content : String = ""
 
   style base {
-    & > *:first-child {
+    > *:first-child {
       margin-top: 0;
     }
 
-    & > *:last-child {
+    > *:last-child {
       margin-bottom: 0;
     }
   }
