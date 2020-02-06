@@ -6,9 +6,11 @@
   "test-directories": [
     "tests"
   ],
-  "external-javascripts": [
-    "assets/commonmark.js"
-  ],
+  "external": {
+    "javascripts": [
+      "commonmark.js"
+    ]
+  },
   "application": {
     "name": "Conduit",
     "title": "Conduit",
