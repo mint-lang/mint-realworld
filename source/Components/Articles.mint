@@ -2,9 +2,9 @@ component Articles {
   connect Stores.Articles exposing { params, status }
 
   get articles : Array(Html) {
-    data.articles
-    |> Array.map(
-      (article : Article) : Html { <Articles.Item article={article}/> })
+    for (article of data.articles) {
+      <Articles.Item article={article}/>
+    }
     |> Array.intersperse(<div::divider/>)
   }
 

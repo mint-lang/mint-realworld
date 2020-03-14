@@ -8,7 +8,7 @@
   ],
   "external": {
     "javascripts": [
-      "commonmark.js"
+      "assets/commonmark.js"
     ]
   },
   "application": {

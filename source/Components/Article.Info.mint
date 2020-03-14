@@ -37,7 +37,7 @@ component Article.Info {
 
   fun render : Html {
     <div::base>
-      <a::profile href={profileUrl}>
+      <a::profile href="/users/#{author.username}">
         <Image
           src={author.image}
           borderRadius="3px"
@@ -45,7 +45,7 @@ component Article.Info {
           width="32px"/>
       </a>
 
-      <a::author href={profileUrl}>
+      <a::author href="/users/#{author.username}">
         <{ author.username }>
       </a>
 
@@ -53,8 +53,5 @@ component Article.Info {
         <{ Time.relative(time, Time.now()) }>
       </span>
     </div>
-  } where {
-    profileUrl =
-      "/users/" + author.username
   }
 }

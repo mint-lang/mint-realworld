@@ -25,10 +25,15 @@ component Articles.Item {
   style button {
     background: transparent;
     align-items: center;
-    color: #{buttonColor};
     border-radius: 2px;
     display: flex;
     border: 0;
+
+    if (article.favorited) {
+      color: #e84848;
+    } else {
+      color: inherit;
+    }
 
     &:hover {
       cursor: pointer;
@@ -69,14 +74,6 @@ component Articles.Item {
 
     &:hover {
       color: #{primary};
-    }
-  }
-
-  get buttonColor : String {
-    if (article.favorited) {
-      "#e84848"
-    } else {
-      "inherit"
     }
   }
 

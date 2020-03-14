@@ -8,11 +8,9 @@ component Article.Comments {
       </div>
     } else {
       <div>
-        <{
-          Array.map(
-            (comment : Comment) : Html { <Article.Comment comment={comment}/> },
-            comments)
-        }>
+        for (comment of comments) {
+          <Article.Comment comment={comment}/>
+        }
       </div>
     }
   } where {
