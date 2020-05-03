@@ -10,7 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
 
       - name: Setup Mint
         uses: fabasoad/setup-mint-action@v1.0.2
@@ -23,7 +24,7 @@ jobs:
       - name: Build
         run: mint build
       
-      - name: Netlify Actions
+      - name: Deploy to Netlify
         uses: nwtgck/actions-netlify@v1.0.12
         with:
           publish-dir: dist
