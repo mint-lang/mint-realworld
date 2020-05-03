@@ -1,0 +1,29 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Mint
+        uses: fabasoad/setup-mint-action@v1.0.2
+        with:
+          version: 0.9.0
+
+      - name: Install Dependencies
+        run: mint install
+        
+      - name: Build
+        run: mint build
+      
+      - name: Netlify Actions
+        uses: nwtgck/actions-netlify@v1.0.12
+        with:
+          publish-dir: dist
