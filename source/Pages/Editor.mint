@@ -117,9 +117,7 @@ component Pages.Editor {
 
         <div::cell>
           <Form.Field>
-            <Label>
-              "Tags"
-            </Label>
+            <Label>"Tags"</Label>
 
             <Tagger
               onChange={setTags}

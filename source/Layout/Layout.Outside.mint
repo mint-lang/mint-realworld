@@ -57,9 +57,7 @@ component Layout.Outside {
       <div::title>
         <Logo size="40px"/>
 
-        <span::brand>
-          "Conduit"
-        </span>
+        <span::brand>"Conduit"</span>
       </div>
 
       <div::form>

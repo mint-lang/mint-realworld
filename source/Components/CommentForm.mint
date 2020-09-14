@@ -60,17 +60,13 @@ component CommentForm {
             "Sign in"
           </a>
 
-          <span>
-            "or"
-          </span>
+          <span>"or"</span>
 
           <a href="/sign-up">
             "sign up"
           </a>
 
-          <span>
-            "to add comments on this article."
-          </span>
+          <span>"to add comments on this article."</span>
         </div>
     }
   }

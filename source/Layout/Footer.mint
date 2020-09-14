@@ -26,23 +26,17 @@ component Footer {
         <hr::hr/>
 
         <div::container>
-          <span>
-            "Implementation of "
-          </span>
+          <span>"Implementation of "</span>
 
           <a href="https://realworld.io/">
             "https://realworld.io/"
           </a>
 
-          <span>
-            " in the Mint language."
-          </span>
+          <span>" in the Mint language."</span>
 
           <br/>
 
-          <span>
-            "Check out the source on Github: "
-          </span>
+          <span>"Check out the source on Github: "</span>
 
           <a href="https://github.com/mint-lang/mint-realworld">
             "https://github.com/mint-lang/mint-realworld"

@@ -35,9 +35,7 @@ component PopularTags {
 
   fun render : Html {
     <div::base>
-      <div::title>
-        "Popular Tags"
-      </div>
+      <div::title>"Popular Tags"</div>
 
       <Status
         message="There was an error loading the popular tags."

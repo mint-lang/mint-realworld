@@ -21,10 +21,12 @@ component Articles {
   }
 
   get data : Stores.Articles {
-    Api.withDefault({
-      count = 0,
-      articles = []
-    }, status)
+    Api.withDefault(
+      {
+        count = 0,
+        articles = []
+      },
+      status)
   }
 
   get pagination : Html {

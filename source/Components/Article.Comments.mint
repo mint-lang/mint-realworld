@@ -3,9 +3,7 @@ component Article.Comments {
 
   get content : Html {
     if (Array.isEmpty(comments)) {
-      <div>
-        "This article does not have any comments yet."
-      </div>
+      <div>"This article does not have any comments yet."</div>
     } else {
       <div>
         for (comment of comments) {

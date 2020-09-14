@@ -264,9 +264,7 @@ component Header {
           <a::brand href="/?page=1">
             <Logo/>
 
-            <span::brand-name>
-              "Conduit"
-            </span>
+            <span::brand-name>"Conduit"</span>
           </a>
 
           <div::links>

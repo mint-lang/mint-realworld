@@ -31,9 +31,7 @@ component Main {
         </Layout>
 
       Page::NotFound =>
-        <Layout>
-          "WTF"
-        </Layout>
+        <Layout>"WTF"</Layout>
 
       Page::SignUp => <Pages.SignUp/>
       Page::SignIn => <Pages.SignIn/>
