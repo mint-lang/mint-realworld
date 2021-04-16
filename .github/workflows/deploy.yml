@@ -14,9 +14,9 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Setup Mint
-        uses: fabasoad/setup-mint-action@v1.0.2
+        uses: fabasoad/setup-mint-action@main
         with:
-          version: 0.9.0
+          version: 0.12.0
 
       - name: Install Dependencies
         run: mint install
