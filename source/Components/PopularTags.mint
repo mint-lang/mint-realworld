@@ -51,7 +51,7 @@ component PopularTags {
   } where {
     tags =
       case (status) {
-        Api.Status::Ok tags => tags
+        Api.Status::Ok(tags) => tags
         => []
       }
   }

@@ -54,7 +54,7 @@ store Forms.Settings {
         |> Api.send(User.fromResponse)
 
       case (newStatus) {
-        Api.Status::Ok user =>
+        Api.Status::Ok(user) =>
           parallel {
             Application.setUser(user)
             Window.navigate("/users/" + username)

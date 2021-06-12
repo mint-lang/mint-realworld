@@ -33,7 +33,7 @@ store Stores.Articles {
   } where {
     nextStatus =
       case (status) {
-        Api.Status::Ok data =>
+        Api.Status::Ok(data) =>
           try {
             articles =
               Array.map(

@@ -37,7 +37,7 @@ store Forms.SignUp {
         |> Api.send(User.fromResponse)
 
       case (newStatus) {
-        Api.Status::Ok user => Application.login(user)
+        Api.Status::Ok(user) => Application.login(user)
         => next { status = newStatus }
       }
     }
