@@ -261,13 +261,17 @@ component Header {
     <div::base>
       <Container>
         <div::wrapper>
-          <a::brand href="/?page=1">
+          <a::brand
+            href="/?page=1"
+            data-selector="brand">
+
             <Logo/>
 
             <span::brand-name>"Conduit"</span>
+
           </a>
 
-          <div::links>
+          <div::links data-selector="links">
             <{ links }>
           </div>
         </div>

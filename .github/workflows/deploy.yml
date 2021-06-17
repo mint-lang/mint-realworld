@@ -16,10 +16,13 @@ jobs:
       - name: Setup Mint
         uses: fabasoad/setup-mint-action@main
         with:
-          version: 0.12.0
+          version: 0.13.0
 
       - name: Install Dependencies
         run: mint install
+
+      - name: Run Tests
+        run: mint test
         
       - name: Build
         run: mint build

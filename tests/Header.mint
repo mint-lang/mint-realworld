@@ -3,7 +3,7 @@ suite "Header" {
     with Test.Html {
       <Header/>
       |> start()
-      |> assertElementExists("[class*=brand] svg")
+      |> assertElementExists("[data-selector=brand] svg")
     }
   }
 
@@ -19,7 +19,7 @@ suite "Header" {
     with Test.Html {
       <Header/>
       |> start()
-      |> assertTextOf("div[class*=links] a:first-child", "Sign in")
+      |> assertTextOf("div[data-selector=links] a:first-child", "Sign in")
     }
   }
 
@@ -27,7 +27,7 @@ suite "Header" {
     with Test.Html {
       <Header/>
       |> start()
-      |> assertTextOf("div[class*=links] a:last-child", "Sign up")
+      |> assertTextOf("div[data-selector=links] a:last-child", "Sign up")
     }
   }
 }
