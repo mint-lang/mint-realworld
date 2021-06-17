@@ -73,7 +73,7 @@ store Forms.Article {
         |> Api.send(Article.fromResponse)
 
       case (newStatus) {
-        Api.Status::Ok article => Window.navigate("/article/" + article.slug)
+        Api.Status::Ok(article) => Window.navigate("/article/" + article.slug)
         => next { status = newStatus }
       }
     }

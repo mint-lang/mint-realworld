@@ -14,7 +14,7 @@ component Article.Comments {
   } where {
     comments =
       case (status) {
-        Api.Status::Ok comments => comments
+        Api.Status::Ok(comments) => comments
         => []
       }
   }

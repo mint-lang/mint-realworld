@@ -84,7 +84,7 @@ routes {
       Application.initialize()
 
       case (Application.user) {
-        UserStatus::LoggedIn user =>
+        UserStatus::LoggedIn(user) =>
           sequence {
             Forms.Settings.set(user)
             Application.setPage(Page::Settings)
@@ -100,7 +100,7 @@ routes {
       Application.initialize()
 
       case (Application.user) {
-        UserStatus::LoggedIn user => Window.navigate("/")
+        UserStatus::LoggedIn(user) => Window.navigate("/")
 
         UserStatus::LoggedOut =>
           parallel {
@@ -117,7 +117,7 @@ routes {
 
       case (Application.user) {
         UserStatus::LoggedOut => Application.setPage(Page::SignUp)
-        UserStatus::LoggedIn user => Window.navigate("/")
+        UserStatus::LoggedIn(user) => Window.navigate("/")
       }
     }
   }
@@ -128,7 +128,7 @@ routes {
       Forms.Article.reset()
 
       case (Application.user) {
-        UserStatus::LoggedIn user => Application.setPage(Page::Editor)
+        UserStatus::LoggedIn(user) => Application.setPage(Page::Editor)
         UserStatus::LoggedOut => Window.navigate("/")
       }
     }
@@ -139,7 +139,7 @@ routes {
       Application.initialize()
 
       case (Application.user) {
-        UserStatus::LoggedIn user => Application.logout()
+        UserStatus::LoggedIn(user) => Application.logout()
         UserStatus::LoggedOut => Window.navigate("/")
       }
     }
@@ -152,7 +152,7 @@ routes {
       sequence {
         article =
           case (Stores.Articles.status) {
-            Api.Status::Ok data =>
+            Api.Status::Ok(data) =>
               data.articles
               |> Array.find(
                 (article : Article) : Bool { article.slug == slug })
@@ -192,7 +192,7 @@ routes {
       }
 
       case (Stores.Article.status) {
-        Api.Status::Ok article =>
+        Api.Status::Ok(article) =>
           parallel {
             Forms.Article.set(article)
             Application.setPage(Page::Editor)

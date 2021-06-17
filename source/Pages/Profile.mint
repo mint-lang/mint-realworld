@@ -94,7 +94,7 @@ component Profile {
     case (user) {
       UserStatus::LoggedOut => Html.empty()
 
-      UserStatus::LoggedIn user =>
+      UserStatus::LoggedIn(user) =>
         if (user.username != profile.username) {
           <div::button>
             <Button
@@ -120,7 +120,7 @@ component Profile {
         toggleUserFollow(profile)
 
       case (newStatus) {
-        Api.Status::Ok profile => Stores.Profile.setProfile(profile)
+        Api.Status::Ok(profile) => Stores.Profile.setProfile(profile)
         => Promise.never()
       }
 

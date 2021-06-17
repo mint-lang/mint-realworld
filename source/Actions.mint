@@ -50,7 +50,7 @@ store Actions {
         Api.send(Article.fromResponse, request)
 
       case (status) {
-        Api.Status::Ok article => Stores.Articles.replaceArticle(article)
+        Api.Status::Ok(article) => Stores.Articles.replaceArticle(article)
 
         => Promise.never()
       }

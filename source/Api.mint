@@ -21,7 +21,7 @@ module Api {
 
   fun withDefault (a : a, status : Api.Status(a)) : a {
     case (status) {
-      Api.Status::Ok value => value
+      Api.Status::Ok(value) => value
       => a
     }
   }
@@ -43,7 +43,7 @@ module Api {
 
   fun errorsOf (key : String, status : Api.Status(a)) : Array(String) {
     case (status) {
-      Api.Status::Error errors =>
+      Api.Status::Error(errors) =>
         errors
         |> Map.get(key)
         |> Maybe.withDefault([])
@@ -77,7 +77,7 @@ module Api {
       /* We try to get a token from session storage. */
       request =
         case (Application.user) {
-          UserStatus::LoggedIn user =>
+          UserStatus::LoggedIn(user) =>
             Http.header(
               "Authorization",
               "Token " + user.token,

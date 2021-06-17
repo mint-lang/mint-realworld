@@ -32,7 +32,7 @@ component CommentForm {
 
   fun render : Html {
     case (user) {
-      UserStatus::LoggedIn user =>
+      UserStatus::LoggedIn(user) =>
         <div::form>
           <Form.Field>
             <Textarea

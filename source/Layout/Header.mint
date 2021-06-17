@@ -146,7 +146,7 @@ component Header {
           </a>
         </>
 
-      UserStatus::LoggedIn user =>
+      UserStatus::LoggedIn(user) =>
         <>
           <a::link href="/new">
             <svg
