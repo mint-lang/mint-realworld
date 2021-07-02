@@ -28,7 +28,7 @@ jobs:
         run: mint build
       
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v1.1.13
+        uses: nwtgck/actions-netlify@v1.2
         with:
           production-deploy: true
           publish-dir: dist
