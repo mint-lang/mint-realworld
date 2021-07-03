@@ -1,4 +1,4 @@
-/* This store contains the data of the currenty viewed article. */
+/* This store contains the data of the currently viewed article. */
 store Stores.Article {
   /* Represents the status of the article. */
   state status : Api.Status(Article) = Api.Status::Initial
