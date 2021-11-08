@@ -88,7 +88,7 @@ module Api {
 
       /* Get the response. */
       response =
-        { request | url = "https://conduit.productionready.io/api" + request.url }
+        { request | url = "https://api.realworld.io/api" + request.url }
         |> Http.header("Content-Type", "application/json")
         |> Http.send()
 
