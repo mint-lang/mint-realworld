@@ -1,7 +1,7 @@
 record Author {
   bio : Maybe(String),
   username : String,
-  following : Bool,
+  following : Maybe(Bool),
   image : String
 }
 
@@ -9,7 +9,7 @@ module Author {
   fun empty : Author {
     {
       bio = Maybe.nothing(),
-      following = false,
+      following = Maybe::Just(false),
       username = "",
       image = ""
     }

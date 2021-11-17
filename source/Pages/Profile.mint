@@ -57,7 +57,7 @@ component Profile {
   get followText : String {
     if (loading) {
       "Loading..."
-    } else if (profile.following) {
+    } else if (profile.following or false) {
       "Unfollow " + profile.username
     } else {
       "Follow " + profile.username
@@ -67,7 +67,7 @@ component Profile {
   get followIcon : Html {
     if (loading) {
       Html.empty()
-    } else if (profile.following) {
+    } else if (profile.following or false) {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"

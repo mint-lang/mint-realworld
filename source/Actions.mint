@@ -5,7 +5,7 @@ store Actions {
         "/profiles/" + profile.username + "/follow"
 
       request =
-        if (profile.following) {
+        if (profile.following or false) {
           Http.delete(url)
         } else {
           Http.post(url)
