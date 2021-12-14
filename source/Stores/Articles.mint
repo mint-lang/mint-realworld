@@ -15,14 +15,15 @@ record Stores.Articles {
 store Stores.Articles {
   state status : Api.Status(Stores.Articles) = Api.Status::Initial
 
-  state params : Stores.Articles.Params = {
-    favorited = false,
-    feed = false,
-    author = "",
-    limit = 10,
-    page = 0,
-    tag = ""
-  }
+  state params : Stores.Articles.Params =
+    {
+      favorited = false,
+      feed = false,
+      author = "",
+      limit = 10,
+      page = 0,
+      tag = ""
+    }
 
   fun reset : Promise(Never, Void) {
     next { status = Api.Status::Initial }
@@ -94,11 +95,11 @@ store Stores.Articles {
 
       search =
         SearchParams.empty()
-        |> SearchParams.append("favorited", favoritedValue)
-        |> SearchParams.append("author", params.author)
-        |> SearchParams.append("tag", params.tag)
-        |> SearchParams.append("offset", offset)
-        |> SearchParams.append("limit", limit)
+        |> SearchParams.appendNotBlank("favorited", favoritedValue)
+        |> SearchParams.appendNotBlank("author", params.author)
+        |> SearchParams.appendNotBlank("tag", params.tag)
+        |> SearchParams.appendNotBlank("offset", offset)
+        |> SearchParams.appendNotBlank("limit", limit)
         |> SearchParams.toString()
 
       request =
