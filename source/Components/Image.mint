@@ -36,16 +36,14 @@ component Image {
     }
   }
 
-  fun componentDidMount : Promise(Never, Void) {
-    sequence {
-      newStatus =
-        load()
+  fun componentDidMount : Promise(Void) {
+    let newStatus =
+      await load()
 
-      next { status = newStatus }
-    }
+    await next { status: newStatus }
   }
 
-  fun load : Promise(Never, Image.Status) {
+  fun load : Promise(Image.Status) {
     `
     new Promise((resolve, reject) => {
       let image = new Image()

@@ -23,13 +23,16 @@ component Articles {
   get data : Stores.Articles {
     Api.withDefault(
       {
-        count = 0,
-        articles = []
+        count: 0,
+        articles: []
       },
       status)
   }
 
   get pagination : Html {
+    let pages =
+      getPages()
+
     if (Array.isEmpty(pages)) {
       Html.empty()
     } else {
@@ -37,52 +40,43 @@ component Articles {
         <{ pages }>
       </div>
     }
-  } where {
-    pages =
-      getPages()
   }
 
   fun getPages : Array(Html) {
-    try {
-      start =
-        Math.max(1, params.page - 3)
+    let start =
+      Math.max(1, params.page - 3)
 
-      end =
-        Math.min(
-          Math.ceil(data.count / params.limit),
-          params.page + 5)
+    let end =
+      Math.min(
+        Math.ceil(data.count / params.limit),
+        params.page + 5)
 
-      if (end > 1) {
-        try {
-          url =
-            Window.url()
+    if (end > 1) {
+      let url =
+        Window.url()
 
-          searchParams =
-            SearchParams.fromString(url.search)
+      let searchParams =
+        SearchParams.fromString(url.search)
 
-          Array.range(start, end)
-          |> Array.map(
-            (page : Number) : Html {
-              try {
-                pageString =
-                  Number.toString(page)
+      Array.range(start, end)
+      |> Array.map(
+        (page : Number) : Html {
+          let pageString =
+            Number.toString(page)
 
-                newSearchParams =
-                  SearchParams.set("page", pageString, searchParams)
+          let newSearchParams =
+            SearchParams.set(searchParams, "page", pageString)
 
-                href =
-                  url.path + "?" + SearchParams.toString(newSearchParams)
+          let href =
+            url.path + "?" + SearchParams.toString(newSearchParams)
 
-                <Pagination.Page
-                  active={page - 1 == params.page}
-                  page={pageString}
-                  href={href}/>
-              }
-            })
-        }
-      } else {
-        []
-      }
+          <Pagination.Page
+            active={page - 1 == params.page}
+            page={pageString}
+            href={href}/>
+        })
+    } else {
+      []
     }
   }
 

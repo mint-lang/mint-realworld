@@ -5,20 +5,20 @@ store Stores.Profile {
     Api.withDefault(Author.empty(), status)
   }
 
-  fun setProfile (profile : Author) : Promise(Never, Void) {
-    next { status = Api.Status::Ok(profile) }
+  fun setProfile (profile : Author) : Promise(Void) {
+    next { status: Api.Status::Ok(profile) }
   }
 
-  fun load (author : String) : Promise(Never, Void) {
+  fun load (author : String) : Promise(Void) {
     if (profile.username != author) {
-      sequence {
-        next { status = Api.Status::Loading }
+      {
+        await next { status: Api.Status::Loading }
 
-        newStatus =
-          Http.get("/profiles/" + author)
+        let newStatus =
+          await Http.get("/profiles/" + author)
           |> Api.send(Author.fromResponse)
 
-        next { status = newStatus }
+        await next { status: newStatus }
       }
     } else {
       Promise.never()

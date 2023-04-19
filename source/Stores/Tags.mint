@@ -3,33 +3,27 @@ store Stores.Tags {
   state cached : Bool = false
 
   fun decodeTags (object : Object) : Result(Object.Error, Array(String)) {
-    with Object.Decode {
-      field(
-        "tags",
-        (input : Object) : Result(Object.Error, Array(String)) { decode input as Array(String) },
-        object)
-    }
+    Object.Decode.field(
+      object,
+      "tags",
+      (input : Object) : Result(Object.Error, Array(String)) { decode input as Array(String) })
   }
 
-  fun load : Promise(Never, Void) {
+  fun load : Promise(Void) {
     if (cached) {
       Promise.never()
     } else {
-      with Http {
-        sequence {
-          next { status = Api.Status::Loading }
+      await next { status: Api.Status::Loading }
 
-          newStatus =
-            Http.get("/tags")
-            |> Api.send(decodeTags)
+      let newStatus =
+        await Http.get("/tags")
+        |> Api.send(decodeTags)
 
-          next
-            {
-              status = newStatus,
-              cached = true
-            }
+      await next
+        {
+          status: newStatus,
+          cached: true
         }
-      }
     }
   }
 }

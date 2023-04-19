@@ -26,7 +26,7 @@ component CommentForm {
     }
   }
 
-  fun handleClick (event : Html.Event) : Promise(Never, Void) {
+  fun handleClick (event : Html.Event) : Promise(Void) {
     submit(article.slug)
   }
 

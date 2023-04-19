@@ -23,7 +23,7 @@ component GlobalErrors {
       Html.empty()
     } else {
       <div::base>
-        <{ Array.map(renderError, errors) }>
+        <{ Array.map(errors, renderError) }>
       </div>
     }
   }

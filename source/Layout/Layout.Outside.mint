@@ -1,7 +1,7 @@
 component Layout.Outside {
   connect Theme exposing { primary }
 
-  property onClick : Function(Promise(Never, Void)) = Promise.never
+  property onClick : Function(Promise(Void)) = Promise.never
   property children : Array(Html) = []
   property buttonText : String = ""
   property disabled : Bool = false
@@ -73,7 +73,7 @@ component Layout.Outside {
 
         <Button
           disabled={disabled}
-          onClick={(event : Html.Event) : Promise(Never, Void) { onClick() }}>
+          onClick={(event : Html.Event) : Promise(Void) { onClick() }}>
 
           <{ buttonText }>
 

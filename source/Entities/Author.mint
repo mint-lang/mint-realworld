@@ -8,20 +8,18 @@ record Author {
 module Author {
   fun empty : Author {
     {
-      bio = Maybe.nothing(),
-      following = Maybe::Just(false),
-      username = "",
-      image = ""
+      bio: Maybe.nothing(),
+      following: Maybe::Just(false),
+      username: "",
+      image: ""
     }
   }
 
-  fun decode (object : Object) : Result(Object.Error, Author) {
+  fun decodeEntity (object : Object) : Result(Object.Error, Author) {
     decode object as Author
   }
 
   fun fromResponse (object : Object) : Result(Object.Error, Author) {
-    with Object.Decode {
-      field("profile", decode, object)
-    }
+    Object.Decode.field(object, "profile", decodeEntity)
   }
 }

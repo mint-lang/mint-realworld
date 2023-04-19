@@ -1,8 +1,8 @@
 component Textarea {
   connect Theme exposing { primary }
 
-  property onChange : Function(String, Promise(Never, Void)) =
-    (value : String) : Promise(Never, Void) { next {  } }
+  property onChange : Function(String, Promise(Void)) =
+    (value : String) : Promise(Void) { next { } }
 
   property errors : Array(String) = []
   property placeholder : String = ""
@@ -70,9 +70,9 @@ component Textarea {
 component Input {
   connect Theme exposing { primary }
 
-  property onBlur : Function(Html.Event, Promise(Never, Void)) = (value : Html.Event) : Promise(Never, Void) { next {  } }
-  property onChange : Function(String, Promise(Never, Void)) = (value : String) : Promise(Never, Void) { next {  } }
-  property onEnter : Function(Promise(Never, Void)) = () : Promise(Never, Void) { next {  } }
+  property onBlur : Function(Html.Event, Promise(Void)) = (value : Html.Event) : Promise(Void) { next { } }
+  property onChange : Function(String, Promise(Void)) = (value : String) : Promise(Void) { next { } }
+  property onEnter : Function(Promise(Void)) = () : Promise(Void) { next { } }
   property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
@@ -116,7 +116,7 @@ component Input {
   fun handleKeyDown (event : Html.Event) : a {
     case (event.keyCode) {
       13 =>
-        sequence {
+        {
           Html.Event.preventDefault(event)
           onEnter()
         }
@@ -148,18 +148,16 @@ component Input {
 }
 
 component Form {
-  property onSubmit : Function(Promise(Never, Void)) = Promise.never
+  property onSubmit : Function(Promise(Void)) = Promise.never
   property children : Array(Html) = []
 
   style hidden {
     display: none;
   }
 
-  fun handleSubmit (event : Html.Event) : Promise(Never, Void) {
-    sequence {
-      Html.Event.preventDefault(event)
-      onSubmit()
-    }
+  fun handleSubmit (event : Html.Event) : Promise(Void) {
+    Html.Event.preventDefault(event)
+    onSubmit()
   }
 
   fun render : Html {

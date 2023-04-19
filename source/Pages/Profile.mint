@@ -47,7 +47,7 @@ component Profile {
   get bio : Html {
     if (Maybe.isJust(profile.bio)) {
       <div::bio>
-        <{ Maybe.withDefault("", profile.bio) }>
+        <{ Maybe.withDefault(profile.bio, "") }>
       </div>
     } else {
       Html.empty()
@@ -112,20 +112,18 @@ component Profile {
     }
   }
 
-  fun handleFollow (event : Html.Event) : Promise(Never, a) {
-    sequence {
-      next { loading = true }
+  fun handleFollow (event : Html.Event) : Promise(Void) {
+    await next { loading: true }
 
-      newStatus =
-        toggleUserFollow(profile)
+    let newStatus =
+      await toggleUserFollow(profile)
 
-      case (newStatus) {
-        Api.Status::Ok(profile) => Stores.Profile.setProfile(profile)
-        => Promise.never()
-      }
-
-      next { loading = false }
+    await case (newStatus) {
+      Api.Status::Ok(profile) => Stores.Profile.setProfile(profile)
+      => Promise.never()
     }
+
+    await next { loading: false }
   }
 
   fun render : Html {

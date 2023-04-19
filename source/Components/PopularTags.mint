@@ -26,14 +26,17 @@ component PopularTags {
 
   fun renderTag (tag : String) : Html {
     <Tag
-      active={active}
+      active={params.tag == tag}
       name={tag}/>
-  } where {
-    active =
-      params.tag == tag
   }
 
   fun render : Html {
+    let tags =
+      case (status) {
+        Api.Status::Ok(tags) => tags
+        => []
+      }
+
     <div::base>
       <div::title>"Popular Tags"</div>
 
@@ -43,16 +46,10 @@ component PopularTags {
         status={Api.toStatus(status)}>
 
         <div::tags>
-          <{ Array.map(renderTag, tags) }>
+          <{ Array.map(tags, renderTag) }>
         </div>
 
       </Status>
     </div>
-  } where {
-    tags =
-      case (status) {
-        Api.Status::Ok(tags) => tags
-        => []
-      }
   }
 }

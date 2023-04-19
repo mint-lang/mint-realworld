@@ -2,6 +2,12 @@ component Article.Comments {
   connect Stores.Comments exposing { status }
 
   get content : Html {
+    let comments =
+      case (status) {
+        Api.Status::Ok(comments) => comments
+        => []
+      }
+
     if (Array.isEmpty(comments)) {
       <div>"This article does not have any comments yet."</div>
     } else {
@@ -11,12 +17,6 @@ component Article.Comments {
         }
       </div>
     }
-  } where {
-    comments =
-      case (status) {
-        Api.Status::Ok(comments) => comments
-        => []
-      }
   }
 
   fun render : Html {

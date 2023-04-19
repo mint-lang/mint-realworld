@@ -1,8 +1,8 @@
 component Button {
   connect Theme exposing { primary, primaryDark }
 
-  property onClick : Function(Html.Event, Promise(Never, Void)) =
-    (event : Html.Event) : Promise(Never, Void) { next {  } }
+  property onClick : Function(Html.Event, Promise(Void)) =
+    (event : Html.Event) : Promise(Void) { next { } }
 
   property children : Array(Html) = []
   property disabled : Bool = false

@@ -25,7 +25,7 @@ component Errors {
       Html.empty()
     } else {
       <ul::base>
-        <{ Array.map(renderError, errors) }>
+        <{ Array.map(errors, renderError) }>
       </ul>
     }
   }

@@ -1,6 +1,9 @@
 suite "Header" {
   test "it has a logo" {
-    with Test.Html {
+    with
+    Test.Html
+
+    {
       <Header/>
       |> start()
       |> assertElementExists("[data-selector=brand] svg")
@@ -8,7 +11,10 @@ suite "Header" {
   }
 
   test "it has a brand name" {
-    with Test.Html {
+    with
+    Test.Html
+
+    {
       <Header/>
       |> start()
       |> assertTextOf("span", "Conduit")
@@ -16,7 +22,10 @@ suite "Header" {
   }
 
   test "it renders the sign in link" {
-    with Test.Html {
+    with
+    Test.Html
+
+    {
       <Header/>
       |> start()
       |> assertTextOf("div[data-selector=links] a:first-child", "Sign in")
@@ -24,7 +33,10 @@ suite "Header" {
   }
 
   test "it renders the sign up link" {
-    with Test.Html {
+    with
+    Test.Html
+
+    {
       <Header/>
       |> start()
       |> assertTextOf("div[data-selector=links] a:last-child", "Sign up")

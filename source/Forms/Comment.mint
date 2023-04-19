@@ -3,37 +3,35 @@ store Forms.Comment {
 
   state comment : String = ""
 
-  fun reset : Promise(Never, Void) {
-    next { comment = "" }
+  fun reset : Promise(Void) {
+    next { comment: "" }
   }
 
-  fun setComment (value : String) : Promise(Never, Void) {
-    next { comment = value }
+  fun setComment (value : String) : Promise(Void) {
+    next { comment: value }
   }
 
-  fun submit (slug : String) : Promise(Never, Void) {
-    sequence {
-      next { status = Api.Status::Loading }
+  fun submit (slug : String) : Promise(Void) {
+    await next { status: Api.Status::Loading }
 
-      params =
-        encode { comment = { body = comment } }
+    let params =
+      encode { comment: { body: comment } }
 
-      newStatus =
-        Http.post("/articles/" + slug + "/comments")
-        |> Http.jsonBody(params)
-        |> Api.send(Comment.fromResponse)
+    let newStatus =
+      await Http.post("/articles/" + slug + "/comments")
+      |> Http.jsonBody(params)
+      |> Api.send(Comment.fromResponse)
 
-      next { status = newStatus }
+    await next { status: newStatus }
 
-      case (newStatus) {
-        Api.Status::Ok =>
-          parallel {
-            Stores.Comments.load(slug)
-            reset()
-          }
+    await case (newStatus) {
+      Api.Status::Ok =>
+        {
+          await Stores.Comments.load(slug)
+          await reset()
+        }
 
-        => Promise.never()
-      }
+      => Promise.never()
     }
   }
 }

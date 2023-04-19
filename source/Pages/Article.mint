@@ -73,11 +73,11 @@ component Pages.Article {
     height: 20px;
   }
 
-  fun handleDelete (event : Html.Event) : Promise(Never, Void) {
+  fun handleDelete (event : Html.Event) : Promise(Void) {
     deleteArticle(article.slug)
   }
 
-  fun handleEdit (event : Html.Event) : Promise(Never, Void) {
+  fun handleEdit (event : Html.Event) : Promise(Void) {
     Window.navigate("/edit/" + article.slug)
   }
 

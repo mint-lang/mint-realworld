@@ -81,14 +81,10 @@ component Articles.Item {
     "/article/" + article.slug
   }
 
-  fun toggle (event : Html.Event) : Promise(Never, Void) {
-    sequence {
-      next { loading = true }
-
-      toggleFavorite(article)
-
-      next { loading = false }
-    }
+  fun toggle (event : Html.Event) : Promise(Void) {
+    await next { loading: true }
+    await toggleFavorite(article)
+    await next { loading: false }
   }
 
   fun render : Html {
@@ -100,7 +96,7 @@ component Articles.Item {
           </div>
 
           <div::description>
-            <Markdown content={Maybe.withDefault("", article.description)}/>
+            <Markdown content={Maybe.withDefault(article.description, "")}/>
           </div>
 
           <TagList

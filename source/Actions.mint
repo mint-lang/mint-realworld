@@ -1,59 +1,48 @@
 store Actions {
-  fun toggleUserFollow (profile : Author) : Promise(Never, Api.Status(Author)) {
-    sequence {
-      url =
-        "/profiles/" + profile.username + "/follow"
+  fun toggleUserFollow (profile : Author) : Promise(Api.Status(Author)) {
+    let url =
+      "/profiles/" + profile.username + "/follow"
 
-      request =
-        if (profile.following or false) {
-          Http.delete(url)
-        } else {
-          Http.post(url)
-        }
+    let request =
+      if (profile.following or false) {
+        Http.delete(url)
+      } else {
+        Http.post(url)
+      }
 
-      status =
-        Api.send(Author.fromResponse, request)
+    Api.send(request, Author.fromResponse)
+  }
+
+  fun deleteArticle (slug : String) : Promise(Void) {
+    await Window.confirm("Are you sure?")
+
+    let status =
+      await Http.delete("/articles/" + slug)
+      |> Api.send((object : Object) { Result.ok(void) })
+
+    case (status) {
+      Api.Status::Ok => Window.navigate("/")
+      => next { }
     }
   }
 
-  fun deleteArticle (slug : String) : Promise(Never, Void) {
-    sequence {
-      Window.confirm("Are you sure?")
+  fun toggleFavorite (article : Article) : Promise(Void) {
+    let url =
+      "/articles/" + article.slug + "/favorite"
 
-      status =
-        Http.delete("/articles/" + slug)
-        |> Api.send(
-          (object : Object) : Result(Object.Error, Void) { Result.ok(void) })
-
-      case (status) {
-        Api.Status::Ok => Window.navigate("/")
-        => Promise.never()
+    let request =
+      if (article.favorited) {
+        Http.delete(url)
+      } else {
+        Http.post(url)
       }
-    } catch String => error {
-      Promise.never()
-    }
-  }
 
-  fun toggleFavorite (article : Article) : Promise(Never, Void) {
-    sequence {
-      url =
-        "/articles/" + article.slug + "/favorite"
+    let status =
+      await Api.send(request, Article.fromResponse)
 
-      request =
-        if (article.favorited) {
-          Http.delete(url)
-        } else {
-          Http.post(url)
-        }
-
-      status =
-        Api.send(Article.fromResponse, request)
-
-      case (status) {
-        Api.Status::Ok(article) => Stores.Articles.replaceArticle(article)
-
-        => Promise.never()
-      }
+    await case (status) {
+      Api.Status::Ok(article) => Stores.Articles.replaceArticle(article)
+      => next { }
     }
   }
 }

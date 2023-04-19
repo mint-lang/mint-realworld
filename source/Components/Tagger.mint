@@ -1,8 +1,8 @@
 component Tagger {
   connect Theme exposing { primary, primaryText }
 
-  property onChange : Function(Set(String), Promise(Never, Void)) =
-    (value : Set(String)) : Promise(Never, Void) { next {  } }
+  property onChange : Function(Set(String), Promise(Void)) =
+    (value : Set(String)) : Promise(Void) { next { } }
 
   property tags : Set(String) = Set.empty()
   property placeholder : String = ""
@@ -50,28 +50,25 @@ component Tagger {
     }
   }
 
-  fun handleTag (value : String) : Promise(Never, Void) {
-    next { tag = value }
+  fun handleTag (value : String) : Promise(Void) {
+    next { tag: value }
   }
 
-  fun handleBlur (event : Html.Event) : Promise(Never, Void) {
-    next { tag = "" }
+  fun handleBlur (event : Html.Event) : Promise(Void) {
+    next { tag: "" }
   }
 
-  fun addTag : Promise(Never, Void) {
-    if (Set.has(tag, tags)) {
+  fun addTag : Promise(Void) {
+    if (Set.has(tags, tag)) {
       Promise.never()
     } else {
-      sequence {
-        onChange(Set.add(tag, tags))
-
-        next { tag = "" }
-      }
+      await onChange(Set.add(tags, tag))
+      await next { tag: "" }
     }
   }
 
-  fun removeTag (tag : String) : Promise(Never, Void) {
-    onChange(Set.delete(tag, tags))
+  fun removeTag (tag : String) : Promise(Void) {
+    onChange(Set.delete(tags, tag))
   }
 
   fun renderTag (tag : String) : Html {
@@ -79,7 +76,7 @@ component Tagger {
       <{ tag }>
 
       <svg::icon
-        onClick={(event : Html.Event) : Promise(Never, Void) { removeTag(tag) }}
+        onClick={(event : Html.Event) : Promise(Void) { removeTag(tag) }}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         height="12"
@@ -110,7 +107,7 @@ component Tagger {
 
       <div::tags>
         <{
-          Set.map(renderTag, tags)
+          Set.map(tags, renderTag)
           |> Set.toArray()
         }>
       </div>

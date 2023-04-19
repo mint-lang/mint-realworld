@@ -8,20 +8,20 @@ component Pages.SignIn {
   }
 
   get error : Html {
-    case (status) {
-      Api.Status::Error => <GlobalErrors errors={errors}/>
-      => Html.empty()
-    }
-  } where {
-    requestErrors =
+    let requestErrors =
       Api.errorsOf("request", status)
 
-    errors =
+    let errors =
       if (Array.isEmpty(requestErrors)) {
         ["Invalid email or password!"]
       } else {
         requestErrors
       }
+
+    case (status) {
+      Api.Status::Error => <GlobalErrors errors={errors}/>
+      => <></>
+    }
   }
 
   get buttonText : String {

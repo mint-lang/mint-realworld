@@ -6,62 +6,60 @@ store Forms.Settings {
   state image : String = ""
   state bio : String = ""
 
-  fun setUsername (value : String) : Promise(Never, Void) {
-    next { username = value }
+  fun setUsername (value : String) : Promise(Void) {
+    next { username: value }
   }
 
-  fun setImage (value : String) : Promise(Never, Void) {
-    next { image = value }
+  fun setImage (value : String) : Promise(Void) {
+    next { image: value }
   }
 
-  fun setEmail (value : String) : Promise(Never, Void) {
-    next { email = value }
+  fun setEmail (value : String) : Promise(Void) {
+    next { email: value }
   }
 
-  fun setBio (value : String) : Promise(Never, Void) {
-    next { bio = value }
+  fun setBio (value : String) : Promise(Void) {
+    next { bio: value }
   }
 
-  fun set (user : User) : Promise(Never, Void) {
+  fun set (user : User) : Promise(Void) {
     next
       {
-        status = Api.Status::Initial,
-        image = Maybe.withDefault("", user.image),
-        bio = Maybe.withDefault("", user.bio),
-        username = user.username,
-        email = user.email
+        status: Api.Status::Initial,
+        image: Maybe.withDefault(user.image, ""),
+        bio: Maybe.withDefault(user.bio, ""),
+        username: user.username,
+        email: user.email
       }
   }
 
-  fun submit : Promise(Never, Void) {
-    sequence {
-      next { status = Api.Status::Loading }
+  fun submit : Promise(Void) {
+    await next { status: Api.Status::Loading }
 
-      body =
-        encode {
-          user =
-            {
-              username = username,
-              image = image,
-              email = email,
-              bio = bio
-            }
+    let body =
+      encode {
+        user:
+          {
+            username: username,
+            image: image,
+            email: email,
+            bio: bio
+          }
+      }
+
+    let newStatus =
+      await Http.put("/user")
+      |> Http.jsonBody(body)
+      |> Api.send(User.fromResponse)
+
+    await case (newStatus) {
+      Api.Status::Ok(user) =>
+        {
+          await Application.setUser(user)
+          await Window.navigate("/users/" + username)
         }
 
-      newStatus =
-        Http.put("/user")
-        |> Http.jsonBody(body)
-        |> Api.send(User.fromResponse)
-
-      case (newStatus) {
-        Api.Status::Ok(user) =>
-          parallel {
-            Application.setUser(user)
-            Window.navigate("/users/" + username)
-          }
-
-        => next { status = newStatus }
-      }
+      => next { status: newStatus }
     }
   }
 }

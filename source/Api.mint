@@ -1,3 +1,4 @@
+/* Represents the status of an API Call. */
 enum Api.Status(a) {
   Error(Map(String, Array(String)))
   Loading
@@ -34,11 +35,11 @@ module Api {
   }
 
   fun errorStatus (key : String, value : String) : Api.Status(a) {
-    Api.Status::Error(error)
-  } where {
-    error =
+    let error =
       Map.empty()
       |> Map.set(key, [value])
+
+    Api.Status::Error(error)
   }
 
   fun errorsOf (key : String, status : Api.Status(a)) : Array(String) {
@@ -53,69 +54,62 @@ module Api {
   }
 
   fun decodeErrors (body : String) : Api.Status(a) {
-    try {
-      object =
-        Json.parse(body)
-        |> Maybe.toResult("")
+    case (Json.parse(body)) {
+      Result::Err => errorStatus("request", "Could not parse the error response.")
 
-      errors =
-        decode object as ErrorResponse
-
-      Api.Status::Error(errors.errors)
-    } catch Object.Error => error {
-      errorStatus("request", "Could not decode the error response.")
-    } catch String => error {
-      errorStatus("request", "Could not parse the error response.")
+      Result::Ok(object) =>
+        case (decode object as ErrorResponse) {
+          Result::Ok(errors) => Api.Status::Error(errors.errors)
+          Result::Err => errorStatus("request", "Could not decode the error response.")
+        }
     }
   }
 
   fun send (
-    decoder : Function(Object, Result(Object.Error, a)),
-    rawRequest : Http.Request
-  ) : Promise(Never, Api.Status(a)) {
-    sequence {
-      /* We try to get a token from session storage. */
-      request =
-        case (Application.user) {
-          UserStatus::LoggedIn(user) =>
-            Http.header(
-              "Authorization",
-              "Token " + user.token,
-              rawRequest)
+    rawRequest : Http.Request,
+    decoder : Function(Object, Result(Object.Error, a))
+  ) : Promise(Api.Status(a)) {
+    /* We try to get a token from session storage. */
+    let request =
+      case (Application.user) {
+        UserStatus::LoggedIn(user) =>
+          Http.header(
+            rawRequest,
+            "Authorization",
+            "Token " + user.token)
 
-          UserStatus::LoggedOut => rawRequest
-        }
-
-      /* Get the response. */
-      response =
-        { request | url = "https://api.realworld.io/api" + request.url }
-        |> Http.header("Content-Type", "application/json")
-        |> Http.send()
-
-      /* Handle response based on status. */
-      case (response.status) {
-        401 => errorStatus("request", "Unauthorized!")
-        403 => decodeErrors(response.body)
-        422 => decodeErrors(response.body)
-
-        =>
-          try {
-            object =
-              Json.parse(response.body)
-              |> Maybe.toResult("")
-
-            data =
-              decoder(object)
-
-            Api.Status::Ok(data)
-          } catch Object.Error => error {
-            errorStatus("request", "Could not decode the response.")
-          } catch String => error {
-            errorStatus("request", "Could not parse the response.")
-          }
+        UserStatus::LoggedOut => rawRequest
       }
-    } catch Http.ErrorResponse => error {
-      errorStatus("request", "Network error.")
+
+    /* Get the response. */
+    let result =
+      await { request | url: "https://conduit.productionready.io/api" + request.url }
+      |> Http.header("Content-Type", "application/json")
+      |> Http.send()
+
+    case (result) {
+      Result::Err => errorStatus("request", "Network error.")
+
+      Result::Ok(response) =>
+        {
+          /* Handle response based on status. */
+          case (response.status) {
+            401 => errorStatus("request", "Unauthorized!")
+            403 => decodeErrors(response.body)
+            422 => decodeErrors(response.body)
+
+            =>
+              case (Json.parse(response.body)) {
+                Result::Err => errorStatus("request", "Could not parse the response.")
+
+                Result::Ok(object) =>
+                  case (decoder(object)) {
+                    Result::Ok(data) => Api.Status::Ok(data)
+                    Result::Err => errorStatus("request", "Could not decode the response.")
+                  }
+              }
+          }
+        }
     }
   }
 }

@@ -20,16 +20,11 @@ component TagList {
 
   fun render : Html {
     <div::base>
-      <{ renderdTags }>
+      for (tag of tags) {
+        <Tag
+          inactive={inactive}
+          name={tag}/>
+      }
     </div>
-  } where {
-    renderdTags =
-      Array.map(
-        (tag : String) : Html {
-          <Tag
-            inactive={inactive}
-            name={tag}/>
-        },
-        tags)
   }
 }

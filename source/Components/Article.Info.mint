@@ -50,7 +50,7 @@ component Article.Info {
       </a>
 
       <span::date>
-        <{ Time.distanceOfTimeInWords(Time.Format:ENGLISH, Time.now(), time) }>
+        <{ Time.distanceOfTimeInWords(time, Time.now(), Time.Format:ENGLISH) }>
       </span>
     </div>
   }

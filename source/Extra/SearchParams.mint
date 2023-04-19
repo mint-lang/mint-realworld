@@ -1,7 +1,7 @@
 module SearchParams {
-  fun appendNotBlank (key : String, value : String, params : SearchParams) : SearchParams {
+  fun appendNotBlank (params : SearchParams, key : String, value : String) : SearchParams {
     if (String.isNotBlank(value)) {
-      SearchParams.append(key, value, params)
+      SearchParams.append(params, key, value)
     } else {
       params
     }

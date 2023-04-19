@@ -8,25 +8,24 @@ store Stores.Article {
     Api.withDefault(Article.empty(), status)
   }
 
-  fun set (article : Article) : Promise(Never, Void) {
-    next { status = Api.Status::Ok(article) }
+  fun set (article : Article) : Promise(Void) {
+    next { status: Api.Status::Ok(article) }
   }
 
   /* Resets the store to the initial values. */
-  fun reset : Promise(Never, Void) {
-    next { status = Api.Status::Initial }
+  fun reset : Promise(Void) {
+    next { status: Api.Status::Initial }
   }
 
   /* Loads the article from the given slug. */
-  fun load (slug : String) : Promise(Never, Void) {
-    sequence {
-      next { status = Api.Status::Loading }
+  fun load (slug : String) : Promise(Void) {
+    await next { status: Api.Status::Loading }
 
-      newStatus =
-        Http.get("/articles/" + slug)
-        |> Api.send(Article.fromResponse)
+    let newStatus =
+      await "/articles/" + slug
+      |> Http.get()
+      |> Api.send(Article.fromResponse)
 
-      next { status = newStatus }
-    }
+    await next { status: newStatus }
   }
 }
