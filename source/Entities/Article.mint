@@ -27,11 +27,7 @@ module Article {
     }
   }
 
-  fun decodeEntity (object : Object) : Result(Object.Error, Article) {
-    decode object as Article
-  }
-
   fun fromResponse (object : Object) : Result(Object.Error, Article) {
-    Object.Decode.field(object, "article", decodeEntity)
+    Object.Decode.field(object, "article", decode as Article)
   }
 }

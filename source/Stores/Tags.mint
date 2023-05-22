@@ -3,14 +3,11 @@ store Stores.Tags {
   state cached : Bool = false
 
   fun decodeTags (object : Object) : Result(Object.Error, Array(String)) {
-    Object.Decode.field(
-      object,
-      "tags",
-      (input : Object) : Result(Object.Error, Array(String)) { decode input as Array(String) })
+    Object.Decode.field(object, "tags", decode as Array(String))
   }
 
   fun load : Promise(Void) {
-    if (cached) {
+    if cached {
       Promise.never()
     } else {
       await next { status: Api.Status::Loading }

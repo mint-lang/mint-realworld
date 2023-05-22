@@ -38,7 +38,7 @@ store Forms.SignIn {
       |> Http.jsonBody(body)
       |> Api.send(User.fromResponse)
 
-    await case (newStatus) {
+    await case newStatus {
       Api.Status::Ok(user) => Application.login(user)
       => next { status: newStatus }
     }

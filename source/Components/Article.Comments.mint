@@ -3,16 +3,16 @@ component Article.Comments {
 
   get content : Html {
     let comments =
-      case (status) {
+      case status {
         Api.Status::Ok(comments) => comments
         => []
       }
 
-    if (Array.isEmpty(comments)) {
+    if Array.isEmpty(comments) {
       <div>"This article does not have any comments yet."</div>
     } else {
       <div>
-        for (comment of comments) {
+        for comment of comments {
           <Article.Comment comment={comment}/>
         }
       </div>

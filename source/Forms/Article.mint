@@ -60,8 +60,8 @@ store Forms.Article {
       }
 
     let request =
-      if (Maybe.isJust(slug)) {
-        Http.put("/articles/" + Maybe.withDefault(slug, ""))
+      if Maybe.isJust(slug) {
+        Http.put("/articles/" + (slug or ""))
       } else {
         Http.post("/articles")
       }
@@ -71,7 +71,7 @@ store Forms.Article {
       |> Http.jsonBody(body)
       |> Api.send(Article.fromResponse)
 
-    await case (newStatus) {
+    await case newStatus {
       Api.Status::Ok(article) => Window.navigate("/article/" + article.slug)
       => next { status: newStatus }
     }

@@ -10,18 +10,16 @@ store Stores.Profile {
   }
 
   fun load (author : String) : Promise(Void) {
-    if (profile.username != author) {
-      {
-        await next { status: Api.Status::Loading }
+    if profile.username != author {
+      await next { status: Api.Status::Loading }
 
-        let newStatus =
-          await Http.get("/profiles/" + author)
-          |> Api.send(Author.fromResponse)
+      let newStatus =
+        await Http.get("/profiles/" + author)
+        |> Api.send(Author.fromResponse)
 
-        await next { status: newStatus }
-      }
+      await next { status: newStatus }
     } else {
-      Promise.never()
+      next { }
     }
   }
 }

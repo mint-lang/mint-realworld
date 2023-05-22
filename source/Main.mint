@@ -2,7 +2,7 @@ component Main {
   connect Application exposing { page }
 
   fun render : Html {
-    case (page) {
+    case page {
       Page::Initial => Html.empty()
 
       Page::Home =>

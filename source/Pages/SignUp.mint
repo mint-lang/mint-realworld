@@ -15,7 +15,7 @@ component Pages.SignUp {
   }
 
   get buttonText : String {
-    if (disabled) {
+    if disabled {
       "Loading..."
     } else {
       "Sign Up"

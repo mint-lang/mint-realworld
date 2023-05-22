@@ -12,20 +12,19 @@ component Pages.SignIn {
       Api.errorsOf("request", status)
 
     let errors =
-      if (Array.isEmpty(requestErrors)) {
+      if Array.isEmpty(requestErrors) {
         ["Invalid email or password!"]
       } else {
         requestErrors
       }
 
-    case (status) {
-      Api.Status::Error => <GlobalErrors errors={errors}/>
-      => <></>
+    if let Api.Status::Error(error) = status {
+      <GlobalErrors errors={errors}/>
     }
   }
 
   get buttonText : String {
-    if (disabled) {
+    if disabled {
       "Loading..."
     } else {
       "Sign In"

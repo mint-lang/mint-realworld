@@ -1,37 +1,29 @@
-component Pagination.Page {
+component Tab {
   connect Theme exposing { primary }
 
   property active : Bool = false
+  property label : String = ""
   property href : String = ""
-  property page : String = ""
 
   style base {
-    box-shadow: 0px 1px 3px 0px rgba(0,0,0,0.1);
-    background: #{background};
+    border-bottom: 2px solid #{borderColor};
     text-decoration: none;
-    border-radius: 2px;
+    padding: 10px 20px;
     font-weight: bold;
-    font-size: 14px;
     color: #{color};
-
-    justify-content: center;
-    display: inline-flex;
-    align-items: center;
-    height: 40px;
-    width: 40px;
   }
 
-  get background : String {
+  get borderColor : String {
     if active {
       primary
     } else {
-      "white"
+      "#E9E9E9"
     }
   }
 
   get color : String {
     if active {
-      "white"
+      primary
     } else {
       "inherit"
     }
@@ -39,7 +31,7 @@ component Pagination.Page {
 
   fun render : Html {
     <a::base href={href}>
-      <{ page }>
+      <{ label }>
     </a>
   }
 }

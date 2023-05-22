@@ -29,7 +29,7 @@ component Articles.Item {
     display: flex;
     border: 0;
 
-    if (article.favorited) {
+    if article.favorited {
       color: #e84848;
     } else {
       color: inherit;

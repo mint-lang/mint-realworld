@@ -19,7 +19,7 @@ component GlobalErrors {
   }
 
   fun render : Html {
-    if (Array.isEmpty(errors)) {
+    if Array.isEmpty(errors) {
       Html.empty()
     } else {
       <div::base>

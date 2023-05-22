@@ -1,22 +1,25 @@
-component Input {
+component Textarea {
   connect Theme exposing { primary }
 
-  property onBlur : Function(Html.Event, Promise(Void)) = (value : Html.Event) : Promise(Void) { next { } }
-  property onChange : Function(String, Promise(Void)) = (value : String) : Promise(Void) { next { } }
-  property onEnter : Function(Promise(Void)) = () : Promise(Void) { next { } }
+  property onChange : Function(String, Promise(Void)) =
+    (value : String) : Promise(Void) { next { } }
+
   property errors : Array(String) = []
   property placeholder : String = ""
   property disabled : Bool = false
-  property type : String = "text"
   property value : String = ""
   property name : String = ""
+  property rows : String = ""
 
   style base {
     border: 2px solid #{borderColor};
     font-family: inherit;
     font-size: 14px;
     padding: 10px;
+    resize: none;
     color: #333;
+    margin: 0;
+    flex: 1;
 
     &:focus {
       border-color: #{focusColor};
@@ -44,27 +47,18 @@ component Input {
     onChange(Dom.getValue(event.target))
   }
 
-  fun handleKeyDown (event : Html.Event) : a {
-    if event.keyCode == Html.Event:ENTER {
-      Html.Event.preventDefault(event)
-      onEnter()
-    }
-  }
-
   fun render : Html {
     <>
       <Label>
         <{ name }>
       </Label>
 
-      <input::base
+      <textarea::base
         placeholder={placeholder}
-        onKeyDown={handleKeyDown}
         onInput={handleInput}
         disabled={disabled}
-        onBlur={onBlur}
         value={value}
-        type={type}/>
+        rows={rows}/>
 
       <Errors
         errors={errors}

@@ -43,7 +43,7 @@ component Tagger {
   }
 
   get color : String {
-    if (disabled) {
+    if disabled {
       "#999"
     } else {
       primary
@@ -59,8 +59,8 @@ component Tagger {
   }
 
   fun addTag : Promise(Void) {
-    if (Set.has(tags, tag)) {
-      Promise.never()
+    if Set.has(tags, tag) {
+      next { }
     } else {
       await onChange(Set.add(tags, tag))
       await next { tag: "" }

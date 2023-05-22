@@ -2,7 +2,7 @@ component Articles {
   connect Stores.Articles exposing { params, status }
 
   get articles : Array(Html) {
-    for (article of data.articles) {
+    for article of data.articles {
       <Articles.Item article={article}/>
     }
     |> Array.intersperse(<div::divider/>)
@@ -33,7 +33,7 @@ component Articles {
     let pages =
       getPages()
 
-    if (Array.isEmpty(pages)) {
+    if Array.isEmpty(pages) {
       Html.empty()
     } else {
       <div::pagination>
@@ -51,30 +51,28 @@ component Articles {
         Math.ceil(data.count / params.limit),
         params.page + 5)
 
-    if (end > 1) {
+    if end > 1 {
       let url =
         Window.url()
 
       let searchParams =
         SearchParams.fromString(url.search)
 
-      Array.range(start, end)
-      |> Array.map(
-        (page : Number) : Html {
-          let pageString =
-            Number.toString(page)
+      for page of Array.range(start, end) {
+        let pageString =
+          Number.toString(page)
 
-          let newSearchParams =
-            SearchParams.set(searchParams, "page", pageString)
+        let newSearchParams =
+          SearchParams.set(searchParams, "page", pageString)
 
-          let href =
-            url.path + "?" + SearchParams.toString(newSearchParams)
+        let href =
+          url.path + "?" + SearchParams.toString(newSearchParams)
 
-          <Pagination.Page
-            active={page - 1 == params.page}
-            page={pageString}
-            href={href}/>
-        })
+        <Pagination.Page
+          active={page - 1 == params.page}
+          page={pageString}
+          href={href}/>
+      }
     } else {
       []
     }

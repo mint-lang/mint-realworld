@@ -4,7 +4,7 @@ store Actions {
       "/profiles/" + profile.username + "/follow"
 
     let request =
-      if (profile.following or false) {
+      if profile.following or false {
         Http.delete(url)
       } else {
         Http.post(url)
@@ -20,7 +20,7 @@ store Actions {
       await Http.delete("/articles/" + slug)
       |> Api.send((object : Object) { Result.ok(void) })
 
-    case (status) {
+    case status {
       Api.Status::Ok => Window.navigate("/")
       => next { }
     }
@@ -31,7 +31,7 @@ store Actions {
       "/articles/" + article.slug + "/favorite"
 
     let request =
-      if (article.favorited) {
+      if article.favorited {
         Http.delete(url)
       } else {
         Http.post(url)
@@ -40,7 +40,7 @@ store Actions {
     let status =
       await Api.send(request, Article.fromResponse)
 
-    await case (status) {
+    await case status {
       Api.Status::Ok(article) => Stores.Articles.replaceArticle(article)
       => next { }
     }

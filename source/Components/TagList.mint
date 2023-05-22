@@ -11,7 +11,7 @@ component TagList {
   }
 
   get opacity : Number {
-    if (inactive) {
+    if inactive {
       0.5
     } else {
       1
@@ -20,7 +20,7 @@ component TagList {
 
   fun render : Html {
     <div::base>
-      for (tag of tags) {
+      for tag of tags {
         <Tag
           inactive={inactive}
           name={tag}/>

@@ -19,7 +19,7 @@ component CommentForm {
   }
 
   get buttonText : String {
-    if (Api.isLoading(status)) {
+    if Api.isLoading(status) {
       "Loading..."
     } else {
       "Post Comment"
@@ -31,7 +31,7 @@ component CommentForm {
   }
 
   fun render : Html {
-    case (user) {
+    case user {
       UserStatus::LoggedIn(user) =>
         <div::form>
           <Form.Field>

@@ -17,11 +17,7 @@ module User {
     }
   }
 
-  fun decodeEntity (object : Object) : Result(Object.Error, User) {
-    decode object as User
-  }
-
   fun fromResponse (object : Object) : Result(Object.Error, User) {
-    Object.Decode.field(object, "user", decodeEntity)
+    Object.Decode.field(object, "user", decode as User)
   }
 }

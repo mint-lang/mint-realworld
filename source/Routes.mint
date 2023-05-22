@@ -62,7 +62,7 @@ routes {
   /settings {
     await Application.initialize()
 
-    await case (Application.user) {
+    await case Application.user {
       UserStatus::LoggedIn(user) =>
         {
           await Forms.Settings.set(user)
@@ -76,7 +76,7 @@ routes {
   /sign-in {
     await Application.initialize()
 
-    await case (Application.user) {
+    await case Application.user {
       UserStatus::LoggedIn(user) => Window.navigate("/")
 
       UserStatus::LoggedOut =>
@@ -90,7 +90,7 @@ routes {
   /sign-up {
     await Application.initialize()
 
-    await case (Application.user) {
+    await case Application.user {
       UserStatus::LoggedOut => Application.setPage(Page::SignUp)
       UserStatus::LoggedIn(user) => Window.navigate("/")
     }
@@ -100,7 +100,7 @@ routes {
     await Application.initialize()
     await Forms.Article.reset()
 
-    await case (Application.user) {
+    await case Application.user {
       UserStatus::LoggedIn(user) => Application.setPage(Page::Editor)
       UserStatus::LoggedOut => Window.navigate("/")
     }
@@ -109,7 +109,7 @@ routes {
   /logout {
     await Application.initialize()
 
-    await case (Application.user) {
+    await case Application.user {
       UserStatus::LoggedIn(user) => Application.logout()
       UserStatus::LoggedOut => Window.navigate("/")
     }
@@ -120,7 +120,7 @@ routes {
 
     await {
       let article =
-        case (Stores.Articles.status) {
+        case Stores.Articles.status {
           Api.Status::Ok(data) =>
             data.articles
             |> Array.find(
@@ -130,7 +130,7 @@ routes {
           => Article.empty()
         }
 
-      if (article.slug == slug) {
+      if article.slug == slug {
         Stores.Article.set(article)
       } else {
         Stores.Article.load(slug)
@@ -149,14 +149,14 @@ routes {
       let article =
         Stores.Article.article
 
-      if (article.slug == slug) {
+      if article.slug == slug {
         Stores.Article.set(article)
       } else {
         Stores.Article.load(slug)
       }
     }
 
-    case (Stores.Article.status) {
+    case Stores.Article.status {
       Api.Status::Ok(article) =>
         {
           Forms.Article.set(article)

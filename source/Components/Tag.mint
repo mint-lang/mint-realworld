@@ -38,7 +38,7 @@ component Tag {
   }
 
   get pointerEvents : String {
-    if (inactive) {
+    if inactive {
       "none"
     } else {
       ""
@@ -46,7 +46,7 @@ component Tag {
   }
 
   get backgroundHover : String {
-    if (active) {
+    if active {
       primaryDark
     } else {
       "#6b747b"
@@ -54,7 +54,7 @@ component Tag {
   }
 
   get background : String {
-    if (active) {
+    if active {
       primary
     } else {
       "#818a91"

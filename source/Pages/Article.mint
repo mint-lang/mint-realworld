@@ -82,7 +82,7 @@ component Pages.Article {
   }
 
   get isMine : Bool {
-    case (user) {
+    case user {
       UserStatus::LoggedIn(user) => user.username == article.author.username
       => false
     }

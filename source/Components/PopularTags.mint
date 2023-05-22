@@ -32,7 +32,7 @@ component PopularTags {
 
   fun render : Html {
     let tags =
-      case (status) {
+      case status {
         Api.Status::Ok(tags) => tags
         => []
       }

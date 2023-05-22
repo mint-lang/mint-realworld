@@ -52,7 +52,7 @@ store Forms.Settings {
       |> Http.jsonBody(body)
       |> Api.send(User.fromResponse)
 
-    await case (newStatus) {
+    await case newStatus {
       Api.Status::Ok(user) =>
         {
           await Application.setUser(user)

@@ -21,7 +21,7 @@ component Errors {
   }
 
   fun render : Html {
-    if (Array.isEmpty(errors)) {
+    if Array.isEmpty(errors) {
       Html.empty()
     } else {
       <ul::base>

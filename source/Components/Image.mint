@@ -30,7 +30,7 @@ component Image {
   }
 
   get opacity : Number {
-    case (status) {
+    case status {
       Image.Status::Ok => 1
       => 0
     }

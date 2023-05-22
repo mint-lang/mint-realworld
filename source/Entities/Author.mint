@@ -15,11 +15,7 @@ module Author {
     }
   }
 
-  fun decodeEntity (object : Object) : Result(Object.Error, Author) {
-    decode object as Author
-  }
-
   fun fromResponse (object : Object) : Result(Object.Error, Author) {
-    Object.Decode.field(object, "profile", decodeEntity)
+    Object.Decode.field(object, "profile", decode as Author)
   }
 }

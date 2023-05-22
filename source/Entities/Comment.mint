@@ -17,11 +17,7 @@ module Comment {
     }
   }
 
-  fun decodeEntity (object : Object) : Result(Object.Error, Comment) {
-    decode object as Comment
-  }
-
   fun fromResponse (object : Object) : Result(Object.Error, Comment) {
-    Object.Decode.field(object, "comment", decodeEntity)
+    Object.Decode.field(object, "comment", decode as Comment)
   }
 }

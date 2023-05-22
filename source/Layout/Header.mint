@@ -107,7 +107,7 @@ component Header {
   }
 
   get links : Html {
-    case (user) {
+    case user {
       UserStatus::LoggedOut =>
         <>
           <a::link href="/sign-in">

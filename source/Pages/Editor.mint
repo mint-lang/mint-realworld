@@ -58,7 +58,7 @@ component Pages.Editor {
   }
 
   get formTitle : String {
-    if (Maybe.isJust(slug)) {
+    if Maybe.isJust(slug) {
       "Edit Article"
     } else {
       "New Article"
@@ -66,9 +66,9 @@ component Pages.Editor {
   }
 
   get buttonText : String {
-    if (disabled) {
+    if disabled {
       "Loading..."
-    } else if (Maybe.isJust(slug)) {
+    } else if Maybe.isJust(slug) {
       "Update"
     } else {
       "Create"

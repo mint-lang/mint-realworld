@@ -31,24 +31,21 @@ store Stores.Articles {
 
   fun replaceArticle (article : Article) : Promise(Void) {
     let nextStatus =
-      case (status) {
-        Api.Status::Ok(data) =>
-          {
-            let articles =
-              Array.map(
-                data.articles,
-                (item : Article) : Article {
-                  if (item.slug == article.slug) {
-                    article
-                  } else {
-                    item
-                  }
-                })
+      if let Api.Status::Ok(data) = status {
+        let articles =
+          Array.map(
+            data.articles,
+            (item : Article) : Article {
+              if item.slug == article.slug {
+                article
+              } else {
+                item
+              }
+            })
 
-            Api.Status::Ok({ data | articles: articles })
-          }
-
-        => status
+        Api.Status::Ok({ data | articles: articles })
+      } else {
+        status
       }
 
     next { status: nextStatus }
@@ -86,7 +83,7 @@ store Stores.Articles {
       Number.toString(params.page * params.limit)
 
     let favoritedValue =
-      if (params.favorited) {
+      if params.favorited {
         params.author
       } else {
         ""
@@ -102,7 +99,7 @@ store Stores.Articles {
       |> SearchParams.toString()
 
     let request =
-      if (params.feed) {
+      if params.feed {
         Http.get("/articles/feed?" + search)
       } else {
         Http.get("/articles?" + search)
@@ -111,7 +108,7 @@ store Stores.Articles {
     let newStatus =
       await Api.send(
         request,
-        (object : Object) : Result(Object.Error, Stores.Articles) { decode object as Stores.Articles })
+        decode as Stores.Articles)
 
     await next { status: newStatus }
   }

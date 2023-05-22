@@ -27,20 +27,21 @@ store Application {
   fun initialize : Promise(Void) {
     Http.abortAll()
 
-    case (Storage.Local.get("user")) {
-      Result::Err => next { user: UserStatus::LoggedOut }
+    let nextUser =
+      {
+        let Result::Ok(data) =
+          Storage.Local.get("user") or return UserStatus::LoggedOut
 
-      Result::Ok(data) =>
-        case (Json.parse(data)) {
-          Result::Err => next { user: UserStatus::LoggedOut }
+        let Result::Ok(object) =
+          Json.parse(data) or return UserStatus::LoggedOut
 
-          Result::Ok(object) =>
-            case (decode object as User) {
-              Result::Ok(currentUser) => next { user: UserStatus::LoggedIn(currentUser) }
-              Result::Err => next { user: UserStatus::LoggedOut }
-            }
-        }
-    }
+        let Result::Ok(currentUser) =
+          decode object as User or return UserStatus::LoggedOut
+
+        UserStatus::LoggedIn(currentUser)
+      }
+
+    next { user: nextUser }
   }
 
   fun setUser (user : User) : Promise(Void) {

@@ -29,7 +29,7 @@ component Status {
   }
 
   fun render : Html {
-    case (status) {
+    case status {
       Status::Error =>
         <div::base>
           <div::message>

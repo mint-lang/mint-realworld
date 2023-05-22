@@ -24,14 +24,9 @@ store Forms.Comment {
 
     await next { status: newStatus }
 
-    await case (newStatus) {
-      Api.Status::Ok =>
-        {
-          await Stores.Comments.load(slug)
-          await reset()
-        }
-
-      => Promise.never()
+    if let Api.Status::Ok(value) = newStatus {
+      await Stores.Comments.load(slug)
+      await reset()
     }
   }
 }
