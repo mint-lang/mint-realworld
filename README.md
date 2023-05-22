@@ -16,7 +16,7 @@ For more information on how to this works with other frontends/backends, head ov
 
 This implemenation only uses the **Mint** language and it's standard library without any third party dependencies.
 
-To learn more about **Mint** check out the [Guide](guide.mint-lang.com)
+To learn more about **Mint** check out the [Guide](https://mint-lang.com/guide)
 
 # Differences
 
