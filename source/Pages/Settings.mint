@@ -1,4 +1,4 @@
-component Pages.Settings {
+async component Pages.Settings {
   connect Forms.Settings exposing {
     submit,
     email,

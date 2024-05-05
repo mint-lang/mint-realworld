@@ -8,7 +8,7 @@ component Title {
 
   fun render : Html {
     <div::base>
-      <{ children }>
+      children
     </div>
   }
 }

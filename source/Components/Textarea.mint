@@ -50,7 +50,7 @@ component Textarea {
   fun render : Html {
     <>
       <Label>
-        <{ name }>
+        name
       </Label>
 
       <textarea::base

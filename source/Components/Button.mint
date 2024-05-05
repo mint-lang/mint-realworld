@@ -37,7 +37,7 @@ component Button {
       onClick={onClick}
       disabled={disabled}>
 
-      <{ children }>
+      children
 
     </button>
   }

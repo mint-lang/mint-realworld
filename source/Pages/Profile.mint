@@ -1,4 +1,4 @@
-component Pages.Profile {
+async component Pages.Profile {
   connect Stores.Articles exposing { params }
   connect Stores.Profile exposing { profile }
 

@@ -1,4 +1,4 @@
-component Pages.SignUp {
+async component Pages.SignUp {
   connect Forms.SignUp exposing {
     setPassword,
     setUsername,

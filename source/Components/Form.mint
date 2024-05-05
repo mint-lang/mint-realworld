@@ -22,7 +22,7 @@ component Form {
         type="text"
         value=""/>
 
-      <{ children }>
+      children
 
     </form>
   }

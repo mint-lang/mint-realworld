@@ -1,5 +1,5 @@
 store Forms.Settings {
-  state status : Api.Status(User) = Api.Status::Initial
+  state status : Api.Status(User) = Api.Status.Initial
 
   state username : String = ""
   state email : String = ""
@@ -25,7 +25,7 @@ store Forms.Settings {
   fun set (user : User) : Promise(Void) {
     next
       {
-        status: Api.Status::Initial,
+        status: Api.Status.Initial,
         image: Maybe.withDefault(user.image, ""),
         bio: Maybe.withDefault(user.bio, ""),
         username: user.username,
@@ -34,7 +34,7 @@ store Forms.Settings {
   }
 
   fun submit : Promise(Void) {
-    await next { status: Api.Status::Loading }
+    await next { status: Api.Status.Loading }
 
     let body =
       encode {
@@ -53,7 +53,7 @@ store Forms.Settings {
       |> Api.send(User.fromResponse)
 
     await case newStatus {
-      Api.Status::Ok(user) =>
+      Api.Status.Ok(user) =>
         {
           await Application.setUser(user)
           await Window.navigate("/users/" + username)

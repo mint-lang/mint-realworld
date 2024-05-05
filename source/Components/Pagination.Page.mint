@@ -39,7 +39,7 @@ component Pagination.Page {
 
   fun render : Html {
     <a::base href={href}>
-      <{ page }>
+      page
     </a>
   }
 }

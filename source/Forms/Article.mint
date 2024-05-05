@@ -1,5 +1,5 @@
 store Forms.Article {
-  state status : Api.Status(Article) = Api.Status::Initial
+  state status : Api.Status(Article) = Api.Status.Initial
 
   state slug : Maybe(String) = Maybe.nothing()
   state tags : Set(String) = Set.empty()
@@ -46,7 +46,7 @@ store Forms.Article {
   }
 
   fun submit : Promise(Void) {
-    await next { status: Api.Status::Loading }
+    await next { status: Api.Status.Loading }
 
     let body =
       encode {
@@ -71,9 +71,10 @@ store Forms.Article {
       |> Http.jsonBody(body)
       |> Api.send(Article.fromResponse)
 
-    await case newStatus {
-      Api.Status::Ok(article) => Window.navigate("/article/" + article.slug)
-      => next { status: newStatus }
+    if let Api.Status.Ok(article) = newStatus {
+      Window.navigate("/article/" + article.slug)
     }
+
+    next { status: newStatus }
   }
 }

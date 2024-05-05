@@ -1,4 +1,4 @@
-component Pages.SignIn {
+async component Pages.SignIn {
   connect Forms.SignIn exposing { submit, status, setEmail, setPassword, email, password }
 
   connect Theme exposing { primary }
@@ -18,7 +18,7 @@ component Pages.SignIn {
         requestErrors
       }
 
-    if let Api.Status::Error(error) = status {
+    if let Api.Status.Error(error) = status {
       <GlobalErrors errors={errors}/>
     }
   }
@@ -39,7 +39,7 @@ component Pages.SignIn {
       title="Sign In">
 
       <Form>
-        <{ error }>
+        error
 
         <Form.Field>
           <Input

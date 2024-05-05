@@ -1,4 +1,4 @@
-component Pages.Home {
+async component Pages.Home {
   connect Stores.Articles exposing { status, params }
   connect Application exposing { user }
 
@@ -29,9 +29,9 @@ component Pages.Home {
 
   get banner : Html {
     case user {
-      UserStatus::LoggedIn => Html.empty()
+      UserStatus.LoggedIn => Html.empty()
 
-      UserStatus::LoggedOut =>
+      UserStatus.LoggedOut =>
         <div::banner>
           <h1>"Conduit"</h1>
 
@@ -42,7 +42,7 @@ component Pages.Home {
 
   fun render : Html {
     <div>
-      <{ banner }>
+      banner
 
       <Container>
         <div::layout>
@@ -53,7 +53,7 @@ component Pages.Home {
                 href="/articles?page=1"
                 label="Global Feed"/>
 
-              <If condition={user != UserStatus::LoggedOut}>
+              <If condition={user != UserStatus.LoggedOut}>
                 <Tab
                   active={params.tag == "" && params.feed}
                   href="/feed?page=1"

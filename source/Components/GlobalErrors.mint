@@ -14,16 +14,16 @@ component GlobalErrors {
 
   fun renderError (error : String) : Html {
     <div>
-      <{ error }>
+      error
     </div>
   }
 
   fun render : Html {
     if Array.isEmpty(errors) {
-      Html.empty()
+      <></>
     } else {
       <div::base>
-        <{ Array.map(errors, renderError) }>
+        Array.map(errors, renderError)
       </div>
     }
   }

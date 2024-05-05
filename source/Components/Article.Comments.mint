@@ -4,7 +4,7 @@ component Article.Comments {
   get content : Html {
     let comments =
       case status {
-        Api.Status::Ok(comments) => comments
+        Ok(comments) => comments
         => []
       }
 
@@ -25,7 +25,7 @@ component Article.Comments {
       loadingMessage="Loading comments..."
       status={Api.toStatus(status)}>
 
-      <{ content }>
+      content
 
     </Status>
   }

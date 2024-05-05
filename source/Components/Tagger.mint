@@ -73,7 +73,7 @@ component Tagger {
 
   fun renderTag (tag : String) : Html {
     <div::tag>
-      <{ tag }>
+      tag
 
       <svg::icon
         onClick={(event : Html.Event) : Promise(Void) { removeTag(tag) }}
@@ -106,10 +106,7 @@ component Tagger {
         value={tag}/>
 
       <div::tags>
-        <{
-          Set.map(tags, renderTag)
-          |> Set.toArray()
-        }>
+        Set.toArray(Set.map(tags, renderTag))
       </div>
     </div>
   }

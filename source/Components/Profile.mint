@@ -47,7 +47,7 @@ component Profile {
   get bio : Html {
     if Maybe.isJust(profile.bio) {
       <div::bio>
-        <{ Maybe.withDefault(profile.bio, "") }>
+        Maybe.withDefault(profile.bio, "")
       </div>
     } else {
       Html.empty()
@@ -66,7 +66,7 @@ component Profile {
 
   get followIcon : Html {
     if loading {
-      Html.empty()
+      <></>
     } else if profile.following or false {
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -91,24 +91,19 @@ component Profile {
   }
 
   get followButton : Html {
-    case user {
-      UserStatus::LoggedOut => Html.empty()
+    if let LoggedIn(user) = user {
+      if user.username != profile.username {
+        <div::button>
+          <Button
+            onClick={handleFollow}
+            disabled={loading}>
 
-      UserStatus::LoggedIn(user) =>
-        if user.username != profile.username {
-          <div::button>
-            <Button
-              onClick={handleFollow}
-              disabled={loading}>
+            followIcon
+            followText
 
-              <{ followIcon }>
-              <{ followText }>
-
-            </Button>
-          </div>
-        } else {
-          Html.empty()
-        }
+          </Button>
+        </div>
+      }
     }
   }
 
@@ -118,7 +113,7 @@ component Profile {
     let newStatus =
       await toggleUserFollow(profile)
 
-    if let Api.Status::Ok(profile) = await newStatus {
+    if let Ok(profile) = await newStatus {
       Stores.Profile.setProfile(profile)
     }
 
@@ -139,11 +134,11 @@ component Profile {
           height="150px"/>
 
         <div::username>
-          <{ profile.username }>
+          profile.username
         </div>
 
-        <{ bio }>
-        <{ followButton }>
+        bio
+        followButton
 
       </Status>
     </div>

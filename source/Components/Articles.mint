@@ -37,7 +37,7 @@ component Articles {
       Html.empty()
     } else {
       <div::pagination>
-        <{ pages }>
+        pages
       </div>
     }
   }
@@ -73,8 +73,6 @@ component Articles {
           page={pageString}
           href={href}/>
       }
-    } else {
-      []
     }
   }
 
@@ -84,8 +82,8 @@ component Articles {
       loadingMessage="Loading articles..."
       status={Api.toStatus(status)}>
 
-      <{ articles }>
-      <{ pagination }>
+      articles
+      pagination
 
     </Status>
   }

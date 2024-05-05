@@ -92,7 +92,7 @@ component Articles.Item {
       <div::content>
         <a::link href={href}>
           <div::title>
-            <{ article.title }>
+            article.title
           </div>
 
           <div::description>
@@ -117,7 +117,7 @@ component Articles.Item {
           <HeartIcon/>
 
           <span::button-text>
-            <{ Number.toString(article.favoritesCount) }>
+            Number.toString(article.favoritesCount)
           </span>
 
         </button>

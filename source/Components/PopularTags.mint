@@ -33,7 +33,7 @@ component PopularTags {
   fun render : Html {
     let tags =
       case status {
-        Api.Status::Ok(tags) => tags
+        Ok(tags) => tags
         => []
       }
 
@@ -46,7 +46,7 @@ component PopularTags {
         status={Api.toStatus(status)}>
 
         <div::tags>
-          <{ Array.map(tags, renderTag) }>
+          Array.map(tags, renderTag)
         </div>
 
       </Status>

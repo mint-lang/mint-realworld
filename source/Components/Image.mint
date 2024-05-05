@@ -1,4 +1,4 @@
-enum Image.Status {
+type Image.Status {
   Initial
   Invalid
   Ok
@@ -10,7 +10,7 @@ component Image {
   property width : String = "auto"
   property src : String = ""
 
-  state status : Image.Status = Image.Status::Initial
+  state status : Image.Status = Image.Status.Initial
 
   style image {
     border-radius: #{borderRadius};
@@ -31,7 +31,7 @@ component Image {
 
   get opacity : Number {
     case status {
-      Image.Status::Ok => 1
+      Ok => 1
       => 0
     }
   }

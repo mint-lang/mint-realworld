@@ -1,4 +1,4 @@
-record User {
+type User {
   bio : Maybe(String),
   email : String,
   image : Maybe(String),

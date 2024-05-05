@@ -46,11 +46,11 @@ component Article.Info {
       </a>
 
       <a::author href="/users/#{author.username}">
-        <{ author.username }>
+        author.username
       </a>
 
       <span::date>
-        <{ Time.distanceOfTimeInWords(time, Time.now(), Time.Format:ENGLISH) }>
+        Time.distanceOfTimeInWords(time, Time.now(), Time.Format.ENGLISH)
       </span>
     </div>
   }

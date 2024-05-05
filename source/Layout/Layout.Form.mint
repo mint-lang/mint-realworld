@@ -37,13 +37,13 @@ component Layout.Form {
     <div::base>
       <Container>
         <div::title>
-          <{ title }>
+          title
         </div>
 
         <GlobalErrors errors={errors}/>
 
         <Form>
-          <{ children }>
+          children
         </Form>
 
         <hr::hr/>
@@ -53,7 +53,7 @@ component Layout.Form {
             disabled={disabled}
             onClick={(event : Html.Event) : Promise(Void) { onSubmit() }}>
 
-            <{ buttonText }>
+            buttonText
 
           </Button>
         </div>

@@ -1,5 +1,5 @@
 store Forms.Comment {
-  state status : Api.Status(Comment) = Api.Status::Initial
+  state status : Api.Status(Comment) = Api.Status.Initial
 
   state comment : String = ""
 
@@ -12,7 +12,7 @@ store Forms.Comment {
   }
 
   fun submit (slug : String) : Promise(Void) {
-    await next { status: Api.Status::Loading }
+    await next { status: Api.Status.Loading }
 
     let params =
       encode { comment: { body: comment } }
@@ -24,7 +24,7 @@ store Forms.Comment {
 
     await next { status: newStatus }
 
-    if let Api.Status::Ok(value) = newStatus {
+    if let Api.Status.Ok(value) = newStatus {
       await Stores.Comments.load(slug)
       await reset()
     }

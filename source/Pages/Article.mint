@@ -1,4 +1,4 @@
-component Pages.Article {
+async component Pages.Article {
   connect Stores.Article exposing { article, status }
   connect Theme exposing { primary, primaryText }
   connect Actions exposing { deleteArticle }
@@ -83,7 +83,7 @@ component Pages.Article {
 
   get isMine : Bool {
     case user {
-      UserStatus::LoggedIn(user) => user.username == article.author.username
+      UserStatus.LoggedIn(user) => user.username == article.author.username
       => false
     }
   }
@@ -98,7 +98,7 @@ component Pages.Article {
         <div::header>
           <Container>
             <div::title>
-              <{ article.title }>
+              article.title
             </div>
 
             <Article.Info

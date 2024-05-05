@@ -21,7 +21,7 @@ store Actions {
       |> Api.send((object : Object) { Result.ok(void) })
 
     case status {
-      Api.Status::Ok => Window.navigate("/")
+      Api.Status.Ok => Window.navigate("/")
       => next { }
     }
   }
@@ -41,7 +41,7 @@ store Actions {
       await Api.send(request, Article.fromResponse)
 
     await case status {
-      Api.Status::Ok(article) => Stores.Articles.replaceArticle(article)
+      Api.Status.Ok(article) => Stores.Articles.replaceArticle(article)
       => next { }
     }
   }

@@ -1,5 +1,5 @@
 store Forms.SignUp {
-  state status : Api.Status(User) = Api.Status::Initial
+  state status : Api.Status(User) = Api.Status.Initial
 
   state username : String = ""
   state password : String = ""
@@ -18,7 +18,7 @@ store Forms.SignUp {
   }
 
   fun submit : Promise(Void) {
-    await next { status: Api.Status::Loading }
+    await next { status: Api.Status.Loading }
 
     let body =
       encode {
@@ -36,7 +36,7 @@ store Forms.SignUp {
       |> Api.send(User.fromResponse)
 
     await case newStatus {
-      Api.Status::Ok(user) => Application.login(user)
+      Api.Status.Ok(user) => Application.login(user)
       => next { status: newStatus }
     }
   }

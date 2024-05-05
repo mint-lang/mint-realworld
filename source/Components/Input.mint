@@ -45,7 +45,7 @@ component Input {
   }
 
   fun handleKeyDown (event : Html.Event) : a {
-    if event.keyCode == Html.Event:ENTER {
+    if event.keyCode == Html.Event.ENTER {
       Html.Event.preventDefault(event)
       onEnter()
     }
@@ -54,7 +54,7 @@ component Input {
   fun render : Html {
     <>
       <Label>
-        <{ name }>
+        name
       </Label>
 
       <input::base

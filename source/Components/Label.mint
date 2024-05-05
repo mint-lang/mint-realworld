@@ -8,7 +8,7 @@ component Label {
 
   fun render : Html {
     <label::base>
-      <{ children }>
+      children
     </label>
   }
 }

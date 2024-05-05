@@ -32,7 +32,7 @@ component CommentForm {
 
   fun render : Html {
     case user {
-      UserStatus::LoggedIn(user) =>
+      LoggedIn(user) =>
         <div::form>
           <Form.Field>
             <Textarea
@@ -48,13 +48,13 @@ component CommentForm {
               disabled={Api.isLoading(status)}
               onClick={handleClick}>
 
-              <{ buttonText }>
+              buttonText
 
             </Button>
           </div>
         </div>
 
-      UserStatus::LoggedOut =>
+      LoggedOut =>
         <div>
           <a href="/sign-in">
             "Sign in"

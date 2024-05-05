@@ -108,7 +108,7 @@ component Header {
 
   get links : Html {
     case user {
-      UserStatus::LoggedOut =>
+      LoggedOut =>
         <>
           <a::link href="/sign-in">
             <svg
@@ -146,7 +146,7 @@ component Header {
           </a>
         </>
 
-      UserStatus::LoggedIn(user) =>
+      LoggedIn(user) =>
         <>
           <a::link href="/new">
             <svg
@@ -251,7 +251,7 @@ component Header {
 
             </svg>
 
-            <{ user.username }>
+            user.username
           </a>
         </>
     }
@@ -272,7 +272,7 @@ component Header {
           </a>
 
           <div::links data-selector="links">
-            <{ links }>
+            links
           </div>
         </div>
       </Container>

@@ -62,12 +62,12 @@ component Layout.Outside {
 
       <div::form>
         <div::subtitle>
-          <{ title }>
+          title
         </div>
 
         <hr::hr/>
 
-        <{ children }>
+        children
 
         <hr::hr/>
 
@@ -75,7 +75,7 @@ component Layout.Outside {
           disabled={disabled}
           onClick={(event : Html.Event) : Promise(Void) { onClick() }}>
 
-          <{ buttonText }>
+          buttonText
 
         </Button>
       </div>

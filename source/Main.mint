@@ -3,38 +3,38 @@ component Main {
 
   fun render : Html {
     case page {
-      Page::Initial => Html.empty()
+      Page.Initial => Html.empty()
 
-      Page::Home =>
+      Page.Home =>
         <Layout>
           <Pages.Home/>
         </Layout>
 
-      Page::Article =>
+      Page.Article =>
         <Layout>
           <Pages.Article/>
         </Layout>
 
-      Page::Editor =>
+      Page.Editor =>
         <Layout>
           <Pages.Editor/>
         </Layout>
 
-      Page::Profile =>
+      Page.Profile =>
         <Layout>
           <Pages.Profile/>
         </Layout>
 
-      Page::Settings =>
+      Page.Settings =>
         <Layout>
           <Pages.Settings/>
         </Layout>
 
-      Page::NotFound =>
+      Page.NotFound =>
         <Layout>"WTF"</Layout>
 
-      Page::SignUp => <Pages.SignUp/>
-      Page::SignIn => <Pages.SignIn/>
+      Page.SignUp => <Pages.SignUp/>
+      Page.SignIn => <Pages.SignIn/>
     }
   }
 }

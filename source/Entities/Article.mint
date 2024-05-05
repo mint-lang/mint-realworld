@@ -1,4 +1,4 @@
-record Article {
+type Article {
   description : Maybe(String),
   title : String,
   body : String,

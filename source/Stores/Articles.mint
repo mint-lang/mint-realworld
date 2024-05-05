@@ -1,4 +1,4 @@
-record Stores.Articles.Params {
+type Stores.Articles.Params {
   favorited : Bool,
   author : String,
   limit : Number,
@@ -7,13 +7,13 @@ record Stores.Articles.Params {
   feed : Bool
 }
 
-record Stores.Articles {
+type Stores.Articles {
   count : Number using "articlesCount",
   articles : Array(Article)
 }
 
 store Stores.Articles {
-  state status : Api.Status(Stores.Articles) = Api.Status::Initial
+  state status : Api.Status(Stores.Articles) = Api.Status.Initial
 
   state params : Stores.Articles.Params =
     {
@@ -26,12 +26,12 @@ store Stores.Articles {
     }
 
   fun reset : Promise(Void) {
-    next { status: Api.Status::Initial }
+    next { status: Api.Status.Initial }
   }
 
   fun replaceArticle (article : Article) : Promise(Void) {
     let nextStatus =
-      if let Api.Status::Ok(data) = status {
+      if let Api.Status.Ok(data) = status {
         let articles =
           Array.map(
             data.articles,
@@ -43,7 +43,7 @@ store Stores.Articles {
               }
             })
 
-        Api.Status::Ok({ data | articles: articles })
+        Api.Status.Ok({ data | articles: articles })
       } else {
         status
       }
@@ -65,7 +65,7 @@ store Stores.Articles {
 
     await next
       {
-        status: Api.Status::Loading,
+        status: Api.Status.Loading,
         params:
           { params |
             favorited: favorited,

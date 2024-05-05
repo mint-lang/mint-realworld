@@ -1,4 +1,4 @@
-record Comment {
+type Comment {
   createdAt : Time,
   updatedAt : Time,
   author : Author,

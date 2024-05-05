@@ -1,12 +1,12 @@
 store Stores.Comments {
-  state status : Api.Status(Array(Comment)) = Api.Status::Initial
+  state status : Api.Status(Array(Comment)) = Api.Status.Initial
 
   fun reset : Promise(Void) {
-    next { status: Api.Status::Initial }
+    next { status: Api.Status.Initial }
   }
 
   fun load (slug : String) : Promise(Void) {
-    await next { status: Api.Status::Loading }
+    await next { status: Api.Status.Loading }
 
     let newStatus =
       await Http.get("/articles/" + slug + "/comments")

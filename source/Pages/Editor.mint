@@ -1,4 +1,4 @@
-component Pages.Editor {
+async component Pages.Editor {
   connect Forms.Article exposing {
     submit,
     status,

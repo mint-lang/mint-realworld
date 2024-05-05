@@ -1,17 +1,17 @@
 store Stores.Profile {
-  state status : Api.Status(Author) = Api.Status::Initial
+  state status : Api.Status(Author) = Api.Status.Initial
 
   get profile : Author {
     Api.withDefault(Author.empty(), status)
   }
 
   fun setProfile (profile : Author) : Promise(Void) {
-    next { status: Api.Status::Ok(profile) }
+    next { status: Api.Status.Ok(profile) }
   }
 
   fun load (author : String) : Promise(Void) {
     if profile.username != author {
-      await next { status: Api.Status::Loading }
+      await next { status: Api.Status.Loading }
 
       let newStatus =
         await Http.get("/profiles/" + author)
