@@ -22,10 +22,10 @@ store Stores.Article {
     await next { status: Api.Status.Loading }
 
     let newStatus =
-      await "/articles/" + slug
+      "/articles/" + slug
       |> Http.get()
       |> Api.send(Article.fromResponse)
 
-    await next { status: newStatus }
+    next { status: await newStatus }
   }
 }

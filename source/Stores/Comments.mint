@@ -9,12 +9,12 @@ store Stores.Comments {
     await next { status: Api.Status.Loading }
 
     let newStatus =
-      await Http.get("/articles/" + slug + "/comments")
+      Http.get("/articles/" + slug + "/comments")
       |> Api.send(
         (object : Object) : Result(Object.Error, Array(Comment)) {
           Object.Decode.field(object, "comments", decode as Array(Comment))
         })
 
-    await next { status: newStatus }
+    next { status: await newStatus }
   }
 }

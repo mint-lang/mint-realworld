@@ -55,12 +55,15 @@ module Api {
 
   fun decodeErrors (body : String) : Api.Status(a) {
     case Json.parse(body) {
-      Result.Err => errorStatus("request", "Could not parse the error response.")
+      Result.Err => errorStatus("request",
+        "Could not parse the error response.")
 
       Result.Ok(object) =>
         case decode object as ErrorResponse {
           Result.Ok(errors) => Api.Status.Error(errors.errors)
-          Result.Err => errorStatus("request", "Could not decode the error response.")
+
+          Result.Err =>
+            errorStatus("request", "Could not decode the error response.")
         }
     }
   }
@@ -73,21 +76,18 @@ module Api {
     let request =
       case Application.user {
         UserStatus.LoggedIn(user) =>
-          Http.header(
-            rawRequest,
-            "Authorization",
-            "Token " + user.token)
+          Http.header(rawRequest, "Authorization", "Token " + user.token)
 
         UserStatus.LoggedOut => rawRequest
       }
 
     /* Get the response. */
     let result =
-      await { request | url: "https://api.realworld.io/api" + request.url }
+      { request | url: "https://api.realworld.io/api" + request.url }
       |> Http.header("Content-Type", "application/json")
       |> Http.send()
 
-    case result {
+    case await result {
       Result.Err => errorStatus("request", "Network error.")
 
       Result.Ok(response) =>
@@ -100,12 +100,15 @@ module Api {
 
             =>
               case Json.parse(response.bodyString) {
-                Result.Err => errorStatus("request", "Could not parse the response.")
+                Result.Err =>
+                  errorStatus("request", "Could not parse the response.")
 
                 Result.Ok(object) =>
                   case decoder(object) {
                     Result.Ok(data) => Api.Status.Ok(data)
-                    Result.Err => errorStatus("request", "Could not decode the response.")
+
+                    Result.Err =>
+                      errorStatus("request", "Could not decode the response.")
                   }
               }
           }

@@ -55,8 +55,6 @@ component Image {
   }
 
   fun render : Html {
-    <div::base>
-      <img::image src={src}/>
-    </div>
+    <div::base><img::image src={src}/></div>
   }
 }

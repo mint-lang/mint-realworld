@@ -18,11 +18,11 @@ store Forms.Comment {
       encode { comment: { body: comment } }
 
     let newStatus =
-      await Http.post("/articles/" + slug + "/comments")
+      await (Http.post("/articles/" + slug + "/comments")
       |> Http.jsonBody(params)
-      |> Api.send(Comment.fromResponse)
+      |> Api.send(Comment.fromResponse))
 
-    await next { status: newStatus }
+    next { status: newStatus }
 
     if let Api.Status.Ok(value) = newStatus {
       await Stores.Comments.load(slug)

@@ -30,8 +30,6 @@ component Tab {
   }
 
   fun render : Html {
-    <a::base href={href}>
-      label
-    </a>
+    <a::base href={href}>label</a>
   }
 }

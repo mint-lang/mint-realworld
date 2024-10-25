@@ -17,10 +17,10 @@ store Actions {
     await Window.confirm("Are you sure?")
 
     let status =
-      await Http.delete("/articles/" + slug)
+      Http.delete("/articles/" + slug)
       |> Api.send((object : Object) { Result.ok(void) })
 
-    case status {
+    case await status {
       Api.Status.Ok => Window.navigate("/")
       => next { }
     }
@@ -38,9 +38,9 @@ store Actions {
       }
 
     let status =
-      await Api.send(request, Article.fromResponse)
+      Api.send(request, Article.fromResponse)
 
-    await case status {
+    case await status {
       Api.Status.Ok(article) => Stores.Articles.replaceArticle(article)
       => next { }
     }

@@ -30,23 +30,13 @@ component Status {
 
   fun render : Html {
     case status {
-      Error =>
-        <div::base>
-          <div::message>
-            message
-          </div>
-        </div>
+      Error => <div::base><div::message>message</div></div>
 
-      Ok =>
-        <>
-          children
-        </>
+      Ok => <>children</>
 
       Loading =>
         <div::base>
-          <div::message>
-            loadingMessage
-          </div>
+          <div::message>loadingMessage</div>
 
           <Loader/>
         </div>

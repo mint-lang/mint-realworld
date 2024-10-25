@@ -12,18 +12,15 @@ component Form {
   }
 
   fun render : Html {
-    <form
-      onSubmit={handleSubmit}
-      autocomplete="false">
-
+    <form onSubmit={handleSubmit} autocomplete="false">
       <input::hidden
         name="prevent_autofill"
         id="prevent_autofill"
         type="text"
-        value=""/>
+        value=""
+      />
 
       children
-
     </form>
   }
 }

@@ -123,8 +123,7 @@ routes {
         case Stores.Articles.status {
           Api.Status.Ok(data) =>
             data.articles
-            |> Array.find(
-              (article : Article) : Bool { article.slug == slug })
+            |> Array.find((article : Article) : Bool { article.slug == slug })
             |> Maybe.withDefault(Article.empty())
 
           => Article.empty()

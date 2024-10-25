@@ -16,14 +16,7 @@ store Stores.Articles {
   state status : Api.Status(Stores.Articles) = Api.Status.Initial
 
   state params : Stores.Articles.Params =
-    {
-      favorited: false,
-      feed: false,
-      author: "",
-      limit: 10,
-      page: 0,
-      tag: ""
-    }
+    { favorited: false, feed: false, author: "", limit: 10, page: 0, tag: "" }
 
   fun reset : Promise(Void) {
     next { status: Api.Status.Initial }
@@ -33,8 +26,7 @@ store Stores.Articles {
     let nextStatus =
       if let Api.Status.Ok(data) = status {
         let articles =
-          Array.map(
-            data.articles,
+          Array.map(data.articles,
             (item : Article) : Article {
               if item.slug == article.slug {
                 article
@@ -63,18 +55,17 @@ store Stores.Articles {
       |> Maybe.withDefault(1)
       |> Math.max(1)
 
-    await next
-      {
-        status: Api.Status.Loading,
-        params:
-          { params |
-            favorited: favorited,
-            author: author,
-            page: page - 1,
-            feed: feed,
-            tag: tag
-          }
-      }
+    await next {
+      status: Api.Status.Loading,
+      params:
+        { params |
+          favorited: favorited,
+          author: author,
+          page: page - 1,
+          feed: feed,
+          tag: tag
+        }
+    }
 
     let limit =
       Number.toString(params.limit)
@@ -106,9 +97,7 @@ store Stores.Articles {
       }
 
     let newStatus =
-      await Api.send(
-        request,
-        decode as Stores.Articles)
+      await Api.send(request, decode as Stores.Articles)
 
     await next { status: newStatus }
   }

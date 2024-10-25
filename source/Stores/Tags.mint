@@ -13,14 +13,9 @@ store Stores.Tags {
       await next { status: Api.Status.Loading }
 
       let newStatus =
-        await Http.get("/tags")
-        |> Api.send(decodeTags)
+        Api.send(Http.get("/tags"), decodeTags)
 
-      await next
-        {
-          status: newStatus,
-          cached: true
-        }
+      next { status: await newStatus, cached: true }
     }
   }
 }

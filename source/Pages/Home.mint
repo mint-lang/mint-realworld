@@ -51,20 +51,20 @@ async component Pages.Home {
               <Tab
                 active={params.tag == "" && !params.feed}
                 href="/articles?page=1"
-                label="Global Feed"/>
+                label="Global Feed"
+              />
 
-              <If condition={user != UserStatus.LoggedOut}>
+              if user != UserStatus.LoggedOut {
                 <Tab
                   active={params.tag == "" && params.feed}
                   href="/feed?page=1"
-                  label="Your Feed"/>
-              </If>
+                  label="Your Feed"
+                />
+              }
 
-              <If condition={params.tag != ""}>
-                <Tab
-                  label={"#" + String.toUpperCase(params.tag)}
-                  active={true}/>
-              </If>
+              if params.tag != "" {
+                <Tab label={"#" + String.toUpperCase(params.tag)} active={true}/>
+              }
             </Tabs>
 
             <Articles/>

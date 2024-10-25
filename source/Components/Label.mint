@@ -7,8 +7,6 @@ component Label {
   }
 
   fun render : Html {
-    <label::base>
-      children
-    </label>
+    <label::base>children</label>
   }
 }

@@ -23,10 +23,7 @@ component Article.Comments {
     <Status
       message="There was an error loading the comments."
       loadingMessage="Loading comments..."
-      status={Api.toStatus(status)}>
-
-      content
-
-    </Status>
+      status={Api.toStatus(status)}
+    >content</Status>
   }
 }

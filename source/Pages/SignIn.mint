@@ -1,5 +1,12 @@
 async component Pages.SignIn {
-  connect Forms.SignIn exposing { submit, status, setEmail, setPassword, email, password }
+  connect Forms.SignIn exposing {
+    submit,
+    status,
+    setEmail,
+    setPassword,
+    email,
+    password
+  }
 
   connect Theme exposing { primary }
 
@@ -36,8 +43,8 @@ async component Pages.SignIn {
       buttonText={buttonText}
       disabled={disabled}
       onClick={submit}
-      title="Sign In">
-
+      title="Sign In"
+    >
       <Form>
         error
 
@@ -47,7 +54,8 @@ async component Pages.SignIn {
             onChange={setEmail}
             disabled={disabled}
             value={email}
-            name="Email"/>
+            name="Email"
+          />
         </Form.Field>
 
         <Form.Field>
@@ -57,10 +65,10 @@ async component Pages.SignIn {
             disabled={disabled}
             value={password}
             type="password"
-            name="Password"/>
+            name="Password"
+          />
         </Form.Field>
       </Form>
-
     </Layout.Outside>
   }
 }

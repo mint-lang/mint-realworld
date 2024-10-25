@@ -28,9 +28,7 @@ component Footer {
         <div::container>
           <span>"Implementation of "</span>
 
-          <a href="https://realworld.io/">
-            "https://realworld.io/"
-          </a>
+          <a href="https://realworld.io/">"https://realworld.io/"</a>
 
           <span>" in the Mint language."</span>
 

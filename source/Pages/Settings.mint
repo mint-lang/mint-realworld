@@ -20,9 +20,7 @@ async component Pages.Settings {
     grid-template-rows: min-content min-content 1fr;
     grid-template-columns: 1fr 1fr;
 
-    grid-template-areas: "image bio"
-                         "username bio"
-                         "email bio";
+    grid-template-areas: "image bio""username bio""email bio";
 
     > *:nth-child(1) {
       grid-area: image;
@@ -41,7 +39,7 @@ async component Pages.Settings {
     }
 
     @media (max-width: 960px) {
-      grid-template-areas: "image" "username" "email" "bio";
+      grid-template-areas: "image""username""email""bio";
       grid-template-columns: 1fr;
       grid-template-rows: auto;
       grid-gap: 15px;
@@ -60,8 +58,8 @@ async component Pages.Settings {
     <Layout.Form
       errors={Api.errorsOf("request", status)}
       onSubmit={submit}
-      title="Settings">
-
+      title="Settings"
+    >
       <div::grid>
         <div::cell>
           <Form.Field>
@@ -71,7 +69,8 @@ async component Pages.Settings {
               onChange={setImage}
               disabled={disabled}
               value={image}
-              name="Image"/>
+              name="Image"
+            />
           </Form.Field>
         </div>
 
@@ -83,7 +82,8 @@ async component Pages.Settings {
               placeholder=""
               disabled={disabled}
               value={username}
-              name="Username"/>
+              name="Username"
+            />
           </Form.Field>
         </div>
 
@@ -95,7 +95,8 @@ async component Pages.Settings {
               placeholder=""
               disabled={disabled}
               value={email}
-              name="Email"/>
+              name="Email"
+            />
           </Form.Field>
         </div>
 
@@ -107,11 +108,11 @@ async component Pages.Settings {
               placeholder=""
               disabled={disabled}
               value={bio}
-              name="Bio"/>
+              name="Bio"
+            />
           </Form.Field>
         </div>
       </div>
-
     </Layout.Form>
   }
 }

@@ -14,8 +14,8 @@ store Stores.Profile {
       await next { status: Api.Status.Loading }
 
       let newStatus =
-        await Http.get("/profiles/" + author)
-        |> Api.send(Author.fromResponse)
+        await (Http.get("/profiles/" + author)
+        |> Api.send(Author.fromResponse))
 
       await next { status: newStatus }
     } else {

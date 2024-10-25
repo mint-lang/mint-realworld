@@ -24,14 +24,10 @@ component Article.Comment {
 
   fun render : Html {
     <div::base>
-      <div::content>
-        <Markdown content={comment.body}/>
-      </div>
+      <div::content><Markdown content={comment.body}/></div>
 
       <div::footer>
-        <Article.Info
-          author={comment.author}
-          time={comment.createdAt}/>
+        <Article.Info author={comment.author} time={comment.createdAt}/>
       </div>
     </div>
   }

@@ -91,35 +91,23 @@ component Articles.Item {
     <div::base>
       <div::content>
         <a::link href={href}>
-          <div::title>
-            article.title
-          </div>
+          <div::title>article.title</div>
 
           <div::description>
             <Markdown content={Maybe.withDefault(article.description, "")}/>
           </div>
 
-          <TagList
-            tags={article.tags}
-            inactive={true}/>
+          <TagList tags={article.tags} inactive={true}/>
         </a>
       </div>
 
       <div::footer>
-        <Article.Info
-          time={article.createdAt}
-          author={article.author}/>
+        <Article.Info time={article.createdAt} author={article.author}/>
 
-        <button::button
-          onClick={toggle}
-          disabled={loading}>
-
+        <button::button onClick={toggle} disabled={loading}>
           <HeartIcon/>
 
-          <span::button-text>
-            Number.toString(article.favoritesCount)
-          </span>
-
+          <span::button-text>Number.toString(article.favoritesCount)</span>
         </button>
       </div>
     </div>
