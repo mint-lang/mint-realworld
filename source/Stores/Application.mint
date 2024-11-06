@@ -1,9 +1,9 @@
-enum UserStatus {
+type UserStatus {
   LoggedIn(User)
   LoggedOut
 }
 
-enum Page {
+type Page {
   Settings
   NotFound
   Article
@@ -16,8 +16,8 @@ enum Page {
 }
 
 store Application {
-  state user : UserStatus = UserStatus::LoggedOut
-  state page : Page = Page::Initial
+  state user : UserStatus = UserStatus.LoggedOut
+  state page : Page = Page.Initial
 
   fun initializeWithPage (page : Page) : Promise(Void) {
     await setPage(page)
@@ -29,30 +29,30 @@ store Application {
 
     let nextUser =
       {
-        let Result::Ok(data) =
-          Storage.Local.get("user") or return UserStatus::LoggedOut
+        let Result.Ok(data) =
+          Storage.Local.get("user") or return UserStatus.LoggedOut
 
-        let Result::Ok(object) =
-          Json.parse(data) or return UserStatus::LoggedOut
+        let Result.Ok(object) =
+          Json.parse(data) or return UserStatus.LoggedOut
 
-        let Result::Ok(currentUser) =
-          decode object as User or return UserStatus::LoggedOut
+        let Result.Ok(currentUser) =
+          decode object as User or return UserStatus.LoggedOut
 
-        UserStatus::LoggedIn(currentUser)
+        UserStatus.LoggedIn(currentUser)
       }
 
     next { user: nextUser }
   }
 
   fun setUser (user : User) : Promise(Void) {
-    next { user: UserStatus::LoggedIn(user) }
+    next { user: UserStatus.LoggedIn(user) }
   }
 
   fun logout : Promise(Void) {
     Storage.Local.delete("user")
 
     await resetStores()
-    await next { user: UserStatus::LoggedOut }
+    await next { user: UserStatus.LoggedOut }
     await Window.navigate("/")
   }
 
@@ -60,7 +60,7 @@ store Application {
     Storage.Local.set("user", Json.stringify(encode user))
 
     await resetStores()
-    await next { user: UserStatus::LoggedIn(user) }
+    await next { user: UserStatus.LoggedIn(user) }
     await Window.navigate("/")
   }
 

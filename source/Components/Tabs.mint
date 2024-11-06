@@ -13,7 +13,7 @@ component Tabs {
 
   fun render : Html {
     <div::base>
-      <{ children }>
+      children
       <div::separator/>
     </div>
   }

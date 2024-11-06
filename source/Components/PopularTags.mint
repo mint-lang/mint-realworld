@@ -25,15 +25,13 @@ component PopularTags {
   }
 
   fun renderTag (tag : String) : Html {
-    <Tag
-      active={params.tag == tag}
-      name={tag}/>
+    <Tag active={params.tag == tag} name={tag}/>
   }
 
   fun render : Html {
     let tags =
       case status {
-        Api.Status::Ok(tags) => tags
+        Ok(tags) => tags
         => []
       }
 
@@ -43,13 +41,8 @@ component PopularTags {
       <Status
         message="There was an error loading the popular tags."
         loadingMessage="Loading popular tags..."
-        status={Api.toStatus(status)}>
-
-        <div::tags>
-          <{ Array.map(tags, renderTag) }>
-        </div>
-
-      </Status>
+        status={Api.toStatus(status)}
+      ><div::tags>Array.map(tags, renderTag)</div></Status>
     </div>
   }
 }

@@ -26,19 +26,12 @@ component Button {
       opacity: 0.5;
     }
 
-    &:hover,
-    &:focus {
+    &:hover, &:focus {
       background: #{primaryDark};
     }
   }
 
   fun render : Html {
-    <button::base
-      onClick={onClick}
-      disabled={disabled}>
-
-      <{ children }>
-
-    </button>
+    <button::base onClick={onClick} disabled={disabled}>children</button>
   }
 }

@@ -14,12 +14,14 @@ suite "Header" {
   test "it renders the sign in link" {
     <Header/>
     |> Test.Html.start()
-    |> Test.Html.assertTextOf("div[data-selector=links] a:first-child", "Sign in")
+    |> Test.Html.assertTextOf("div[data-selector=links] a:first-child",
+      "Sign in")
   }
 
   test "it renders the sign up link" {
     <Header/>
     |> Test.Html.start()
-    |> Test.Html.assertTextOf("div[data-selector=links] a:last-child", "Sign up")
+    |> Test.Html.assertTextOf("div[data-selector=links] a:last-child",
+      "Sign up")
   }
 }

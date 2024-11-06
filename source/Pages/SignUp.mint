@@ -1,4 +1,4 @@
-component Pages.SignUp {
+async component Pages.SignUp {
   connect Forms.SignUp exposing {
     setPassword,
     setUsername,
@@ -27,8 +27,8 @@ component Pages.SignUp {
       buttonText={buttonText}
       disabled={disabled}
       onClick={submit}
-      title="Sign Up">
-
+      title="Sign Up"
+    >
       <Form>
         <GlobalErrors errors={Api.errorsOf("request", status)}/>
 
@@ -39,7 +39,8 @@ component Pages.SignUp {
             onChange={setUsername}
             disabled={disabled}
             value={username}
-            name="Username"/>
+            name="Username"
+          />
         </Form.Field>
 
         <Form.Field>
@@ -49,7 +50,8 @@ component Pages.SignUp {
             onChange={setEmail}
             disabled={disabled}
             value={email}
-            name="Email"/>
+            name="Email"
+          />
         </Form.Field>
 
         <Form.Field>
@@ -60,10 +62,10 @@ component Pages.SignUp {
             disabled={disabled}
             value={password}
             type="password"
-            name="Password"/>
+            name="Password"
+          />
         </Form.Field>
       </Form>
-
     </Layout.Outside>
   }
 }

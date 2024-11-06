@@ -36,26 +36,19 @@ component Layout.Form {
   fun render : Html {
     <div::base>
       <Container>
-        <div::title>
-          <{ title }>
-        </div>
+        <div::title>title</div>
 
         <GlobalErrors errors={errors}/>
 
-        <Form>
-          <{ children }>
-        </Form>
+        <Form>children</Form>
 
         <hr::hr/>
 
         <div::button>
           <Button
             disabled={disabled}
-            onClick={(event : Html.Event) : Promise(Void) { onSubmit() }}>
-
-            <{ buttonText }>
-
-          </Button>
+            onClick={(event : Html.Event) : Promise(Void) { onSubmit() }}
+          >buttonText</Button>
         </div>
       </Container>
     </div>

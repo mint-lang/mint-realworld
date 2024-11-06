@@ -7,8 +7,6 @@ component Title {
   }
 
   fun render : Html {
-    <div::base>
-      <{ children }>
-    </div>
+    <div::base>children</div>
   }
 }

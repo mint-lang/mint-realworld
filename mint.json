@@ -7,11 +7,6 @@
   "test-directories": [
     "tests"
   ],
-  "external": {
-    "javascripts": [
-      "assets/commonmark.js"
-    ]
-  },
   "application": {
     "name": "Conduit",
     "title": "Conduit",

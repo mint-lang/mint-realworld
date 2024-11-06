@@ -1,5 +1,5 @@
 store Stores.Tags {
-  state status : Api.Status(Array(String)) = Api.Status::Initial
+  state status : Api.Status(Array(String)) = Api.Status.Initial
   state cached : Bool = false
 
   fun decodeTags (object : Object) : Result(Object.Error, Array(String)) {
@@ -10,17 +10,12 @@ store Stores.Tags {
     if cached {
       Promise.never()
     } else {
-      await next { status: Api.Status::Loading }
+      await next { status: Api.Status.Loading }
 
       let newStatus =
-        await Http.get("/tags")
-        |> Api.send(decodeTags)
+        Api.send(Http.get("/tags"), decodeTags)
 
-      await next
-        {
-          status: newStatus,
-          cached: true
-        }
+      next { status: await newStatus, cached: true }
     }
   }
 }

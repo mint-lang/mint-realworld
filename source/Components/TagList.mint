@@ -21,9 +21,7 @@ component TagList {
   fun render : Html {
     <div::base>
       for tag of tags {
-        <Tag
-          inactive={inactive}
-          name={tag}/>
+        <Tag inactive={inactive} name={tag}/>
       }
     </div>
   }

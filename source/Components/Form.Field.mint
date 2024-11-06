@@ -15,8 +15,6 @@ component Form.Field {
   }
 
   fun render : Html {
-    <div::base>
-      <{ children }>
-    </div>
+    <div::base>children</div>
   }
 }

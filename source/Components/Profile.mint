@@ -46,9 +46,7 @@ component Profile {
 
   get bio : Html {
     if Maybe.isJust(profile.bio) {
-      <div::bio>
-        <{ Maybe.withDefault(profile.bio, "") }>
-      </div>
+      <div::bio>Maybe.withDefault(profile.bio, "")</div>
     } else {
       Html.empty()
     }
@@ -66,49 +64,34 @@ component Profile {
 
   get followIcon : Html {
     if loading {
-      Html.empty()
+      <></>
     } else if profile.following or false {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         height="24"
-        width="24">
-
-        <path d="M0 9h24v6h-24z"/>
-
-      </svg>
+        width="24"
+      ><path d="M0 9h24v6h-24z"/></svg>
     } else {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
         height="24"
-        width="24">
-
-        <path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z"/>
-
-      </svg>
+        width="24"
+      ><path d="M24 9h-9v-9h-6v9h-9v6h9v9h6v-9h9z"/></svg>
     }
   }
 
   get followButton : Html {
-    case user {
-      UserStatus::LoggedOut => Html.empty()
-
-      UserStatus::LoggedIn(user) =>
-        if user.username != profile.username {
-          <div::button>
-            <Button
-              onClick={handleFollow}
-              disabled={loading}>
-
-              <{ followIcon }>
-              <{ followText }>
-
-            </Button>
-          </div>
-        } else {
-          Html.empty()
-        }
+    if let LoggedIn(user) = user {
+      if user.username != profile.username {
+        <div::button>
+          <Button onClick={handleFollow} disabled={loading}>
+            followIcon
+            followText
+          </Button>
+        </div>
+      }
     }
   }
 
@@ -118,7 +101,7 @@ component Profile {
     let newStatus =
       await toggleUserFollow(profile)
 
-    if let Api.Status::Ok(profile) = await newStatus {
+    if let Ok(profile) = await newStatus {
       Stores.Profile.setProfile(profile)
     }
 
@@ -130,21 +113,19 @@ component Profile {
       <Status
         message="There was an error loading the profile..."
         loadingMessage="Loading profile..."
-        status={Api.toStatus(status)}>
-
+        status={Api.toStatus(status)}
+      >
         <Image
           src={profile.image}
           borderRadius="5px"
           width="150px"
-          height="150px"/>
+          height="150px"
+        />
 
-        <div::username>
-          <{ profile.username }>
-        </div>
+        <div::username>profile.username</div>
 
-        <{ bio }>
-        <{ followButton }>
-
+        bio
+        followButton
       </Status>
     </div>
   }

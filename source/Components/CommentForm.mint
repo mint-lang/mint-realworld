@@ -32,7 +32,7 @@ component CommentForm {
 
   fun render : Html {
     case user {
-      UserStatus::LoggedIn(user) =>
+      LoggedIn(user) =>
         <div::form>
           <Form.Field>
             <Textarea
@@ -40,31 +40,24 @@ component CommentForm {
               placeholder="Write a comment..."
               name="Comment on this post:"
               onChange={setComment}
-              value={comment}/>
+              value={comment}
+            />
           </Form.Field>
 
           <div::button>
-            <Button
-              disabled={Api.isLoading(status)}
-              onClick={handleClick}>
-
-              <{ buttonText }>
-
+            <Button disabled={Api.isLoading(status)} onClick={handleClick}>
+              buttonText
             </Button>
           </div>
         </div>
 
-      UserStatus::LoggedOut =>
+      LoggedOut =>
         <div>
-          <a href="/sign-in">
-            "Sign in"
-          </a>
+          <a href="/sign-in">"Sign in"</a>
 
           <span>" or "</span>
 
-          <a href="/sign-up">
-            "sign up"
-          </a>
+          <a href="/sign-up">"sign up"</a>
 
           <span>" to add comments on this article."</span>
         </div>

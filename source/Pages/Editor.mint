@@ -1,4 +1,4 @@
-component Pages.Editor {
+async component Pages.Editor {
   connect Forms.Article exposing {
     submit,
     status,
@@ -21,9 +21,7 @@ component Pages.Editor {
     grid-template-rows: min-content 1fr min-content;
     grid-template-columns: 1fr 1fr;
 
-    grid-template-areas: "title content"
-                         "extract content"
-                         "tags content";
+    grid-template-areas: "title content""extract content""tags content";
 
     > *:nth-child(1) {
       grid-area: title;
@@ -42,7 +40,7 @@ component Pages.Editor {
     }
 
     @media (max-width: 960px) {
-      grid-template-areas: "title" "extract" "tags" "content";
+      grid-template-areas: "title""extract""tags""content";
       grid-template-rows: min-content 150px min-content 400px;
       grid-template-columns: 1fr;
       grid-gap: 15px;
@@ -76,10 +74,7 @@ component Pages.Editor {
   }
 
   get errors : Array(String) {
-    [
-      Api.errorsOf("request", status),
-      Api.errorsOf("article", status)
-    ]
+    [Api.errorsOf("request", status), Api.errorsOf("article", status)]
     |> Array.concat()
   }
 
@@ -88,8 +83,8 @@ component Pages.Editor {
       buttonText={buttonText}
       onSubmit={submit}
       title={formTitle}
-      errors={errors}>
-
+      errors={errors}
+    >
       <div::grid>
         <div::cell>
           <Form.Field>
@@ -99,7 +94,8 @@ component Pages.Editor {
               onChange={setTitle}
               disabled={disabled}
               value={title}
-              name="Title"/>
+              name="Title"
+            />
           </Form.Field>
         </div>
 
@@ -111,7 +107,8 @@ component Pages.Editor {
               onChange={setExtract}
               disabled={disabled}
               value={extract}
-              name="Extract"/>
+              name="Extract"
+            />
           </Form.Field>
         </div>
 
@@ -123,7 +120,8 @@ component Pages.Editor {
               onChange={setTags}
               disabled={disabled}
               placeholder="Tags"
-              tags={tags}/>
+              tags={tags}
+            />
           </Form.Field>
         </div>
 
@@ -135,11 +133,11 @@ component Pages.Editor {
               onChange={setContent}
               disabled={disabled}
               value={content}
-              name="Content"/>
+              name="Content"
+            />
           </Form.Field>
         </div>
       </div>
-
     </Layout.Form>
   }
 }

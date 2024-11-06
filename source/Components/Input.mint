@@ -1,8 +1,12 @@
 component Input {
   connect Theme exposing { primary }
 
-  property onBlur : Function(Html.Event, Promise(Void)) = (value : Html.Event) : Promise(Void) { next { } }
-  property onChange : Function(String, Promise(Void)) = (value : String) : Promise(Void) { next { } }
+  property onBlur : Function(Html.Event, Promise(Void)) =
+    (value : Html.Event) : Promise(Void) { next { } }
+
+  property onChange : Function(String, Promise(Void)) =
+    (value : String) : Promise(Void) { next { } }
+
   property onEnter : Function(Promise(Void)) = () : Promise(Void) { next { } }
   property errors : Array(String) = []
   property placeholder : String = ""
@@ -45,7 +49,7 @@ component Input {
   }
 
   fun handleKeyDown (event : Html.Event) : a {
-    if event.keyCode == Html.Event:ENTER {
+    if event.keyCode == Html.Event.ENTER {
       Html.Event.preventDefault(event)
       onEnter()
     }
@@ -53,9 +57,7 @@ component Input {
 
   fun render : Html {
     <>
-      <Label>
-        <{ name }>
-      </Label>
+      <Label>name</Label>
 
       <input::base
         placeholder={placeholder}
@@ -64,11 +66,10 @@ component Input {
         disabled={disabled}
         onBlur={onBlur}
         value={value}
-        type={type}/>
+        type={type}
+      />
 
-      <Errors
-        errors={errors}
-        prefix={name}/>
+      <Errors errors={errors} prefix={name}/>
     </>
   }
 }

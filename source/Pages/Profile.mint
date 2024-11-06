@@ -1,4 +1,4 @@
-component Pages.Profile {
+async component Pages.Profile {
   connect Stores.Articles exposing { params }
   connect Stores.Profile exposing { profile }
 
@@ -20,12 +20,14 @@ component Pages.Profile {
             <Tab
               href={"/users/" + profile.username}
               active={!params.favorited}
-              label="Articles"/>
+              label="Articles"
+            />
 
             <Tab
               href={"/users/" + profile.username + "/favorites"}
               label="Favorited Articles"
-              active={params.favorited}/>
+              active={params.favorited}
+            />
           </Tabs>
 
           <Articles/>

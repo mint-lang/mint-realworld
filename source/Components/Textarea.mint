@@ -49,20 +49,17 @@ component Textarea {
 
   fun render : Html {
     <>
-      <Label>
-        <{ name }>
-      </Label>
+      <Label>name</Label>
 
       <textarea::base
         placeholder={placeholder}
         onInput={handleInput}
         disabled={disabled}
         value={value}
-        rows={rows}/>
+        rows={rows}
+      />
 
-      <Errors
-        errors={errors}
-        prefix={name}/>
+      <Errors errors={errors} prefix={name}/>
     </>
   }
 }

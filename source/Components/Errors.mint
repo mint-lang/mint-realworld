@@ -15,18 +15,14 @@ component Errors {
   }
 
   fun renderError (error : String) : Html {
-    <li>
-      <{ prefix + " " + error }>
-    </li>
+    <li>prefix + " " + error</li>
   }
 
   fun render : Html {
     if Array.isEmpty(errors) {
-      Html.empty()
+      <></>
     } else {
-      <ul::base>
-        <{ Array.map(errors, renderError) }>
-      </ul>
+      <ul::base>Array.map(errors, renderError)</ul>
     }
   }
 }

@@ -1,60 +1,60 @@
 routes {
   /?page=:page (page : String) {
-    Application.initializeWithPage(Page::Home)
+    Application.initializeWithPage(Page.Home)
     Stores.Articles.load("", page, "", false, false)
     Stores.Tags.load()
   }
 
   / {
-    Application.initializeWithPage(Page::Home)
+    Application.initializeWithPage(Page.Home)
     Stores.Articles.load("", "", "", false, false)
     Stores.Tags.load()
   }
 
   /feed?tag=:tag&page=:page (tag : String, page : String) {
-    Application.initializeWithPage(Page::Home)
+    Application.initializeWithPage(Page.Home)
     Stores.Articles.load("", page, tag, true, false)
     Stores.Tags.load()
   }
 
   /feed?page=:page (page : String) {
-    Application.initializeWithPage(Page::Home)
+    Application.initializeWithPage(Page.Home)
     Stores.Articles.load("", page, "", true, false)
     Stores.Tags.load()
   }
 
   /articles?tag=:tag&page=:page (tag : String, page : String) {
-    Application.initializeWithPage(Page::Home)
+    Application.initializeWithPage(Page.Home)
     Stores.Articles.load("", page, tag, false, false)
     Stores.Tags.load()
   }
 
   /articles?page=:page (page : String) {
-    Application.initializeWithPage(Page::Home)
+    Application.initializeWithPage(Page.Home)
     Stores.Articles.load("", page, "", false, false)
     Stores.Tags.load()
   }
 
   /users/:username?page=:page (username : String, page : String) {
-    Application.initializeWithPage(Page::Profile)
+    Application.initializeWithPage(Page.Profile)
     Stores.Articles.load(username, page, "", false, false)
     Stores.Profile.load(username)
   }
 
   /users/:username (username : String) {
-    Application.initializeWithPage(Page::Profile)
+    Application.initializeWithPage(Page.Profile)
     Stores.Articles.load(username, "", "", false, false)
     Stores.Profile.load(username)
   }
 
   /users/:username/favorites?page=:page (username : String, page : String) {
-    Application.initializeWithPage(Page::Profile)
+    Application.initializeWithPage(Page.Profile)
     Stores.Articles.load(username, page, "", false, true)
     Stores.Profile.load(username)
   }
 
   /users/:username/favorites (username : String) {
-    Application.initializeWithPage(Page::Profile)
+    Application.initializeWithPage(Page.Profile)
     Stores.Articles.load(username, "", "", false, true)
     Stores.Profile.load(username)
   }
@@ -63,13 +63,13 @@ routes {
     await Application.initialize()
 
     await case Application.user {
-      UserStatus::LoggedIn(user) =>
+      UserStatus.LoggedIn(user) =>
         {
           await Forms.Settings.set(user)
-          await Application.setPage(Page::Settings)
+          await Application.setPage(Page.Settings)
         }
 
-      UserStatus::LoggedOut => Window.navigate("/")
+      UserStatus.LoggedOut => Window.navigate("/")
     }
   }
 
@@ -77,12 +77,12 @@ routes {
     await Application.initialize()
 
     await case Application.user {
-      UserStatus::LoggedIn(user) => Window.navigate("/")
+      UserStatus.LoggedIn(user) => Window.navigate("/")
 
-      UserStatus::LoggedOut =>
+      UserStatus.LoggedOut =>
         {
           await Forms.SignIn.reset()
-          await Application.setPage(Page::SignIn)
+          await Application.setPage(Page.SignIn)
         }
     }
   }
@@ -91,8 +91,8 @@ routes {
     await Application.initialize()
 
     await case Application.user {
-      UserStatus::LoggedOut => Application.setPage(Page::SignUp)
-      UserStatus::LoggedIn(user) => Window.navigate("/")
+      UserStatus.LoggedOut => Application.setPage(Page.SignUp)
+      UserStatus.LoggedIn(user) => Window.navigate("/")
     }
   }
 
@@ -101,8 +101,8 @@ routes {
     await Forms.Article.reset()
 
     await case Application.user {
-      UserStatus::LoggedIn(user) => Application.setPage(Page::Editor)
-      UserStatus::LoggedOut => Window.navigate("/")
+      UserStatus.LoggedIn(user) => Application.setPage(Page.Editor)
+      UserStatus.LoggedOut => Window.navigate("/")
     }
   }
 
@@ -110,21 +110,20 @@ routes {
     await Application.initialize()
 
     await case Application.user {
-      UserStatus::LoggedIn(user) => Application.logout()
-      UserStatus::LoggedOut => Window.navigate("/")
+      UserStatus.LoggedIn(user) => Application.logout()
+      UserStatus.LoggedOut => Window.navigate("/")
     }
   }
 
   /article/:slug (slug : String) {
-    Application.initializeWithPage(Page::Article)
+    Application.initializeWithPage(Page.Article)
 
     await {
       let article =
         case Stores.Articles.status {
-          Api.Status::Ok(data) =>
+          Api.Status.Ok(data) =>
             data.articles
-            |> Array.find(
-              (article : Article) : Bool { article.slug == slug })
+            |> Array.find((article : Article) : Bool { article.slug == slug })
             |> Maybe.withDefault(Article.empty())
 
           => Article.empty()
@@ -157,10 +156,10 @@ routes {
     }
 
     case Stores.Article.status {
-      Api.Status::Ok(article) =>
+      Api.Status.Ok(article) =>
         {
           Forms.Article.set(article)
-          Application.setPage(Page::Editor)
+          Application.setPage(Page.Editor)
         }
 
       => Promise.never()
@@ -168,6 +167,6 @@ routes {
   }
 
   * {
-    Application.initializeWithPage(Page::NotFound)
+    Application.initializeWithPage(Page.NotFound)
   }
 }

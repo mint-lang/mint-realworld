@@ -16,9 +16,7 @@ component Layout {
     <div::base>
       <Header/>
 
-      <div::content>
-        <{ children }>
-      </div>
+      <div::content>children</div>
 
       <Footer/>
     </div>

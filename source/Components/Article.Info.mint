@@ -5,8 +5,7 @@ component Article.Info {
   property time : Time = Time.now()
 
   style base {
-    grid-template-areas: "image author"
-                         "image date";
+    grid-template-areas: "image author""image date";
 
     grid-template-columns: 32px 1fr;
     grid-template-rows: 22px 10px;
@@ -38,19 +37,13 @@ component Article.Info {
   fun render : Html {
     <div::base>
       <a::profile href="/users/#{author.username}">
-        <Image
-          src={author.image}
-          borderRadius="3px"
-          height="32px"
-          width="32px"/>
+        <Image src={author.image} borderRadius="3px" height="32px" width="32px"/>
       </a>
 
-      <a::author href="/users/#{author.username}">
-        <{ author.username }>
-      </a>
+      <a::author href="/users/#{author.username}">author.username</a>
 
       <span::date>
-        <{ Time.distanceOfTimeInWords(time, Time.now(), Time.Format:ENGLISH) }>
+        Time.distanceOfTimeInWords(time, Time.now(), Time.Format.ENGLISH)
       </span>
     </div>
   }

@@ -1,5 +1,5 @@
 store Forms.Settings {
-  state status : Api.Status(User) = Api.Status::Initial
+  state status : Api.Status(User) = Api.Status.Initial
 
   state username : String = ""
   state email : String = ""
@@ -23,37 +23,28 @@ store Forms.Settings {
   }
 
   fun set (user : User) : Promise(Void) {
-    next
-      {
-        status: Api.Status::Initial,
-        image: Maybe.withDefault(user.image, ""),
-        bio: Maybe.withDefault(user.bio, ""),
-        username: user.username,
-        email: user.email
-      }
+    next {
+      status: Api.Status.Initial,
+      image: Maybe.withDefault(user.image, ""),
+      bio: Maybe.withDefault(user.bio, ""),
+      username: user.username,
+      email: user.email
+    }
   }
 
   fun submit : Promise(Void) {
-    await next { status: Api.Status::Loading }
+    await next { status: Api.Status.Loading }
 
     let body =
-      encode {
-        user:
-          {
-            username: username,
-            image: image,
-            email: email,
-            bio: bio
-          }
-      }
+      encode { user: { username: username, image: image, email: email, bio: bio } }
 
     let newStatus =
-      await Http.put("/user")
+      await (Http.put("/user")
       |> Http.jsonBody(body)
-      |> Api.send(User.fromResponse)
+      |> Api.send(User.fromResponse))
 
-    await case newStatus {
-      Api.Status::Ok(user) =>
+    case newStatus {
+      Api.Status.Ok(user) =>
         {
           await Application.setUser(user)
           await Window.navigate("/users/" + username)

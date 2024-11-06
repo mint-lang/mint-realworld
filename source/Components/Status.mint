@@ -1,4 +1,4 @@
-enum Status {
+type Status {
   Error
   Ok
   Loading
@@ -6,7 +6,7 @@ enum Status {
 }
 
 component Status {
-  property status : Status = Status::Initial
+  property status : Status = Status.Initial
   property loadingMessage : String = ""
   property children : Array(Html) = []
   property message : String = ""
@@ -25,33 +25,23 @@ component Status {
   }
 
   get isLoading : Bool {
-    status == Status::Loading
+    status == Status.Loading
   }
 
   fun render : Html {
     case status {
-      Status::Error =>
-        <div::base>
-          <div::message>
-            <{ message }>
-          </div>
-        </div>
+      Error => <div::base><div::message>message</div></div>
 
-      Status::Ok =>
-        <>
-          <{ children }>
-        </>
+      Ok => <>children</>
 
-      Status::Loading =>
+      Loading =>
         <div::base>
-          <div::message>
-            <{ loadingMessage }>
-          </div>
+          <div::message>loadingMessage</div>
 
           <Loader/>
         </div>
 
-      Status::Initial => <div/>
+      Initial => <div/>
     }
   }
 }

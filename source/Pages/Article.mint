@@ -1,4 +1,4 @@
-component Pages.Article {
+async component Pages.Article {
   connect Stores.Article exposing { article, status }
   connect Theme exposing { primary, primaryText }
   connect Actions exposing { deleteArticle }
@@ -83,7 +83,7 @@ component Pages.Article {
 
   get isMine : Bool {
     case user {
-      UserStatus::LoggedIn(user) => user.username == article.author.username
+      UserStatus.LoggedIn(user) => user.username == article.author.username
       => false
     }
   }
@@ -92,39 +92,35 @@ component Pages.Article {
     <Status
       message="There was an error loading the article."
       loadingMessage="Loading article..."
-      status={Api.toStatus(status)}>
-
+      status={Api.toStatus(status)}
+    >
       <div>
         <div::header>
           <Container>
-            <div::title>
-              <{ article.title }>
-            </div>
+            <div::title>article.title</div>
 
-            <Article.Info
-              time={article.createdAt}
-              author={article.author}/>
+            <Article.Info time={article.createdAt} author={article.author}/>
 
             <div::spacer/>
 
             <TagList tags={article.tags}/>
 
-            <If condition={isMine}>
+            if isMine {
               <div::buttons>
                 <Button onClick={handleEdit}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 24 24"
                     height="24"
-                    width="24">
-
+                    width="24"
+                  >
                     <path
                       d={
-                        "M7.127 22.564l-7.126 1.436 1.438-7.125 5.688 5.689zm-4.2" \
-                        "74-7.104l5.688 5.689 15.46-15.46-5.689-5.689-15.459 15.4" \
-                        "6z"
-                      }/>
-
+                        "M7.127 22.564l-7.126 1.436 1.438-7.125 5.688 " \
+                        "5.689zm-4.274-7.104l5.688 5.689 " \
+                        "15.46-15.46-5.689-5.689-15.459 15.46z"
+                      }
+                    />
                   </svg>
 
                   "Edit"
@@ -135,20 +131,21 @@ component Pages.Article {
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
-                    viewBox="0 0 24 24">
-
+                    viewBox="0 0 24 24"
+                  >
                     <path
                       d={
-                        "M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 1.631-1." \
-                        "099 1.631-2h5.316c0 .901.73 2 1.631 2h5.711z"
-                      }/>
-
+                        "M3 6l3 18h12l3-18h-18zm19-4v2h-20v-2h5.711c.9 0 " \
+                        "1.631-1.099 1.631-2h5.316c0 .901.73 2 1.631 " \
+                        "2h5.711z"
+                      }
+                    />
                   </svg>
 
                   "Delete"
                 </Button>
               </div>
-            </If>
+            }
           </Container>
         </div>
 
@@ -166,7 +163,6 @@ component Pages.Article {
           </Container>
         </div>
       </div>
-
     </Status>
   }
 }

@@ -1,4 +1,4 @@
-record Author {
+type Author {
   bio : Maybe(String),
   username : String,
   following : Maybe(Bool),
@@ -7,12 +7,7 @@ record Author {
 
 module Author {
   fun empty : Author {
-    {
-      bio: Maybe.nothing(),
-      following: Maybe::Just(false),
-      username: "",
-      image: ""
-    }
+    { bio: Maybe.nothing(), following: Maybe.Just(false), username: "", image: "" }
   }
 
   fun fromResponse (object : Object) : Result(Object.Error, Author) {
