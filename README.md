@@ -4,7 +4,7 @@ This codebase was created to demonstrate a fully fledged fullstack application b
 
 # How it works
 
-This implemenation only uses the [Mint language](https://mint-lang.com) and it's standard library without any third party dependencies.
+This implemenation only uses the [Mint language](https://mint-lang.com) and its standard library without any third party dependencies.
 
 # Development Server
 
