@@ -22,7 +22,7 @@ jobs:
         run: mint install
 
       - name: Run Tests
-        run: mint test
+        run: mint test -b firefox
         
       - name: Build
         run: mint build
