@@ -83,7 +83,9 @@ async component Pages.Article {
 
   get isMine : Bool {
     case user {
-      UserStatus.LoggedIn(user) => user.username == article.author.username
+      UserStatus.LoggedIn(user) =>
+        user.username == article.expand.author.username
+
       => false
     }
   }
@@ -99,7 +101,7 @@ async component Pages.Article {
           <Container>
             <div::title>article.title</div>
 
-            <Article.Info time={article.createdAt} author={article.author}/>
+            <Article.Info time={article.created} author={article.expand.author}/>
 
             <div::spacer/>
 

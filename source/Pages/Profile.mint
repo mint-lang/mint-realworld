@@ -1,5 +1,4 @@
 async component Pages.Profile {
-  connect Stores.Articles exposing { params }
   connect Stores.Profile exposing { profile }
 
   style articles {
@@ -19,18 +18,18 @@ async component Pages.Profile {
           <Tabs>
             <Tab
               href={"/users/" + profile.username}
-              active={!params.favorited}
+              active={true}
               label="Articles"
             />
 
             <Tab
               href={"/users/" + profile.username + "/favorites"}
               label="Favorited Articles"
-              active={params.favorited}
+              active={false}
             />
           </Tabs>
 
-          <Articles/>
+          // <Articles/>
         </div>
       </Container>
     </div>

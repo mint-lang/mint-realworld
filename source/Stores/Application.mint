@@ -1,5 +1,5 @@
 type UserStatus {
-  LoggedIn(User)
+  LoggedIn(User, Maybe(String))
   LoggedOut
 }
 
@@ -12,7 +12,7 @@ type Page {
   Editor
   SignIn
   SignUp
-  Home
+  Home(articles : Api.Status(Articles), tags : Array(Array(String)))
 }
 
 store Application {
@@ -38,14 +38,24 @@ store Application {
         let Result.Ok(currentUser) =
           decode object as User or return UserStatus.LoggedOut
 
-        UserStatus.LoggedIn(currentUser)
+        let token =
+          Storage.Local.get("token")
+          |> Result.toMaybe()
+
+        UserStatus.LoggedIn(currentUser, token)
       }
 
     next { user: nextUser }
   }
 
-  fun setUser (user : User) : Promise(Void) {
-    next { user: UserStatus.LoggedIn(user) }
+  fun setUser (updatedUser : User) : Promise(Void) {
+    next {
+      user:
+        case user {
+          LoggedIn(_, token) => UserStatus.LoggedIn(updatedUser, token)
+          LoggedOut => user
+        }
+    }
   }
 
   fun logout : Promise(Void) {
@@ -56,16 +66,15 @@ store Application {
     await Window.navigate("/")
   }
 
-  fun login (user : User) : Promise(Void) {
+  fun login (user : User, token : String) : Promise(Void) {
     Storage.Local.set("user", Json.stringify(encode user))
 
     await resetStores()
-    await next { user: UserStatus.LoggedIn(user) }
+    await next { user: UserStatus.LoggedIn(user, Maybe.Just(token)) }
     await Window.navigate("/")
   }
 
   fun resetStores : Promise(Void) {
-    await Stores.Articles.reset()
     await Stores.Comments.reset()
     await Stores.Article.reset()
   }

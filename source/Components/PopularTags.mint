@@ -1,5 +1,4 @@
 component PopularTags {
-  connect Stores.Articles exposing { params }
   connect Stores.Tags exposing { status }
 
   style tags {
@@ -25,7 +24,7 @@ component PopularTags {
   }
 
   fun renderTag (tag : String) : Html {
-    <Tag active={params.tag == tag} name={tag}/>
+    <Tag active={false} name={tag}/>
   }
 
   fun render : Html {

@@ -1,8 +1,9 @@
 async component Pages.Home {
-  connect Stores.Articles exposing { status, params }
   connect Application exposing { user }
 
   connect Theme exposing { primary, primaryText }
+
+  property articles : Api.Status(Articles)
 
   style banner {
     justify-content: center;
@@ -48,26 +49,18 @@ async component Pages.Home {
         <div::layout>
           <div>
             <Tabs>
-              <Tab
-                active={params.tag == "" && !params.feed}
-                href="/articles?page=1"
-                label="Global Feed"
-              />
+              <Tab active={true} href="/articles?page=1" label="Global Feed"/>
 
               if user != UserStatus.LoggedOut {
-                <Tab
-                  active={params.tag == "" && params.feed}
-                  href="/feed?page=1"
-                  label="Your Feed"
-                />
+                <Tab active={false} href="/feed?page=1" label="Your Feed"/>
               }
 
-              if params.tag != "" {
-                <Tab label={"#" + String.toUpperCase(params.tag)} active={true}/>
+              if "" != "" {
+                <Tab label={"#" + String.toUpperCase("")} active={true}/>
               }
             </Tabs>
 
-            <Articles/>
+            <Articles articles={articles}/>
           </div>
 
           <PopularTags/>

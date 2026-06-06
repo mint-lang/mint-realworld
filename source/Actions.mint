@@ -27,6 +27,7 @@ store Actions {
   }
 
   fun toggleFavorite (article : Article) : Promise(Void) {
+    /*
     let url =
       "/articles/" + article.slug + "/favorite"
 
@@ -41,8 +42,9 @@ store Actions {
       Api.send(request, Article.fromResponse)
 
     case await status {
-      Api.Status.Ok(article) => Stores.Articles.replaceArticle(article)
       => next { }
     }
+    */
+    next { }
   }
 }

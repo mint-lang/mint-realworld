@@ -11,18 +11,13 @@ component Errors {
     margin: 0;
 
     padding: 10px;
-    padding-left: 30px;
-  }
-
-  fun renderError (error : String) : Html {
-    <li>prefix + " " + error</li>
   }
 
   fun render : Html {
     if Array.isEmpty(errors) {
       <></>
     } else {
-      <ul::base>Array.map(errors, renderError)</ul>
+      <div::base>errors</div>
     }
   }
 }

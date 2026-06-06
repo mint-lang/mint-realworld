@@ -29,12 +29,13 @@ component Articles.Item {
     display: flex;
     border: 0;
 
+    /*
     if article.favorited {
       color: #e84848;
     } else {
       color: inherit;
     }
-
+    */
     &:hover {
       cursor: pointer;
     }
@@ -102,12 +103,12 @@ component Articles.Item {
       </div>
 
       <div::footer>
-        <Article.Info time={article.createdAt} author={article.author}/>
+        <Article.Info time={article.created} author={article.expand.author}/>
 
         <button::button onClick={toggle} disabled={loading}>
           <HeartIcon/>
 
-          <span::button-text>Number.toString(article.favoritesCount)</span>
+          // <span::button-text>Number.toString(article.favoritesCount)</span>
         </button>
       </div>
     </div>

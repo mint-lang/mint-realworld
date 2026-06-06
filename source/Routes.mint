@@ -1,61 +1,74 @@
 routes {
-  /?page=:page (page : String) {
-    Application.initializeWithPage(Page.Home)
-    Stores.Articles.load("", page, "", false, false)
-    Stores.Tags.load()
-  }
-
   / {
-    Application.initializeWithPage(Page.Home)
-    Stores.Articles.load("", "", "", false, false)
+    let params =
+      Window.url().search
+      |> SearchParams.fromString()
+
+    Application.initialize()
+
+    let articles =
+      await Api.loadArticles(0)
+
+    Application.setPage(Page.Home(articles: articles, tags: []))
+
+    // Stores.Articles.load("", page, "", false, false)
     Stores.Tags.load()
   }
 
+  /*
   /feed?tag=:tag&page=:page (tag : String, page : String) {
     Application.initializeWithPage(Page.Home)
-    Stores.Articles.load("", page, tag, true, false)
+
+    // Stores.Articles.load("", page, tag, true, false)
     Stores.Tags.load()
   }
 
   /feed?page=:page (page : String) {
     Application.initializeWithPage(Page.Home)
-    Stores.Articles.load("", page, "", true, false)
+
+    // Stores.Articles.load("", page, "", true, false)
     Stores.Tags.load()
   }
 
   /articles?tag=:tag&page=:page (tag : String, page : String) {
     Application.initializeWithPage(Page.Home)
-    Stores.Articles.load("", page, tag, false, false)
+
+    // Stores.Articles.load("", page, tag, false, false)
     Stores.Tags.load()
   }
 
   /articles?page=:page (page : String) {
     Application.initializeWithPage(Page.Home)
-    Stores.Articles.load("", page, "", false, false)
+
+    // Stores.Articles.load("", page, "", false, false)
     Stores.Tags.load()
   }
-
+  */
   /users/:username?page=:page (username : String, page : String) {
     Application.initializeWithPage(Page.Profile)
-    Stores.Articles.load(username, page, "", false, false)
+
+    // Stores.Articles.load(username, page, "", false, false)
     Stores.Profile.load(username)
   }
 
   /users/:username (username : String) {
     Application.initializeWithPage(Page.Profile)
-    Stores.Articles.load(username, "", "", false, false)
+
+    // Stores.Articles.load(username, "", "", false, false)
     Stores.Profile.load(username)
   }
 
   /users/:username/favorites?page=:page (username : String, page : String) {
     Application.initializeWithPage(Page.Profile)
-    Stores.Articles.load(username, page, "", false, true)
+
+    // Stores.Articles.load(username, page, "", false, true)
     Stores.Profile.load(username)
   }
 
   /users/:username/favorites (username : String) {
     Application.initializeWithPage(Page.Profile)
-    Stores.Articles.load(username, "", "", false, true)
+
+    // Stores.Articles.load(username, "", "", false, true)
     Stores.Profile.load(username)
   }
 
@@ -76,14 +89,9 @@ routes {
   /sign-in {
     await Application.initialize()
 
-    await case Application.user {
+    case Application.user {
+      UserStatus.LoggedOut => Application.setPage(Page.SignIn)
       UserStatus.LoggedIn(user) => Window.navigate("/")
-
-      UserStatus.LoggedOut =>
-        {
-          await Forms.SignIn.reset()
-          await Application.setPage(Page.SignIn)
-        }
     }
   }
 
@@ -118,23 +126,7 @@ routes {
   /article/:slug (slug : String) {
     Application.initializeWithPage(Page.Article)
 
-    await {
-      let article =
-        case Stores.Articles.status {
-          Api.Status.Ok(data) =>
-            data.articles
-            |> Array.find((article : Article) : Bool { article.slug == slug })
-            |> Maybe.withDefault(Article.empty())
-
-          => Article.empty()
-        }
-
-      if article.slug == slug {
-        Stores.Article.set(article)
-      } else {
-        Stores.Article.load(slug)
-      }
-    }
+    await Stores.Article.load(slug)
 
     Window.setScrollTop(0)
     Stores.Comments.load(slug)

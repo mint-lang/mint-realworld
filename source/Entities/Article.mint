@@ -3,26 +3,26 @@ type Article {
   title : String,
   body : String,
   slug : String,
-  favoritesCount : Number,
-  favorited : Bool,
-  createdAt : Time,
-  updatedAt : Time,
-  author : Author,
-  tags : Array(String) using "tagList"
+  created : Time,
+  updated : Time,
+  expand : ArticleExands,
+  tags : Array(String)
+}
+
+type ArticleExands {
+  author : Author
 }
 
 module Article {
   fun empty : Article {
     {
       body: "",
-      createdAt: Time.now(),
+      created: Time.now(),
       description: Maybe.nothing(),
-      favorited: false,
-      favoritesCount: 0,
       slug: "",
       title: "",
-      updatedAt: Time.now(),
-      author: Author.empty(),
+      updated: Time.now(),
+      expand: { author: Author.empty() },
       tags: []
     }
   }

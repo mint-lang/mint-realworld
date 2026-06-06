@@ -1,28 +1,45 @@
 async component Pages.SignUp {
-  connect Forms.SignUp exposing {
-    setPassword,
-    setUsername,
-    setEmail,
-    username,
-    password,
-    submit,
-    status,
-    email
-  }
+  state status : Api.Status(SignInResponse) = Api.Status.Initial
+  state confirmation : String = ""
+  state username : String = ""
+  state password : String = ""
+  state email : String = ""
 
-  get disabled : Bool {
-    Api.isLoading(status)
-  }
+  fun submit : Promise(Void) {
+    await next { status: Api.Status.Loading }
 
-  get buttonText : String {
-    if disabled {
-      "Loading..."
-    } else {
-      "Sign Up"
+    let request =
+      Http.post("/collections/users/records")
+      |> Http.jsonBody(
+        encode {
+          passwordConfirm: confirmation,
+          emailVisibility: true,
+          password: password,
+          username: username,
+          email: email
+        })
+      |> Api.send(decode as User)
+
+    let status =
+      await request
+
+    case status {
+      Ok => next { status: await Api.signIn(email, password) }
+      => next { status: Api.cast(status, Maybe.Nothing) }
     }
   }
 
   fun render : Html {
+    let disabled =
+      Api.isLoading(status)
+
+    let buttonText =
+      if disabled {
+        "Loading..."
+      } else {
+        "Sign Up"
+      }
+
     <Layout.Outside
       buttonText={buttonText}
       disabled={disabled}
@@ -30,13 +47,13 @@ async component Pages.SignUp {
       title="Sign Up"
     >
       <Form>
-        <GlobalErrors errors={Api.errorsOf("request", status)}/>
+        Api.globalErrors(status)
 
         <Form.Field>
           <Input
             errors={Api.errorsOf("username", status)}
             placeholder="realworld"
-            onChange={setUsername}
+            onChange={-> username}
             disabled={disabled}
             value={username}
             name="Username"
@@ -47,7 +64,7 @@ async component Pages.SignUp {
           <Input
             errors={Api.errorsOf("email", status)}
             placeholder="demo@realworld.io"
-            onChange={setEmail}
+            onChange={-> email}
             disabled={disabled}
             value={email}
             name="Email"
@@ -57,12 +74,24 @@ async component Pages.SignUp {
         <Form.Field>
           <Input
             errors={Api.errorsOf("password", status)}
-            onChange={setPassword}
+            onChange={-> password}
             placeholder="********"
             disabled={disabled}
             value={password}
             type="password"
             name="Password"
+          />
+        </Form.Field>
+
+        <Form.Field>
+          <Input
+            errors={Api.errorsOf("password", status)}
+            onChange={-> confirmation}
+            placeholder="********"
+            disabled={disabled}
+            value={confirmation}
+            type="password"
+            name="confirmation"
           />
         </Form.Field>
       </Form>

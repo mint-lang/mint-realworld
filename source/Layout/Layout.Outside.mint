@@ -29,13 +29,16 @@ component Layout.Outside {
 
   style title {
     font-family: Expletus Sans;
-    font-size: 50px;
-    display: flex;
+    font-size: 40px;
     height: 40px;
+
+    align-items: center;
+    display: flex;
+    gap: 10px;
   }
 
   style brand {
-    line-height: 50px;
+    line-height: 40px;
     margin-left: 5px;
     height: 40px;
   }

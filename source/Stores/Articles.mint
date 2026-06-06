@@ -1,3 +1,4 @@
+/*
 type Stores.Articles.Params {
   favorited : Bool,
   author : String,
@@ -102,3 +103,4 @@ store Stores.Articles {
     await next { status: newStatus }
   }
 }
+*/

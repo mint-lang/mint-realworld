@@ -1,13 +1,27 @@
-/* Represents the status of an API Call. */
 type Api.Status(a) {
-  Error(Map(String, Array(String)))
+  Error(Map(String, ErrorData))
+  Errored(String)
   Loading
   Initial
   Ok(a)
 }
 
 type ErrorResponse {
-  errors : Map(String, Array(String))
+  data : Map(String, ErrorData),
+  message : String
+}
+
+type ErrorData {
+  message : String,
+  code : String
+}
+
+type Articles {
+  items : Array(Article),
+  totalPages : Number,
+  totalItems : Number,
+  perPage : Number,
+  page : Number
 }
 
 module Api {
@@ -15,9 +29,14 @@ module Api {
     case status {
       Api.Status.Loading => Status.Loading
       Api.Status.Initial => Status.Initial
+      Api.Status.Errored => Status.Error
       Api.Status.Error => Status.Error
       Api.Status.Ok => Status.Ok
     }
+  }
+
+  fun cast (status : Api.Status(a), decoder : Maybe(b)) : Api.Status(b) {
+    `#{status}`
   }
 
   fun withDefault (a : a, status : Api.Status(a)) : a {
@@ -34,85 +53,100 @@ module Api {
     }
   }
 
-  fun errorStatus (key : String, value : String) : Api.Status(a) {
-    let error =
-      Map.empty()
-      |> Map.set(key, [value])
-
-    Api.Status.Error(error)
-  }
-
   fun errorsOf (key : String, status : Api.Status(a)) : Array(String) {
     case status {
       Api.Status.Error(errors) =>
-        errors
-        |> Map.get(key)
-        |> Maybe.withDefault([])
+        case Map.get(errors, key) {
+          Just(value) => [value.message]
+          => []
+        }
 
       => []
     }
   }
 
-  fun decodeErrors (body : String) : Api.Status(a) {
-    case Json.parse(body) {
-      Result.Err => errorStatus("request",
-        "Could not parse the error response.")
-
-      Result.Ok(object) =>
-        case decode object as ErrorResponse {
-          Result.Ok(errors) => Api.Status.Error(errors.errors)
-
-          Result.Err =>
-            errorStatus("request", "Could not decode the error response.")
-        }
+  fun globalErrors (status : Api.Status(a)) {
+    if let Errored(message) = status {
+      <GlobalErrors errors={[message]}/>
     }
   }
 
+  fun signIn (email : String, password : String) {
+    let request =
+      Http.post("/collections/users/auth-with-password")
+      |> Http.jsonBody(encode { password: password, identity: email })
+      |> Api.send(decode as SignInResponse)
+
+    let status =
+      await request
+
+    if let Ok({ record: user, token: token }) = status {
+      Application.login(user, token)
+    }
+
+    status
+  }
+
+  fun loadArticles (page : Number) : Promise(Api.Status(Articles)) {
+    let params =
+      SearchParams.empty()
+      |> SearchParams.append("page", "#{page}")
+      |> SearchParams.append("expand", "author")
+      |> SearchParams.toString()
+
+    Http.get("/collections/articles/records?#{params}")
+    |> Http.jsonBody(encode { page: page })
+    |> Api.send(decode as Articles)
+  }
+
   fun send (
-    rawRequest : Http.Request,
+    request : Http.Request,
     decoder : Function(Object, Result(Object.Error, a))
   ) : Promise(Api.Status(a)) {
-    /* We try to get a token from session storage. */
     let request =
       case Application.user {
-        UserStatus.LoggedIn(user) =>
-          Http.header(rawRequest, "Authorization", "Token " + user.token)
+        LoggedIn(user, Just(token)) =>
+          Http.header(request, "Authorization", "Token #{token}")
 
-        UserStatus.LoggedOut => rawRequest
+        => request
       }
 
-    /* Get the response. */
-    let result =
-      { request | url: "https://api.realworld.io/api" + request.url }
+    let request =
+      { request | url: "http://localhost:3001/api" + request.url }
       |> Http.header("Content-Type", "application/json")
       |> Http.send()
 
-    case await result {
-      Result.Err => errorStatus("request", "Network error.")
+    let Ok(response) =
+      await request or return Api.Status.Errored("Network error!")
 
-      Result.Ok(response) =>
+    let JSON(object) =
+      response.body or return Api.Status.Errored("Can't decode response!")
+
+    case response.status {
+      403 => Api.Status.Errored("Unauthorized!")
+
+      400 =>
         {
-          /* Handle response based on status. */
-          case response.status {
-            401 => errorStatus("request", "Unauthorized!")
-            403 => decodeErrors(response.bodyString)
-            422 => decodeErrors(response.bodyString)
-
-            =>
-              case Json.parse(response.bodyString) {
-                Result.Err =>
-                  errorStatus("request", "Could not parse the response.")
-
-                Result.Ok(object) =>
-                  case decoder(object) {
-                    Result.Ok(data) => Api.Status.Ok(data)
-
-                    Result.Err =>
-                      errorStatus("request", "Could not decode the response.")
-                  }
-              }
+          if let Ok(response) = (decode object as ErrorResponse) {
+            if Map.isEmpty(response.data) {
+              Api.Status.Errored(response.message)
+            } else {
+              Api.Status.Error(response.data)
+            }
+          } else {
+            Api.Status.Errored("Could not decode the error response!")
           }
         }
+
+      200 =>
+        if let Ok(data) = decoder(object) {
+          Api.Status.Ok(data)
+        } else {
+          dbg decoder(object)
+          Api.Status.Errored("Could not decode the response entity!")
+        }
+
+      => Api.Status.Errored("Invalid request status!")
     }
   }
 }

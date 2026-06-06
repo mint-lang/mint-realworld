@@ -15,9 +15,7 @@ component Layout {
   fun render : Html {
     <div::base>
       <Header/>
-
       <div::content>children</div>
-
       <Footer/>
     </div>
   }

@@ -1,12 +1,5 @@
 component Articles {
-  connect Stores.Articles exposing { params, status }
-
-  get articles : Array(Html) {
-    for article of data.articles {
-      <Articles.Item article={article}/>
-    }
-    |> Array.intersperse(<div::divider/>)
-  }
+  property articles : Api.Status(Articles)
 
   style divider {
     margin: 20px 0;
@@ -20,62 +13,47 @@ component Articles {
     display: grid;
   }
 
-  get data : Stores.Articles {
-    Api.withDefault({ count: 0, articles: [] }, status)
-  }
-
-  get pagination : Html {
-    let pages =
-      getPages()
-
-    if Array.isEmpty(pages) {
-      Html.empty()
-    } else {
-      <div::pagination>pages</div>
-    }
-  }
-
-  fun getPages : Array(Html) {
-    let start =
-      Math.max(1, params.page - 3)
-
-    let end =
-      Math.min(Math.ceil(data.count / params.limit), params.page + 5)
-
-    if end > 1 {
-      let url =
-        Window.url()
-
-      let searchParams =
-        SearchParams.fromString(url.search)
-
-      for page of Array.range(start, end) {
-        let pageString =
-          Number.toString(page)
-
-        let newSearchParams =
-          SearchParams.set(searchParams, "page", pageString)
-
-        let href =
-          url.path + "?" + SearchParams.toString(newSearchParams)
-
-        <Pagination.Page
-          active={page - 1 == params.page}
-          page={pageString}
-          href={href}
-        />
-      }
-    }
-  }
-
   fun render : Html {
     <Status
       message="There was an error loading the articles."
       loadingMessage="Loading articles..."
-      status={Api.toStatus(status)}
+      status={Api.toStatus(articles)}
     >
-      articles
-      pagination
+      if let Ok(articles) = articles {
+        <div>
+          articles.items
+          |> Array.map(
+            (article : Article) { <Articles.Item article={article}/> })
+          |> Array.intersperse(<div::divider/>)
+
+          if articles.totalPages > 1 {
+            let url =
+              Window.url()
+
+            let searchParams =
+              SearchParams.fromString(url.search)
+
+            <div::pagination>
+              for page of Array.range(1, articles.totalPages) {
+                let pageString =
+                  Number.toString(page)
+
+                let newSearchParams =
+                  SearchParams.set(searchParams, "page", pageString)
+
+                let href =
+                  url.path + "?" + SearchParams.toString(newSearchParams)
+
+                <Pagination.Page
+                  active={page - 1 == articles.page}
+                  page={pageString}
+                  href={href}
+                />
+              }
+            </div>
+          }
+        </div>
+      }
     </Status>
   }
 }
